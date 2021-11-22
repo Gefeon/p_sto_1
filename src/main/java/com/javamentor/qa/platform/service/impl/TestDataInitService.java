@@ -5,6 +5,7 @@ import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.impl.model.RoleServiceImpl;
 import com.javamentor.qa.platform.service.impl.model.UserServiceImpl;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
+@NoArgsConstructor
 public class TestDataInitService {
     //Amount of test data
     private final static int usersNum = 10;
@@ -69,6 +71,7 @@ public class TestDataInitService {
         this.roleService = roleService;
     }
 
+    //fill related tables user_entity and role with test data
     public void fillTableWithTestData() {
         roleService.persistAll(getRandomRoles());
         List<Role> existingRoles = roleService.getAll();
@@ -79,6 +82,7 @@ public class TestDataInitService {
         userService.persistAll(usersToPersist);
     }
 
+    //generates rolesNum roles with random fields
     private Set<Role> getRandomRoles() {
         Set<Role> testRoles = new HashSet<>();
         while (testRoles.size() < rolesNum - 1) {
@@ -87,6 +91,7 @@ public class TestDataInitService {
         return testRoles;
     }
 
+    //generates usersNum users with random fields(all necessary without role)
     private Set<User> getRandomUsers() {
         Set<User> users = new HashSet<>();
 
