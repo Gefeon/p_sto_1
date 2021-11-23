@@ -5,21 +5,20 @@ import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.impl.model.question.AnswerServiceImpl;
 import com.javamentor.qa.platform.service.impl.model.question.QuestionServiceImpl;
 import com.javamentor.qa.platform.service.impl.model.question.TagServiceImpl;
 import com.javamentor.qa.platform.service.impl.model.user.RoleServiceImpl;
 import com.javamentor.qa.platform.service.impl.model.user.UserServiceImpl;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
@@ -71,6 +70,16 @@ public class TestDataInitService {
     private final String[] roles = new String[]{
             "ADMIN", "USER", "ANONYMOUS", "GUEST", "UNDEFINED", "MAIN"};
 
+    private final String[] randomWords = new String[]{
+            "teach", "about", "you", "may", "back", "going to",
+            "live", "destination", "tomorrow", "big", "date", "I",
+            "walk", "theatre", "queue", "window", "package",
+            "run", "into", "for", "over", "apple", "dark",
+            "order", "seller", "headphone", "break", "buy"};
+
+    private final String[] htmlTags = new String[]{
+            "div", "span", "h1", "button", "b", "strong", "sup", "sub"};
+
     public TestDataInitService(UserServiceImpl userService, RoleServiceImpl roleService, AnswerServiceImpl answerService,
                                QuestionServiceImpl questionService, TagServiceImpl tagService) {
         this.userService = userService;
@@ -115,19 +124,19 @@ public class TestDataInitService {
 
         List<User> existingUsers = userService.getAll();
         List<Tag> existingTags = tagService.getAll();
-        int tagEndIndex = getRandInt(1,existingTags.size() - 1);
+        int tagEndIndex = getRandInt(1, existingTags.size() - 1);
         for (Question question : questions) {
-           question.setUser(existingUsers.get(getRandInt(0, existingUsers.size() - 1)));
+            question.setUser(existingUsers.get(getRandInt(0, existingUsers.size() - 1)));
             question.setTags(existingTags.subList(0, tagEndIndex));
-       }
+        }
         questionService.persistAll(questions);
 
         Set<Answer> answersToPersist = new HashSet<>();
-            for (Answer answer : answers) {
-                answer.setUser(existingUsers.get(getRandInt(0, existingUsers.size() - 1)));
-                answer.setQuestion(questions.get(getRandInt(0, questions.size() - 1)));
-                answersToPersist.add(answer);
-            }
+        for (Answer answer : answers) {
+            answer.setUser(existingUsers.get(getRandInt(0, existingUsers.size() - 1)));
+            answer.setQuestion(questions.get(getRandInt(0, questions.size() - 1)));
+            answersToPersist.add(answer);
+        }
         answerService.persistAll(answersToPersist);
     }
 
@@ -168,35 +177,48 @@ public class TestDataInitService {
     private List<Tag> getRandomTags() {
         List<Tag> tags = new ArrayList<>();
         for (int i = 0; i < tagsNum; i++) {
-            String name = "bf";
-            String description = "bfd";
-            tags.add(new Tag(null,name,description,null,null));
+            String name = getRand(randomWords);
+            StringBuilder description = new StringBuilder();
+            for (int j = 0; j < getRandInt(3, 15); j++) {
+                description.append(getRand(randomWords)).append(" ");
+            }
+            tags.add(new Tag(null, name, description.toString(), null, null));
         }
         return tags;
     }
 
-    //generates answersNum answers with random title, description and isDeleted value
+    //generates answersNum answers with random title,
+    // description and isDeleted value
     private List<Question> getRandomQuestions() {
         List<Question> questions = new ArrayList<>();
         for (int i = 0; i < questionsNum; i++) {
-            String title = "b";
-            String description = "fb";
-            questions.add(new Question(null,title,description,null,
-                    null,null, null, i % 3 == 0,
-                    null,null,null,null));
+            String title = getRand(randomWords);
+            StringBuilder description = new StringBuilder();
+            for (int j = 0; j < getRandInt(3, 15); j++) {
+                description.append(getRand(randomWords)).append(" ");
+            }
+            questions.add(new Question(null, title, description.toString(), null,
+                    null, null, null, i % 3 == 0,
+                    null, null, null, null));
         }
         return questions;
     }
 
-    //generates answersNum answers with random htmlBody and dataAcceptTime
+    //generates answersNum answers with random htmlBody,
+    // dataAcceptTime and all Boolean values
     private List<Answer> getRandomAnswers() {
         List<Answer> answers = new ArrayList<>();
         for (int i = 0; i < answersNum; i++) {
-            String htmlBody = "vfd";
-            LocalDateTime dateAcceptTime = LocalDateTime.of(2021,getRandInt(1,12),
-                    getRandInt(1,28),getRandInt(0,23),
-                    getRandInt(0,59));
-            Answer answer = new Answer(null,null,htmlBody);
+            String first = getRand(htmlTags);
+            String second = getRand(htmlTags);
+            String third = getRand(htmlTags);
+            String htmlBody = "<" + first + ">" + getRand(randomWords) + "</" + first + ">" + "\n" +
+                    "<" + second + ">" + getRand(randomWords) + "</" + second + ">" + "\n" +
+                    "<" + third + ">" + getRand(randomWords) + "</" + third + ">";
+            LocalDateTime dateAcceptTime = LocalDateTime.of(2021, getRandInt(1, 12),
+                    getRandInt(1, 28), getRandInt(0, 23),
+                    getRandInt(0, 59));
+            Answer answer = new Answer(null, null, htmlBody, i % 5 == 0, i % 2 == 0, i % 6 == 0);
             answer.setDateAcceptTime(dateAcceptTime);
             answers.add(answer);
         }
