@@ -1,8 +1,9 @@
-package com.javamentor.qa.platform.service.impl.model;
+package com.javamentor.qa.platform.service.impl.model.user;
 
 import com.javamentor.qa.platform.dao.abstracts.model.ReadWriteDao;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.service.abstracts.model.UserService;
+import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
+import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
 import org.springframework.stereotype.Service;
 
 @Service

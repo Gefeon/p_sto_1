@@ -1,23 +1,36 @@
 package com.javamentor.qa.platform.service.impl;
 
+import com.javamentor.qa.platform.models.entity.question.Question;
+import com.javamentor.qa.platform.models.entity.question.Tag;
+import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.service.impl.model.RoleServiceImpl;
-import com.javamentor.qa.platform.service.impl.model.UserServiceImpl;
+import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
+import com.javamentor.qa.platform.service.impl.model.question.AnswerServiceImpl;
+import com.javamentor.qa.platform.service.impl.model.question.QuestionServiceImpl;
+import com.javamentor.qa.platform.service.impl.model.question.TagServiceImpl;
+import com.javamentor.qa.platform.service.impl.model.user.RoleServiceImpl;
+import com.javamentor.qa.platform.service.impl.model.user.UserServiceImpl;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-@NoArgsConstructor
+
 public class TestDataInitService {
     //Amount of test data
     private final static int usersNum = 10;
     private final static int rolesNum = 4;
+    private final static int answersNum = 10;
+    private final static int questionsNum = 10;
+    private final static int tagsNum = 4;
 
     //static fields for random values
     private final Character[] alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -58,6 +71,14 @@ public class TestDataInitService {
     private final String[] roles = new String[]{
             "ADMIN", "USER", "ANONYMOUS", "GUEST", "UNDEFINED", "MAIN"};
 
+    public TestDataInitService(UserServiceImpl userService, RoleServiceImpl roleService, AnswerServiceImpl answerService,
+                               QuestionServiceImpl questionService, TagServiceImpl tagService) {
+        this.userService = userService;
+        this.roleService = roleService;
+        this.answerService = answerService;
+        this.questionService = questionService;
+        this.tagService = tagService;
+    }
 
     @Getter
     @Setter
@@ -65,11 +86,16 @@ public class TestDataInitService {
     @Getter
     @Setter
     private RoleServiceImpl roleService;
+    @Getter
+    @Setter
+    private AnswerServiceImpl answerService;
+    @Getter
+    @Setter
+    private QuestionServiceImpl questionService;
+    @Getter
+    @Setter
+    private TagServiceImpl tagService;
 
-    public TestDataInitService(UserServiceImpl userService, RoleServiceImpl roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
-    }
 
     //fill related tables user_entity and role with test data
     public void fillTableWithTestData() {
@@ -77,9 +103,32 @@ public class TestDataInitService {
         List<Role> existingRoles = roleService.getAll();
         Set<User> usersToPersist = getRandomUsers();
         for (User user : usersToPersist) {
-            user.setRole(existingRoles.get(getRandInt(0, existingRoles.size())));
+            user.setRole(existingRoles.get(getRandInt(0, existingRoles.size() - 1)));
         }
         userService.persistAll(usersToPersist);
+
+        List<Tag> tags = getRandomTags();
+        List<Question> questions = getRandomQuestions();
+        List<Answer> answers = getRandomAnswers();
+
+        tagService.persistAll(tags);
+
+        List<User> existingUsers = userService.getAll();
+        List<Tag> existingTags = tagService.getAll();
+        int tagEndIndex = getRandInt(1,existingTags.size() - 1);
+        for (Question question : questions) {
+           question.setUser(existingUsers.get(getRandInt(0, existingUsers.size() - 1)));
+            question.setTags(existingTags.subList(0, tagEndIndex));
+       }
+        questionService.persistAll(questions);
+
+        Set<Answer> answersToPersist = new HashSet<>();
+            for (Answer answer : answers) {
+                answer.setUser(existingUsers.get(getRandInt(0, existingUsers.size() - 1)));
+                answer.setQuestion(questions.get(getRandInt(0, questions.size() - 1)));
+                answersToPersist.add(answer);
+            }
+        answerService.persistAll(answersToPersist);
     }
 
     //generates rolesNum roles with random fields
@@ -113,6 +162,45 @@ public class TestDataInitService {
                     linkSite, linkGithub, linkVk, about, imageLink, nickname));
         }
         return users;
+    }
+
+    //generates tagsNum tags with random name and description
+    private List<Tag> getRandomTags() {
+        List<Tag> tags = new ArrayList<>();
+        for (int i = 0; i < tagsNum; i++) {
+            String name = "bf";
+            String description = "bfd";
+            tags.add(new Tag(null,name,description,null,null));
+        }
+        return tags;
+    }
+
+    //generates answersNum answers with random title, description and isDeleted value
+    private List<Question> getRandomQuestions() {
+        List<Question> questions = new ArrayList<>();
+        for (int i = 0; i < questionsNum; i++) {
+            String title = "b";
+            String description = "fb";
+            questions.add(new Question(null,title,description,null,
+                    null,null, null, i % 3 == 0,
+                    null,null,null,null));
+        }
+        return questions;
+    }
+
+    //generates answersNum answers with random htmlBody and dataAcceptTime
+    private List<Answer> getRandomAnswers() {
+        List<Answer> answers = new ArrayList<>();
+        for (int i = 0; i < answersNum; i++) {
+            String htmlBody = "vfd";
+            LocalDateTime dateAcceptTime = LocalDateTime.of(2021,getRandInt(1,12),
+                    getRandInt(1,28),getRandInt(0,23),
+                    getRandInt(0,59));
+            Answer answer = new Answer(null,null,htmlBody);
+            answer.setDateAcceptTime(dateAcceptTime);
+            answers.add(answer);
+        }
+        return answers;
     }
 
     private static int getRandInt(int lowBound, int upperBound) {
