@@ -1,10 +1,9 @@
-// при отправке формы входа
+
 $(document).on('submit', '#loginForm', function(){
 
-    // получаем данные формы
     const login_form = $(this);
     const form_data = JSON.stringify(login_form.serializeObject());
-// отправить данные формы в API
+
 $.ajax({
     url: "/login",
     type: "POST",
@@ -12,7 +11,7 @@ $.ajax({
     data: form_data,
     success: function (result) {
 
-        //Если получаем в теле запроса. Если приходит в Set-Cookie, ничего делать не нужно
+        //Get token in response body. If it will be in Set-Cookie header comment next 2 rows
         $.cookie("jwt", null, { path: '/' });
         $.cookie("jwt", result.jwt, {expires: 5, path: '/' });
 
