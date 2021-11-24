@@ -1,8 +1,15 @@
 package com.javamentor.qa.platform.models.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
+@Component
+@NoArgsConstructor
 public class QuestionDto {
     private Long id;
     private String title;
