@@ -12,10 +12,10 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class QuestionCreateDto {
-    @NotBlank
+    @NotBlank(message = "Поле title не может быть пустым или null")
     private String title;
-    @NotBlank
+    @NotBlank(message = "Поле message не может быть пустым или null")
     private String description;
-    @NotEmpty
+    @NotEmpty(message = "Поле tags не может быть пустым или null")
     private List<TagDto> tags;
 }
