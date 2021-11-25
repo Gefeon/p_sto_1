@@ -3,6 +3,9 @@ package com.javamentor.qa.platform;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
+import com.javamentor.qa.platform.models.entity.question.Tag;
+import com.javamentor.qa.platform.models.mapper.TagMapper;
+import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.impl.TestDataInitService;
 import com.javamentor.qa.platform.webapp.configs.JmApplication;
@@ -28,18 +31,27 @@ public class QuestionResourceControllerTests {
     private final TestRestTemplate restTemplate;
     private final TestDataInitService testDataInitService;
     private final TagService tagService;
+    private final QuestionService questionService;
+    private final TagMapper tagMapper;
     private final String url = "/api/user/question";
 
+    public static boolean dbInit = false;
+
     @Autowired
-    public QuestionResourceControllerTests(TestRestTemplate restTemplate, TestDataInitService testDataInitService, TagService tagService) {
+    public QuestionResourceControllerTests(TestRestTemplate restTemplate, TestDataInitService testDataInitService, TagService tagService, QuestionService questionService, TagMapper tagMapper) {
         this.restTemplate = restTemplate;
         this.testDataInitService = testDataInitService;
         this.tagService = tagService;
+        this.questionService = questionService;
+        this.tagMapper = tagMapper;
     }
 
     @BeforeEach
-    void dbInit() {
-        testDataInitService.fillTableWithTestData();
+    public void setUp() {
+        if (!dbInit) {
+            dbInit = true;
+            testDataInitService.fillTableWithTestData();
+        }
     }
 
     @Test
@@ -114,7 +126,7 @@ public class QuestionResourceControllerTests {
     }
 
     @Test
-    public void postTagsWithNonexistentIdGetNew() {
+    public void postTagsWithNonexistentIdCheckNewTagsAdded() {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
         questionCreateDto.setDescription("question description");
@@ -123,17 +135,63 @@ public class QuestionResourceControllerTests {
         TagDto tag2 = new TagDto();
         tag1.setName("newTagName1");
         tag2.setName("newTagName2");
-        questionCreateDto.setTags(List.of(tag1,tag2));
+        questionCreateDto.setTags(List.of(tag1, tag2));
 
         int tagsCount = tagService.getAll().size();
         ResponseEntity<QuestionDto> response = restTemplate.postForEntity(url, questionCreateDto, QuestionDto.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody().getListTagDto(), iterableWithSize(2));
-        assertThat(tagService.getAll().size(),is(tagsCount + 2));
+        assertThat(tagService.getAll().size(), is(tagsCount + 2));
         assertThat(tagService.existsByName(tag1.getName()), is(true));
         assertThat(tagService.existsByName(tag2.getName()), is(true));
+        assertThat(questionService.getWithTagsById(response.getBody().getId()).orElseThrow()
+                .getTags().stream().filter(tag -> tag.getName().equals(tag1.getName()))
+                .findFirst().orElse(null), notNullValue());
     }
 
+    @Test
+    public void postTagsWithExistentIdCheckNewTagsAdded() {
 
+        QuestionCreateDto questionCreateDto = new QuestionCreateDto();
+        questionCreateDto.setDescription("question description");
+        questionCreateDto.setTitle("title");
+        TagDto tag1 = new TagDto();
+        TagDto tag2 = new TagDto();
+        tag1.setName("newTagName1");
+        tagService.persist(tagMapper.toModel(tag1));
+        tag2.setName("newTagName2");
+        questionCreateDto.setTags(List.of(tag1, tag2));
+
+        int tagsCount = tagService.getAll().size();
+        ResponseEntity<QuestionDto> response = restTemplate.postForEntity(url, questionCreateDto, QuestionDto.class);
+
+        List<Tag> tagList = questionService.getWithTagsById(response.getBody().getId()).orElseThrow().getTags();
+
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(response.getBody().getListTagDto(), iterableWithSize(2));
+        assertThat(tagService.getAll().size(), is(tagsCount + 1));
+        assertThat(tagService.existsByName(tag1.getName()), is(true));
+        assertThat(tagService.existsByName(tag2.getName()), is(true));
+        assertThat((tagList.stream().filter(tag -> tag.getName().equals(tag1.getName()))
+                .findFirst().orElse(null)), notNullValue());
+    }
+
+    @Test
+    public void postQuestionCheckIsAdded() {
+
+        QuestionCreateDto questionCreateDto = new QuestionCreateDto();
+        questionCreateDto.setDescription("question description");
+        questionCreateDto.setTitle("title");
+        TagDto tag = new TagDto();
+        tag.setName("tagName");
+        questionCreateDto.setTags(List.of(tag));
+
+        int questionsCount = questionService.getAll().size();
+        ResponseEntity<QuestionDto> response = restTemplate.postForEntity(url, questionCreateDto, QuestionDto.class);
+
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(questionService.getAll().size(), is(questionsCount + 1));
+
+    }
 }

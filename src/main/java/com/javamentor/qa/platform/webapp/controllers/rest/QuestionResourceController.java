@@ -42,14 +42,15 @@ public class QuestionResourceController {
         int counter = 0;
         for (Tag tag : question.getTags()) {
             Tag newTag;
-            if (tagService.existsByName(questionCreateDto.getTags().get(counter++).getName())) {
-                newTag = tagService.getByName(questionCreateDto.getTags().get(counter++).getName()).orElse(null);
+            if (tagService.existsByName(questionCreateDto.getTags().get(counter).getName())) {
+                newTag = tagService.getByName(questionCreateDto.getTags().get(counter).getName()).orElse(null);
             } else {
                 newTag = new Tag();
                 newTag.setName(tag.getName());
                 tagService.persist(newTag);
             }
             tags.add(newTag);
+            counter++;
         }
         question.setTags(tags);
 
