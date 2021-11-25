@@ -15,9 +15,12 @@ public class DataSourceConfig {
     public DataSource getDataSource() {
         DataSourceBuilder<?> dataSourceBuilder = DataSourceBuilder.create();
         String dbName = "";
+        String username = "postgres";
+        String password = "";
+
         dataSourceBuilder.url("jdbc:postgresql://localhost:5432/" + dbName + "?characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true");
-        dataSourceBuilder.username("postgres");
-        dataSourceBuilder.password("root");
+        dataSourceBuilder.username(username);
+        dataSourceBuilder.password(password);
         return dataSourceBuilder.build();
     }
 }

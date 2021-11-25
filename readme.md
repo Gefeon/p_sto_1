@@ -405,20 +405,11 @@ User при регистрации получает все знаки лишь �
 ````
 
 ## Установка локальных параметров БД.
-Для запуска проекта с локальными настроками БД необходимо указать параметры в файле 
-**application-local.properties**:
+Для запуска проекта с локальными настройками БД необходимо внести изменения в файле
+**DataSourceConfig**:
 ````
-spring.datasource.url=jdbc:postgresql://localhost:5432/jm?characterEncoding=UTF-8&useUnicode=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-spring.datasource.username=postgres
-spring.datasource.password=root
+String dbName = "";
+String username = "";
+String password = "";
 ````
-Если необходимо:
 
-- Меняем порт **5432**.
-- Меняем название БД - **jm**
-- Меняем **username** и **password**
-
-Меняем активный профиль в файле **application.properties** c **dev** на **local**:
-````
-spring.profiles.active=dev
-````
