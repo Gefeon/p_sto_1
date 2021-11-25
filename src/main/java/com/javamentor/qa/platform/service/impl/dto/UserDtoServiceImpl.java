@@ -7,7 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
+import java.util.Optional;
+
 @Service
 public class UserDtoServiceImpl implements UserDtoService {
 
@@ -19,7 +20,8 @@ public class UserDtoServiceImpl implements UserDtoService {
     }
 
     @Override
-    public UserDto getUserDtoById(Long id) {
+    @Transactional
+    public Optional<UserDto> getUserDtoById(Long id) {
         return userDtoDao.getUserDtoById(id);
     }
 }

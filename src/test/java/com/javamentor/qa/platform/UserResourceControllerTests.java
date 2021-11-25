@@ -1,47 +1,52 @@
 package com.javamentor.qa.platform;
 
 
-import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.webapp.configs.JmApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
-@SpringBootTest(classes = JmApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
+@SpringBootTest(classes = JmApplication.class)
 public class UserResourceControllerTests {
 
-    private final Long id = 3L;
+    private final Long id = 33L;
     private final String url = "/api/user/" + id;
     private final String name = "Roman";
     private final String email = "Rom@ya.ru";
-    private final String linkImage = "";
+    private final String linkImage = null;
     private final String city = "Surgut";
     private final int reputation = 41;
-    private TestRestTemplate restTemplate;
+
+    private MockMvc mockMvc;
 
     @Autowired
-    public void setRestTemplate(TestRestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public void setMockMvc(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
     }
 
     @Test
     public void testGetUserById() throws Exception {
 
-        ResponseEntity<UserDto> response = restTemplate.getForEntity(url, UserDto.class);
+        ResultActions res = mockMvc.perform(get(url));
 
-        assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(response.getBody().getId(), is(id));
-        assertThat(response.getBody().getFullName(), is(name));
-        assertThat(response.getBody().getEmail(), is(email));
-        assertThat(response.getBody().getLinkImage(), is(nullValue()));
-        assertThat(response.getBody().getCity(), is(city));
-        assertThat(response.getBody().getReputation(), is(reputation));
-
+        if (res.andReturn().getResponse().getHeaderValue("Body") == null) {
+            res.andExpect(status().isNotFound());
+        } else {
+            res
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.fullName").value(name))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(email))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.city").value(city))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.linkImage").value(linkImage))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.reputation").value(reputation));
+        }
     }
 }

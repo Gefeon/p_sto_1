@@ -1,6 +1,10 @@
 package com.javamentor.qa.platform.models.dto;
 
-import lombok.*;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
