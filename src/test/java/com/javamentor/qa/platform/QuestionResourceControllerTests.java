@@ -3,9 +3,9 @@ package com.javamentor.qa.platform;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
+import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.impl.TestDataInitService;
 import com.javamentor.qa.platform.webapp.configs.JmApplication;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,14 @@ public class QuestionResourceControllerTests {
 
     private final TestRestTemplate restTemplate;
     private final TestDataInitService testDataInitService;
+    private final TagService tagService;
     private final String url = "/api/user/question";
 
     @Autowired
-    public QuestionResourceControllerTests(TestRestTemplate restTemplate, TestDataInitService testDataInitService) {
+    public QuestionResourceControllerTests(TestRestTemplate restTemplate, TestDataInitService testDataInitService, TagService tagService) {
         this.restTemplate = restTemplate;
         this.testDataInitService = testDataInitService;
+        this.tagService = tagService;
     }
 
     @BeforeEach
@@ -112,22 +114,25 @@ public class QuestionResourceControllerTests {
     }
 
     @Test
-    public void postTagsWithNonexistentIdGet() {
+    public void postTagsWithNonexistentIdGetNew() {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
         questionCreateDto.setDescription("question description");
         questionCreateDto.setTitle("title");
         TagDto tag1 = new TagDto();
         TagDto tag2 = new TagDto();
-        tag1.setName("tagName1");
-        tag2.setName("tagName2");
+        tag1.setName("newTagName1");
+        tag2.setName("newTagName2");
         questionCreateDto.setTags(List.of(tag1,tag2));
 
+        int tagsCount = tagService.getAll().size();
         ResponseEntity<QuestionDto> response = restTemplate.postForEntity(url, questionCreateDto, QuestionDto.class);
 
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(response.getBody().getListTagDto(), iterableWithSize(2));
-        assertThat(response.getBody().getListTagDto().get(0).getId(), greaterThan(0L));
+        assertThat(tagService.getAll().size(),is(tagsCount + 2));
+        assertThat(tagService.existsByName(tag1.getName()), is(true));
+        assertThat(tagService.existsByName(tag2.getName()), is(true));
     }
 
 

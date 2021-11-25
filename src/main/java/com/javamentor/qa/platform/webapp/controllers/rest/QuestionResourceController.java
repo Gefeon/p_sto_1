@@ -39,10 +39,11 @@ public class QuestionResourceController {
     public QuestionDto getUserDto(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
         Question question = questionMapper.toModel(questionCreateDto);
         List<Tag> tags = new ArrayList<>();
+        int counter = 0;
         for (Tag tag : question.getTags()) {
             Tag newTag;
-            if (tagService.existsByName(questionCreateDto.getTags().get(0).getName())) {
-                newTag = tagService.getByName(questionCreateDto.getTags().get(0).getName()).orElse(null);
+            if (tagService.existsByName(questionCreateDto.getTags().get(counter++).getName())) {
+                newTag = tagService.getByName(questionCreateDto.getTags().get(counter++).getName()).orElse(null);
             } else {
                 newTag = new Tag();
                 newTag.setName(tag.getName());
