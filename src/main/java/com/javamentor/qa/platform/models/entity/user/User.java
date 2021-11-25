@@ -22,6 +22,21 @@ import java.util.Objects;
 @Table(name = "user_entity")
 public class User implements UserDetails {
 
+    public User(@NonNull String email, @NonNull String password, String fullName,
+                String city, String linkSite, String linkGitHub, String linkVk,
+                String about, String imageLink, String nickname) {
+        this.email = email;
+        this.password = password;
+        this.fullName = fullName;
+        this.city = city;
+        this.linkSite = linkSite;
+        this.linkGitHub = linkGitHub;
+        this.linkVk = linkVk;
+        this.about = about;
+        this.imageLink = imageLink;
+        this.nickname = nickname;
+    }
+
     private static final long serialVersionUID = 8086496705293852501L;
 
     @Id
@@ -87,7 +102,7 @@ public class User implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
+    public @NonNull String getPassword() {
         return password;
     }
 
