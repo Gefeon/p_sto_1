@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +36,12 @@ public class QuestionResourceController {
     }
 
     @PostMapping("/question")
-    public QuestionDto getUserDto(@RequestBody QuestionCreateDto questionCreateDto) {
+    public QuestionDto getUserDto(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
         Question question = questionMapper.toModel(questionCreateDto);
         List<Tag> tags = new ArrayList<>();
-        for (Tag tag: question.getTags()) {
+        for (Tag tag : question.getTags()) {
             Tag newTag;
-            if(tagService.existsByName(questionCreateDto.getTags().get(0).getName())) {
+            if (tagService.existsByName(questionCreateDto.getTags().get(0).getName())) {
                 newTag = tagService.getByName(questionCreateDto.getTags().get(0).getName()).orElse(null);
             } else {
                 newTag = new Tag();
