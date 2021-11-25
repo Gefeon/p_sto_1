@@ -15,12 +15,13 @@ public abstract class ReadOnlyDaoImpl<E, K> {
     @PersistenceContext
     private EntityManager entityManager;
 
-    private Class<E> clazz = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
+    @SuppressWarnings("unchecked") //because 0th generic superclass is always E
+    private final Class<E> clazz = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
             .getActualTypeArguments()[0];
 
-
+    @SuppressWarnings("unchecked") //because row use of List is bad practice
     public List<E> getAll() {
-        return entityManager.createQuery("from " + clazz.getName()).getResultList();
+        return (List<E>) entityManager.createQuery("from " + clazz.getName()).getResultList();
     }
 
     public boolean existsById(K id) {
@@ -28,15 +29,17 @@ public abstract class ReadOnlyDaoImpl<E, K> {
         return count > 0;
     }
 
+    @SuppressWarnings("unchecked") //because row use of Query is bad practice
     public Optional<E> getById(K id) {
         String hql = "FROM " + clazz.getName() + " WHERE id = :id";
         TypedQuery<E> query = (TypedQuery<E>) entityManager.createQuery(hql).setParameter("id", id);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
 
+    @SuppressWarnings("unchecked") //because row use of List is bad practice
     public List<E> getAllByIds(Iterable<K> ids) {
         if (ids != null && ids.iterator().hasNext()) {
-            return entityManager.createQuery("from " + clazz.getName() + " e WHERE e.id IN :ids")
+            return (List<E>) entityManager.createQuery("from " + clazz.getName() + " e WHERE e.id IN :ids")
                     .setParameter("ids", ids).getResultList();
         } else {
             return new ArrayList<>();
