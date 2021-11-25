@@ -16,7 +16,7 @@ public abstract class QuestionMapper {
     @Autowired
     protected QuestionViewedService questionViewedService;
 
-    @Mapping(source = "question.tags", target = "listTagDto", ignore = true)
+    @Mapping(source = "question.tags", target = "listTagDto")
     @Mapping(source = "question.id", target = "id")
     @Mapping(source = "question.persistDateTime", target = "persistDateTime")
     @Mapping(source = "question.lastUpdateDateTime", target = "lastUpdateDateTime")
