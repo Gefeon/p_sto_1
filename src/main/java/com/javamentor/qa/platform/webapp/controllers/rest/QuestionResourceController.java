@@ -56,7 +56,7 @@ public class QuestionResourceController {
 
         //TODO: instead of using userFrom DB we need attach
         // to Question @AuthenticationPrincipal
-        User user = userService.getById(1L).orElseThrow();
+        User user = userService.getAll().get(0);
         question.setUser(user);
 
         questionService.persist(question);
