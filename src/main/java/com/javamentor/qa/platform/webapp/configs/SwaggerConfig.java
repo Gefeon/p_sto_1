@@ -19,6 +19,7 @@ import java.util.Collections;
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
+    public static final String QUESTION_CONTROLLER = "Question";
 
     @Bean
     public Docket api() {
