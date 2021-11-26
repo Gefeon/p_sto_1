@@ -20,6 +20,7 @@ public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
     public static final String QUESTION_CONTROLLER = "Question";
+    public static final String ANSWER_CONTROLLER = "Answer";
 
     @Bean
     public Docket api() {
