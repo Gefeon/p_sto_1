@@ -56,7 +56,7 @@ public class QuestionResourceController {
         }
         question.setTags(tags);
 
-        //TODO: instead of using userFrom DB we need attach
+        //TODO: instead of using userFromDB we need attach
         // to Question @AuthenticationPrincipal
         User user = userService.getAll().get(0);
         question.setUser(user);
