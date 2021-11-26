@@ -11,9 +11,9 @@ $.ajax({
     data: form_data,
     success: function (result) {
 
-        //Get token in response body. If it will be in Set-Cookie header comment next 2 rows
-        $.cookie("jwt", null, { path: '/' });
-        $.cookie("jwt", result.jwt, {expires: 5, path: '/' });
+        //Get token in response body.
+        $.cookie("jwt_token", null, { path: '/' });
+        $.cookie("jwt_token", result.token, {expires: 5, path: '/' });
 
         window.location.replace("/home");
     },
