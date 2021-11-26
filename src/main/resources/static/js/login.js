@@ -15,7 +15,7 @@ $.ajax({
         $.cookie("jwt_token", null, { path: '/' });
         $.cookie("jwt_token", result.token, {expires: 5, path: '/' });
 
-        window.location.replace("/home");
+        window.location.replace("/main");
     },
     error: function () {
         alert("error!")
