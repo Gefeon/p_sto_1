@@ -9,6 +9,8 @@ import com.javamentor.qa.platform.models.mapper.QuestionMapper;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,7 +38,7 @@ public class QuestionResourceController {
     }
 
     @PostMapping("/question")
-    public QuestionDto getUserDto(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
+    public ResponseEntity<QuestionDto> getUserDto(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
         Question question = questionMapper.toModel(questionCreateDto);
         List<Tag> tags = new ArrayList<>();
         int counter = 0;
@@ -60,8 +62,6 @@ public class QuestionResourceController {
         question.setUser(user);
 
         questionService.persist(question);
-        QuestionDto dto = questionMapper.toDto(question);
-        System.out.println("Вот");
-        return dto;
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.toDto(question));
     }
 }

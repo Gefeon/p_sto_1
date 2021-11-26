@@ -4,13 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
-import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.mapper.TagMapper;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.impl.TestDataInitService;
 import com.javamentor.qa.platform.webapp.configs.JmApplication;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,8 +29,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,27 +37,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = JmApplication.class)
 public class QuestionResourceControllerTests {
 
-    private MockMvc mockMvc;
-    private  final TestDataInitService testDataInitService;
+    private final TestDataInitService testDataInitService;
     private final TagService tagService;
     private final QuestionService questionService;
+
+    private final MockMvc mockMvc;
     private final TagMapper tagMapper;
     private final String url = "/api/user/question";
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public QuestionResourceControllerTests(TestDataInitService testDataInitService, TestDataInitService testDataInitService1, TagService tagService,
-                                           QuestionService questionService, TagMapper tagMapper, ObjectMapper objectMapper) {
-        this.testDataInitService = testDataInitService1;
+    public QuestionResourceControllerTests(TestDataInitService testDataInitService, TagService tagService,
+                                           QuestionService questionService, MockMvc mockMvc, TagMapper tagMapper, ObjectMapper objectMapper) {
+        this.testDataInitService = testDataInitService;
         this.tagService = tagService;
         this.questionService = questionService;
+        this.mockMvc = mockMvc;
         this.tagMapper = tagMapper;
         this.objectMapper = objectMapper;
-    }
-
-    @Autowired
-    public void setMockMvc(MockMvc mockMvc) {
-        this.mockMvc = mockMvc;
     }
 
     @BeforeEach
@@ -67,11 +64,12 @@ public class QuestionResourceControllerTests {
 
     @AfterEach
     public void clearTags() {
-       testDataInitService.clearTestData();
+        testDataInitService.clearTestData();
     }
 
     @Test
     public void postCorrectData_checkResponse() throws Exception {
+
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
         questionCreateDto.setDescription("question description");
         questionCreateDto.setTitle("question title");
@@ -85,20 +83,19 @@ public class QuestionResourceControllerTests {
         questionCreateDto.setTags(tags);
 
         ResultActions response = mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON));
-        response.andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(greaterThan(0L),Long.class))
+        response.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value(greaterThan(0L), Long.class))
                 .andExpect(jsonPath("$.title").value(questionCreateDto.getTitle()))
                 .andExpect(jsonPath("$.description").isNotEmpty())
-                .andExpect(jsonPath("$.authorId").value(greaterThan(0L),Long.class))
-                .andExpect(jsonPath("$.countAnswer").value(greaterThanOrEqualTo(0L),Long.class))
-                .andExpect(jsonPath("$.viewCount").value(greaterThanOrEqualTo(0L),Long.class))
+                .andExpect(jsonPath("$.authorId").value(greaterThan(0L), Long.class))
+                .andExpect(jsonPath("$.countAnswer").value(greaterThanOrEqualTo(0L), Long.class))
+                .andExpect(jsonPath("$.viewCount").value(greaterThanOrEqualTo(0L), Long.class))
                 .andExpect(jsonPath("$.countValuable").isNotEmpty())
                 .andExpect(jsonPath("$.persistDateTime").value(startsWith(LocalDate.now().toString())))
                 .andExpect(jsonPath("$.lastUpdateDateTime").value(startsWith(LocalDate.now().toString())))
                 .andExpect(jsonPath("$.listTagDto").value(iterableWithSize(randomSize)))
-                .andExpect(jsonPath("$.listTagDto[0].id").value(greaterThan(0L),Long.class));
+                .andExpect(jsonPath("$.listTagDto[0].id").value(greaterThan(0L), Long.class));
     }
-
 
 
     @Test
@@ -111,10 +108,11 @@ public class QuestionResourceControllerTests {
         tag.setName("tagName");
         questionCreateDto.setTags(List.of(tag));
 
-        mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest())
-                                .andExpect(mvcResult -> mvcResult.getResolvedException().getClass().equals(MethodArgumentNotValidException.class));
+        MvcResult result = mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+        Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
     }
+
 
     @Test
     public void postNullDescription_getBadRequest() throws Exception {
@@ -125,9 +123,9 @@ public class QuestionResourceControllerTests {
         tag.setName("tagName");
         questionCreateDto.setTags(List.of(tag));
 
-        mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult -> mvcResult.getResolvedException().getClass().equals(MethodArgumentNotValidException.class));
+        MvcResult result = mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+        Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
     }
 
     @Test
@@ -137,9 +135,10 @@ public class QuestionResourceControllerTests {
         questionCreateDto.setDescription("question description");
         questionCreateDto.setTitle("title");
 
-        mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(mvcResult -> mvcResult.getResolvedException().getClass().equals(MethodArgumentNotValidException.class));
+        MvcResult result = mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest()).andReturn();
+        Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
+
     }
 
     @Test
@@ -156,10 +155,9 @@ public class QuestionResourceControllerTests {
 
         int tagsCount = tagService.getAll().size();
         MvcResult result = mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isCreated()).andReturn();
 
         QuestionDto questionDto = objectMapper.readValue(result.getResponse().getContentAsString(), QuestionDto.class);
-
         assertThat(tagService.getAll().size(), is(tagsCount + 2));
         assertThat(tagService.existsByName(tag1.getName()), is(true));
         assertThat(tagService.existsByName(tag2.getName()), is(true));
@@ -183,10 +181,9 @@ public class QuestionResourceControllerTests {
 
         int tagsCount = tagService.getAll().size();
         MvcResult result = mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
+                .andExpect(status().isCreated()).andReturn();
 
         QuestionDto questionDto = objectMapper.readValue(result.getResponse().getContentAsString(), QuestionDto.class);
-
         assertThat(tagService.getAll().size(), is(tagsCount + 1));
         assertThat(tagService.existsByName(tag1.getName()), is(true));
         assertThat(tagService.existsByName(tag2.getName()), is(true));
@@ -207,8 +204,7 @@ public class QuestionResourceControllerTests {
 
         int questionsCount = questionService.getAll().size();
         mockMvc.perform(post(url).content(objectMapper.writeValueAsString(questionCreateDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
         assertThat(questionService.getAll().size(), is(questionsCount + 1));
-
     }
 }
