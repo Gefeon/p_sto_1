@@ -38,6 +38,7 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
             System.out.println("!!!AUTHORIZE SUCCESS!!!");
             String username = optionalDecodedJWT.get().getSubject();
             String role = optionalDecodedJWT.get().getClaim("role").asString();
+            System.out.println("role of " + username + " = " + role);
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(role)));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
