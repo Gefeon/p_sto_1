@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 @Getter
 @Setter
 @AllArgsConstructor
-class JwtToken{
+class JwtToken {
     private String token;
 }
 
