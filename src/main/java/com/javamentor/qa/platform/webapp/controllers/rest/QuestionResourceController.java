@@ -6,6 +6,7 @@ import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
+import com.javamentor.qa.platform.models.mapper.TagMapper;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
@@ -28,15 +29,11 @@ import java.util.List;
 public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
-    private final TagService tagService;
-    private final UserService userService;
+
     private final QuestionService questionService;
 
-    public QuestionResourceController(QuestionMapper questionMapper, TagService tagService,
-                                      UserService userService, QuestionService questionService) {
+    public QuestionResourceController(QuestionMapper questionMapper, QuestionService questionService) {
         this.questionMapper = questionMapper;
-        this.tagService = tagService;
-        this.userService = userService;
         this.questionService = questionService;
     }
 
@@ -48,27 +45,6 @@ public class QuestionResourceController {
     @PostMapping("/question")
     public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
         Question question = questionMapper.toModel(questionCreateDto);
-        List<Tag> tags = new ArrayList<>();
-        int counter = 0;
-        for (Tag tag : question.getTags()) {
-            Tag newTag;
-            if (tagService.existsByName(questionCreateDto.getTags().get(counter).getName())) {
-                newTag = tagService.getByName(questionCreateDto.getTags().get(counter).getName()).orElse(null);
-            } else {
-                newTag = new Tag();
-                newTag.setName(tag.getName());
-                tagService.persist(newTag);
-            }
-            tags.add(newTag);
-            counter++;
-        }
-        question.setTags(tags);
-
-        //TODO: instead of using userFromDB we need attach
-        // to Question @AuthenticationPrincipal
-        User user = userService.getAll().get(0);
-        question.setUser(user);
-
         questionService.persist(question);
         return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.toDto(question));
     }

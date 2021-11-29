@@ -1,6 +1,5 @@
 package com.javamentor.qa.platform.dao.impl.model.question;
 
-import com.javamentor.qa.platform.dao.abstracts.model.ReadWriteDao;
 import com.javamentor.qa.platform.dao.abstracts.model.question.TagDao;
 import com.javamentor.qa.platform.dao.impl.model.ReadWriteDaoImpl;
 import com.javamentor.qa.platform.dao.util.SingleResultUtil;
@@ -10,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,11 +25,24 @@ public class TagDaoImpl extends ReadWriteDaoImpl<Tag, Long> implements TagDao {
          return count > 0;
     }
 
-    @SuppressWarnings("unchecked") //because row use of Query is bad practice
+    @SuppressWarnings("unchecked")
     public Optional<Tag> getByName(String name) {
-        String hql = "FROM Tag t WHERE  t.name= :name";
-        TypedQuery<Tag> query = (TypedQuery<Tag>) entityManager.createQuery(hql).setParameter("name", name);
+        TypedQuery<Tag> query = (TypedQuery<Tag>) entityManager
+                .createQuery("FROM Tag t WHERE  t.name= :name")
+                .setParameter("name", name);
         return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
+    @SuppressWarnings("unchecked") //because row use of List is bad practice
+    @Override
+    public List<Tag> getByAllNames(Collection<String> names) {
+        if (names != null && names.size() > 0) {
+            return (List<Tag>) entityManager
+                    .createQuery("FROM Tag t WHERE  t.name IN :names")
+                    .setParameter("names", names).getResultList();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
 }

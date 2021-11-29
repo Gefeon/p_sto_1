@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface QuestionService extends ReadWriteService<Question, Long> {
     Optional<Question> getWithTagsById(Long id);
 
+    void persist(Question question);
 }
