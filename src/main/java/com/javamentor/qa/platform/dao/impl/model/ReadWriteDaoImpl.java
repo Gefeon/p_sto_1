@@ -1,12 +1,13 @@
 package com.javamentor.qa.platform.dao.impl.model;
 
-import com.javamentor.qa.platform.models.entity.user.User;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.lang.reflect.ParameterizedType;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 
 public abstract class ReadWriteDaoImpl<E, K> extends ReadOnlyDaoImpl<E, K> {
@@ -29,7 +30,7 @@ public abstract class ReadWriteDaoImpl<E, K> extends ReadOnlyDaoImpl<E, K> {
         entityManager.remove(e);
     }
 
-
+    @SuppressWarnings("unchecked") //because 0th generic superclass is always E
     public void deleteById(K id) {
         Class<E> clazz = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
@@ -38,26 +39,7 @@ public abstract class ReadWriteDaoImpl<E, K> extends ReadOnlyDaoImpl<E, K> {
     }
 
     public void persistAll(E... entities) {
-        int i = 0;
-
-        for (E entity : entities) {
-            entityManager.persist(entity);
-
-            i++;
-
-            // Flush a batch of inserts and release memory
-            if (i % batchSize == 0 && i > 0) {
-
-                entityManager.flush();
-                entityManager.clear();
-                i = 0;
-            }
-        }
-        if (i > 0) {
-            entityManager.flush();
-            entityManager.clear();
-        }
-
+        persistAll(Arrays.stream(entities).collect(Collectors.toList()));
     }
 
     public void persistAll(Collection<E> entities) {
