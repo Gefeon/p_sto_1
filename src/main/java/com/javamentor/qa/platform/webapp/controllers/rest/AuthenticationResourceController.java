@@ -1,20 +1,21 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
+import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.security.jwt.JwtService;
+import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.management.relation.RoleNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
+import javax.validation.Valid;
 
 /**
  * @author Alexey Achkasov
@@ -23,27 +24,26 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth/token")
 @RequiredArgsConstructor
+@Api(tags = {SwaggerConfig.AUTHENTICATION_CONTROLLER})
 public class AuthenticationResourceController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
     @PostMapping
-    public ResponseEntity<?> createToken(@RequestBody AuthenticationRequestDto authenticationRequestDto) {
-        String username = authenticationRequestDto.getUsername();
-        String password = authenticationRequestDto.getPassword();
-        System.out.println("username = " + username);
-        System.out.println("password = " + password);
-        //throws AuthenticationException if bad credentials is present
-        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-
-        String token = jwtService.createAccessToken(username, auth.getAuthorities()
+    @Operation(summary = "Authenticate user", responses = {
+            @ApiResponse(responseCode = "200", description = "Successful authentication"),
+            @ApiResponse(responseCode = "400", description = "Invalid user credentials")})
+    public ResponseEntity<TokenResponseDto> createToken(
+            @ApiParam(value = "A JSON object containing user login and password", required = true)
+            @Valid @RequestBody final AuthenticationRequestDto authDto) {
+        Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword()));
+        TokenResponseDto token = jwtService.createAccessToken(authDto.getUsername(),
+                auth.getAuthorities()
                 .stream()
                 .findFirst()
                 .orElseThrow()
                 .getAuthority());
-        Map<String, String> response = new HashMap<>();
-        response.put("token", token);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(token);
     }
 }

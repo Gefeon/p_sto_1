@@ -58,9 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
 
         http
                 .authorizeRequests()
-                .antMatchers("/api/auth/token", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                .antMatchers("/api/user/**").access("hasRole('USER')");
-                //.anyRequest().authenticated();
+                .antMatchers("/api/auth/token").permitAll()
+                .antMatchers("/api/user/**").access("hasRole('USER')")
+                .anyRequest().authenticated();
 
         http.addFilterBefore(new CustomJwtAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(new ExceptionHandlerFilter(), CustomJwtAuthorizationFilter.class);

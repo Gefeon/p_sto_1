@@ -35,6 +35,8 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
         Optional<DecodedJWT> optionalDecodedJWT = jwtService.processToken(request);
 
         if (optionalDecodedJWT.isPresent()) {
+            System.out.println(optionalDecodedJWT.get().getIssuedAt());
+            System.out.println(optionalDecodedJWT.get().getExpiresAt());
             System.out.println("!!!AUTHORIZE SUCCESS!!!");
             String username = optionalDecodedJWT.get().getSubject();
             String role = optionalDecodedJWT.get().getClaim("role").asString();

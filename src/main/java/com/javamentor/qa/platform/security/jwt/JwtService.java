@@ -5,7 +5,9 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -38,14 +40,14 @@ public class JwtService {
         algorithm = Algorithm.HMAC256(secretKey);
     }
 
-    public String createAccessToken(String username, String role) {
+    public TokenResponseDto createAccessToken(String username, String role) {
         Long currentTime = System.currentTimeMillis();
-        return JWT.create()
+        return new TokenResponseDto(JWT.create()
                 .withSubject(username)
                 .withIssuedAt(getIssuedAt(currentTime))
                 .withExpiresAt(getExpiresAt(currentTime, accessTokenValidTime))
                 .withClaim("role", role)
-                .sign(algorithm);
+                .sign(algorithm));
     }
 
     public Optional<DecodedJWT> processToken(HttpServletRequest request) throws JWTVerificationException {
