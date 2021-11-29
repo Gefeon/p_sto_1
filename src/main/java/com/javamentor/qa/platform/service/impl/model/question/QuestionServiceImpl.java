@@ -16,18 +16,7 @@ import java.util.Optional;
 @Service
 public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> implements QuestionService {
 
-    @PersistenceContext
-    EntityManager entityManager;
-
     public QuestionServiceImpl(QuestionDao questionDao) {
         super(questionDao);
-    }
-
-    @Override
-    @SuppressWarnings("unchecked") //because row use of Query is bad practice
-    public Optional<Question> getWithTagsById(Long id) {
-        String hql = "FROM Question q LEFT JOIN FETCH q.tags WHERE q.id = :id ";
-        TypedQuery<Question> query = (TypedQuery<Question>) entityManager.createQuery(hql).setParameter("id", id);
-        return SingleResultUtil.getSingleResultOrNull(query);
     }
 }

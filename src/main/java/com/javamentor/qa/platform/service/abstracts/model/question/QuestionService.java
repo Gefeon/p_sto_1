@@ -6,6 +6,4 @@ import com.javamentor.qa.platform.service.abstracts.model.ReadWriteService;
 import java.util.Optional;
 
 public interface QuestionService extends ReadWriteService<Question, Long> {
-    Optional<Question> getWithTagsById(Long id);
-
 }
