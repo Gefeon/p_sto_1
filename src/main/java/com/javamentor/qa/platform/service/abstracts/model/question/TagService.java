@@ -6,6 +6,4 @@ import com.javamentor.qa.platform.service.abstracts.model.ReadWriteService;
 import java.util.Optional;
 
 public interface TagService extends ReadWriteService<Tag, Long> {
-    boolean existsByName(String name);
-    Optional<Tag> getByName(String name);
 }
