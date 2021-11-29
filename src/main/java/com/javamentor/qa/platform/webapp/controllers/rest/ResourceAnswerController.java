@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.NoSuchElementException;
 
-@Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
+
 @RestController
 @RequestMapping("/api/user/question/{questionId}/answer")
 public class ResourceAnswerController {

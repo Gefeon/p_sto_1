@@ -6,6 +6,7 @@ import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService;
+
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
@@ -102,15 +103,6 @@ public class TestDataInitService {
         addRandomTags();
         addRandomQuestions();
         addRandomAnswers();
-    }
-
-    //fill related tables user_entity and role with test data
-    public void clearTestData() {
-        answerService.deleteAll(answerService.getAll());
-        questionService.deleteAll(questionService.getAll());
-        tagService.deleteAll(tagService.getAll());
-        userService.deleteAll(userService.getAll());
-        roleService.deleteAll(roleService.getAll());
     }
 
 

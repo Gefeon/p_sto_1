@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.webapp.configs;
 
+import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,10 +17,11 @@ import java.util.Collections;
 
 @Configuration
 @EnableSwagger2
+@Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
+
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
-    public static final String QUESTION_CONTROLLER = "Question";
     public static final String ANSWER_CONTROLLER = "Answer";
 
     @Bean
