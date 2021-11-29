@@ -19,6 +19,6 @@ public class ExampleControllerService {
     }
 
     public List<User> getListOfUsers() {
-        return em.createQuery("select u from User u", User.class).getResultList();
+        return em.createQuery("select u from User u join fetch u.role r", User.class).getResultList();
     }
 }
