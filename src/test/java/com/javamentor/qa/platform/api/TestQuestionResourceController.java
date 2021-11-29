@@ -1,23 +1,12 @@
 package com.javamentor.qa.platform.api;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.database.rider.core.DBUnitRule;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
-import com.javamentor.qa.platform.models.mapper.TagMapper;
-import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
-import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
-import org.junit.Rule;
+import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -33,23 +22,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application-test.properties")
-public class TestQuestionResourceController extends AbstractTestControllerClass{
+
+public class TestQuestionResourceController extends AbstractTestControllerClass {
 
     private final String url = "/api/user/question";
 
-    @Rule
-    public DBUnitRule dbUnitRule = DBUnitRule.instance();
-
-    @Autowired
-    public TestQuestionResourceController(TagService tagService, QuestionService questionService,
-                                          MockMvc mockMvc, TagMapper tagMapper, ObjectMapper objectMapper) {
-        super(tagService, questionService, mockMvc, tagMapper, objectMapper);
-    }
-
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postCorrectData_checkResponse() throws Exception {
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
         questionCreateDto.setDescription("question description");
@@ -78,9 +57,8 @@ public class TestQuestionResourceController extends AbstractTestControllerClass{
                 .andExpect(jsonPath("$.listTagDto[0].id").value(greaterThan(0L), Long.class));
     }
 
-
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postBlankTitle_getBadRequest() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -97,7 +75,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass{
 
 
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postNullDescription_getBadRequest() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -112,7 +90,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass{
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postNullTags_getBadRequest() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -126,7 +104,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass{
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postTagsWithNonexistentId_checkNewTagsAdded() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -152,7 +130,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass{
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postTagsWithExistentId_checkNewTagsAdded() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -179,7 +157,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass{
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml",disableConstraints = true)
+    @DataSet(value = "dataset/initialize/questionResourceController/common.yml")
     public void postQuestion_checkIsAdded() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
