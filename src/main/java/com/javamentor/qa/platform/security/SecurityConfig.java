@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
     public void configure(WebSecurity web) {
         web
                 .ignoring()
-                .antMatchers("/static/**");
+                .antMatchers("/js/**");
     }
 
     @Override
@@ -33,8 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http.cors();
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .and().formLogin().loginPage("/loginPage");
+                .antMatchers("/**").permitAll();
 
     }
 
