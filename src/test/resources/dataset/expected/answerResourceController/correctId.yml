@@ -32,7 +32,6 @@ user_entity:
     persist_date: "2021-11-24 00:00:00"
     role_id: 100
 
-
 role:
   - id: 100
     name: "ADMIN"
@@ -45,20 +44,3 @@ question:
     persist_date: "2021-11-30 00:29:29.623810"
     title: "lazyEx"
     user_id: 100
-
-answer:
-  - id: 100
-    date_accept_time: "2021-11-30 00:29:29.623810"
-    html_body: "some body"
-    is_deleted: false
-    is_deleted_by_moderator: false
-    is_helpful: false
-    persist_date: "2021-11-30 00:29:29.623810"
-    update_date: "2021-11-30 00:29:29.623810"
-    question_id: 100
-    user_id: 101
-
-
-
-
-
