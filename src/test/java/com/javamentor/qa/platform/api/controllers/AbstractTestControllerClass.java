@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.api;
+package com.javamentor.qa.platform.api.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.configuration.DBUnit;
