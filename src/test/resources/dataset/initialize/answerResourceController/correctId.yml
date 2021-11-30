@@ -1,0 +1,64 @@
+user_entity:
+  - id: 100
+    about: "информация о первом пользователе"
+    city: "Москва"
+    email: "admin100@admin.ru"
+    full_name: "ПЕТРОВ ПЕТР ПЕТРОВИЧ"
+    image_link: "test.ru"
+    is_deleted: "false"
+    is_enabled: "true"
+    last_redaction_date: "2021-11-24 00:00:00"
+    link_github: "test.ru"
+    link_site: "test.ru"
+    link_vk: "test.ru"
+    nickname: "admin"
+    password: "admin"
+    persist_date: "2021-11-24 00:00:00"
+    role_id: 100
+  - id: 101
+    about: "второй"
+    city: "Москва"
+    email: "ad@admin.ru"
+    full_name: "Иванов Иван Иванович"
+    image_link: "admin.ru"
+    is_deleted: "false"
+    is_enabled: "true"
+    last_redaction_date: "2021-11-24 00:00:00"
+    link_github: "admin.ru"
+    link_site: "admin.ru"
+    link_vk: "admin.ru"
+    nickname: "adm"
+    password: "admin"
+    persist_date: "2021-11-24 00:00:00"
+    role_id: 100
+
+#
+#role:
+#  - id: 100
+#    name: "ADMIN"
+#
+#question:
+#  - id: 100
+#    description: "fix lazyInitialization Exception"
+#    is_deleted: false
+#    last_redaction_date: "2021-11-30 00:29:29.623810"
+#    persist_date: "2021-11-30 00:29:29.623810"
+#    title: "lazyEx"
+#    user_id: 100
+#
+#answer:
+#  - id: 100
+#    date_accept_time: "2021-11-30 00:29:29.623810"
+#    html_body: "some body"
+#    is_deleted: false
+#    is_deleted_by_moderator: false
+#    is_helpful: false
+#    persist_date: "2021-11-30 00:29:29.623810"
+#    update_date: "2021-11-30 00:29:29.623810"
+#    question_id: 100
+#    user_id: 101
+#
+#
+#
+#
+#
