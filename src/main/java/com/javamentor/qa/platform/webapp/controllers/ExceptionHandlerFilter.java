@@ -10,10 +10,6 @@ import java.io.IOException;
 
 import static javax.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 26.11.2021
- */
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override

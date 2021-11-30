@@ -7,10 +7,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
@@ -19,10 +17,6 @@ import java.util.Optional;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 25.11.2021
- */
 @Getter
 @Service
 public class JwtService {

@@ -1,20 +1,22 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
+import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
+import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 29.11.2021
- */
+//ToDo используется как заглушка для тестов
+
 @RestController
 @RequestMapping("/api/user")
+@Api(tags = {SwaggerConfig.USER_RESOURCE_CONTROLLER})
 public class UserResourceController {
     @GetMapping("stub")
-    public ResponseEntity<?> stub(Authentication auth) {
-        return ResponseEntity.ok("Hello " + auth.getName());
+    @Operation(summary = "Returns Hello World!")
+    public ResponseEntity<?> stub() {
+        return ResponseEntity.ok("Hello World!");
     }
 }

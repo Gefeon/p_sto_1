@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform;
+package com.javamentor.qa.platform.api.authenticationresourcecontroller;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,22 +12,21 @@ import com.javamentor.qa.platform.webapp.configs.JmApplication;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.ReflectionUtils;
 
 import javax.annotation.PostConstruct;
-
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,18 +34,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 28.11.2021
- */
-
 @AutoConfigureMockMvc
 @SpringBootTest(classes = JmApplication.class)
-@Setter @Getter @NoArgsConstructor
+@Getter @NoArgsConstructor
 public class TestAuthenticationResourceController {
     private static final String AUTH_URI = "/api/auth/token";
-    private static final String AUTH_HEADER = "Authorization";
     private static final String WITH_AUTH_URI = "/api/user/stub";
+    private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
     @Autowired private TestDataInitService testDataInitService;
@@ -78,26 +72,27 @@ public class TestAuthenticationResourceController {
     @Test
     public void shouldGetAccessToSecuredResource() throws Exception {
         User user = userService.getById(1L).orElseThrow();
-        TokenResponseDto token = jwtService.createAccessToken(user.getUsername(), user.getPassword());
+        TokenResponseDto token = jwtService.createAccessToken(user.getUsername(), "ROLE_USER");
         assertNotNull(token);
 
         MvcResult result = mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + token.getToken()))
                 .andExpect(status().isOk()).andReturn();
+
         DecodedJWT decodedJWT = jwtService.processToken(result.getRequest()).orElseThrow();
         assertEquals(decodedJWT.getExpiresAt().getTime() - decodedJWT.getIssuedAt().getTime(), jwtService.getAccessTokenValidTime());
     }
 
     @Test
     public void shouldNotAllowedAccessToUserWithExpiredToken() throws Exception {
-        JwtService jwtServiceFake = Mockito.spy(jwtService);
+        JwtService jwtServiceSpy = Mockito.spy(jwtService);
         Field field = JwtService.class.getDeclaredField("accessTokenValidTime");
         field.setAccessible(true);
-        long notValidAfterMs = -1000L;
-        ReflectionUtils.setField(field, jwtServiceFake, notValidAfterMs);
+        ReflectionUtils.setField(field, jwtServiceSpy, -1000L);
+        assertEquals(-1000L, jwtServiceSpy.getAccessTokenValidTime());
 
-        User user = userService.getById(1L).orElseThrow();
-        TokenResponseDto token = jwtServiceFake.createAccessToken(user.getUsername(), user.getPassword());
-
+        UserDetails userDetails = userDetailsService.loadUserByUsername(userService.getById(1L).orElseThrow().getUsername());
+        String role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).findFirst().orElseThrow();
+        TokenResponseDto token = jwtServiceSpy.createAccessToken(userDetails.getUsername(), role);
         assertNotNull(token);
 
         mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + token.getToken()))

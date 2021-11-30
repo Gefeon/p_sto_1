@@ -6,10 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 28.11.2021
- */
 @Getter @Setter
 @AllArgsConstructor
 @ApiModel(description = "A JSON object containing the authentication JWT")

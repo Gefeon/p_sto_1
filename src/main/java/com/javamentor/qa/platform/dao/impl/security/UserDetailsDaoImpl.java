@@ -11,10 +11,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.Optional;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 26.11.2021
- */
 @Repository
 public class UserDetailsDaoImpl implements UserDetailsDao {
     @PersistenceContext

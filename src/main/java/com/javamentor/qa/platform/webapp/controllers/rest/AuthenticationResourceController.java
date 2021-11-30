@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 25.11.2021
- */
 @RestController
 @RequestMapping("/api/auth/token")
 @RequiredArgsConstructor

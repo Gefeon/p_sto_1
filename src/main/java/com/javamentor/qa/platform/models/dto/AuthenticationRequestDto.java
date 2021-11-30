@@ -8,10 +8,6 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
-/**
- * @author Alexey Achkasov
- * @version 1.0, 25.11.2021
- */
 @Getter @Setter
 @AllArgsConstructor
 @ApiModel(description = "A JSON object containing user login and password")
