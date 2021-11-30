@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,15 +31,13 @@ public class UserResourceController {
     @GetMapping("/{userId}")
     @Operation(summary = "Get user dto", responses = {
             @ApiResponse(description = "Get user dto success", responseCode = "200",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Optional.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
             @ApiResponse(description = "User not found", responseCode = "404", content = @Content)
     })
-    public ResponseEntity<Optional<UserDto>> getUserDto(@PathVariable("userId") Long id) {
-        HttpStatus status = HttpStatus.OK;
+    public ResponseEntity<UserDto> getUserDto(@PathVariable("userId") Long id) {
         Optional<UserDto> dto = userDtoService.getUserDtoById(id);
-        if(dto.isEmpty()) {
-            status = HttpStatus.NOT_FOUND;
-        }
-        return new ResponseEntity<>(dto, new HttpHeaders(), status);
+        return dto.isEmpty()
+                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+                : ResponseEntity.ok(dto.get());
     }
 }
