@@ -16,36 +16,18 @@ user_entity:
     persist_date: "2021-11-24 00:00:00"
     role_id: 100
   - id: 101
-    about: "второй"
-    city: "Москва"
-    email: "ad@admin.ru"
-    full_name: "Иванов Иван Иванович"
-    image_link: "admin.ru"
+    about: "информация о втором пользователе"
+    city: "Санкт-Петербург"
+    email: "user101@user.ru"
+    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
+    image_link: "test.ru"
     is_deleted: "false"
     is_enabled: "true"
     last_redaction_date: "2021-11-24 00:00:00"
-    link_github: "admin.ru"
-    link_site: "admin.ru"
-    link_vk: "admin.ru"
-    nickname: "adm"
-    password: "admin"
+    link_github: "test.ru"
+    link_site: "test.ru"
+    link_vk: "test.ru"
+    nickname: "user"
+    password: "user"
     persist_date: "2021-11-24 00:00:00"
-    role_id: 100
-
-role:
-  - id: 100
-    name: "ADMIN"
-
-question:
-  - id: 100
-    description: "fix lazyInitialization Exception"
-    is_deleted: false
-    last_redaction_date: "2021-11-30 00:29:29.623810"
-    persist_date: "2021-11-30 00:29:29.623810"
-    title: "lazyEx"
-    user_id: 100
-
-
-
-
-
+    role_id: 101

@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.api;
+package com.javamentor.qa.platform.api.controllers;
 
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.junit5.api.DBRider;
