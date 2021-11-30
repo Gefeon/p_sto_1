@@ -6,7 +6,6 @@ import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService;
-
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
@@ -104,7 +103,6 @@ public class TestDataInitService {
         addRandomQuestions();
         addRandomAnswers();
     }
-
 
     private void addRandomAnswers() {
         List<Answer> answers = new ArrayList<>();

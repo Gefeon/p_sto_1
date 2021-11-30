@@ -15,6 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
+@Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @Configuration
 @EnableSwagger2
 @Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
