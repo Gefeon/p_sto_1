@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TagServiceImpl extends ReadWriteServiceImpl<Tag, Long> implements TagService {
+
     public TagServiceImpl(TagDao tagDao) {
         super(tagDao);
     }
