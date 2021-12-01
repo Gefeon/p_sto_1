@@ -21,6 +21,7 @@ import java.util.Collections;
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
+    public static final String ANSWER_CONTROLLER = "Answer";
 
     @Bean
     public Docket api() {
@@ -30,6 +31,7 @@ public class SwaggerConfig {
                 .paths(PathSelectors.any())
                 .build()
                 .tags(new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1))
+                .tags(new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",2))
                 .apiInfo(apiInfo());
     }
 

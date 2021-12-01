@@ -14,16 +14,16 @@ public class ResourceAnswerControllerTest extends AbstractTestControllerClass{
     private final String url = "/api/user/question/100/answer/100";
 
     @Test
-    @DataSet(value = "dataset/initialize/answerResourceController/incorrectId.yml")
-    @ExpectedDataSet(value = "dataset/expected/answerResourceController/incorrectId.yml")
+    @DataSet(value = "dataset/DBAnswerExampleAnotherId.yml", disableConstraints = true)
+    @ExpectedDataSet(value = "dataset/expected/DBAnswerExampleAnotherId.yml")
     public void deleteAnswerWithIncorrectId_returnBadRequest() throws Exception {
         ResultActions response = mockMvc.perform(delete(url));
         response.andExpect(status().isBadRequest());
     }
 
     @Test
-    @DataSet(value = "dataset/initialize/answerResourceController/correctId.yml")
-    @ExpectedDataSet(value = "dataset/expected/answerResourceController/correctId.yml")
+    @DataSet(value = "dataset/DBAnswerExample.yml", disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/empty.yml"})
     public void deleteAnswer_returnStatusOk_AnswerDeleted() throws Exception {
         ResultActions response = mockMvc.perform(delete(url));
         response.andExpect(status().isOk());

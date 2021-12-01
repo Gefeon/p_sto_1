@@ -2,6 +2,8 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService;
+import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
+import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
+@Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
 @RestController
 @RequestMapping("/api/user/question/{questionId}/answer")
 public class ResourceAnswerController {
@@ -35,7 +38,7 @@ public class ResourceAnswerController {
             answerService.deleteById(answerId);
             return new ResponseEntity<>(HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("No answer with such id exists in DB", HttpStatus.BAD_REQUEST);
     }
 }
 
