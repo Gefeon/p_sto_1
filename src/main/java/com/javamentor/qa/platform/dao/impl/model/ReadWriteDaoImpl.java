@@ -31,11 +31,11 @@ public abstract class ReadWriteDaoImpl<E, K> extends ReadOnlyDaoImpl<E, K> {
     }
 
     @SuppressWarnings("unchecked") //because 0th generic superclass is always E
-    public boolean deleteById(K id) {
+    public void deleteById(K id) {
         Class<E> clazz = (Class<E>) ((ParameterizedType) getClass().getGenericSuperclass())
                 .getActualTypeArguments()[0];
         String hql = "DELETE " + clazz.getName() + " WHERE id = :id";
-        return entityManager.createQuery(hql).setParameter("id", id).executeUpdate() > 0;
+        entityManager.createQuery(hql).setParameter("id", id).executeUpdate();
     }
 
     public void persistAll(E... entities) {
