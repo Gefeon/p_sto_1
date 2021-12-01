@@ -1,6 +1,6 @@
 package com.javamentor.qa.platform.security;
 
-import com.javamentor.qa.platform.dao.abstracts.security.UserDetailsDao;
+import com.javamentor.qa.platform.dao.abstracts.model.user.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private final UserDetailsDao userDetailsDao;
+    private final UserDao userDao;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return userDetailsDao.loadUserByUsername(email)
+        return userDao.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User with email: " + email + " not found"));
     }
 }

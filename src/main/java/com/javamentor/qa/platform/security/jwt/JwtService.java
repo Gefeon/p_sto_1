@@ -50,9 +50,8 @@ public class JwtService {
             String token = rawToken.substring(7);
             JWTVerifier verifier = JWT.require(algorithm).build();
             return Optional.of(verifier.verify(token));
-        } else {
-            return Optional.empty();
         }
+        return Optional.empty();
     }
 
     private Date getExpiresAt(Long currentTime, Long validTime) {
