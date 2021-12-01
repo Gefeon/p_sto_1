@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.PropertySources;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
@@ -33,7 +32,7 @@ public class TestUserResourceController {
     }
 
     @Test
-    @DataSet(value="dataset/UserDtoResurceController.yml")
+    @DataSet(value="dataset/UserDtoResourceController.yml")
     public void getUserDtoById() throws Exception {
 
         //user exist
@@ -58,9 +57,8 @@ public class TestUserResourceController {
                 .andExpect(jsonPath("$.email").doesNotExist())
                 .andExpect(jsonPath("$.city").doesNotExist())
                 .andExpect(jsonPath("$.linkImage").doesNotExist())
-                .andExpect(jsonPath("$.reputation").doesNotExist())
-                .andExpect(jsonPath("$").doesNotHaveJsonPath())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$.reputation").doesNotExist());
+//                .andExpect(jsonPath("$").value("User is absent or wrong Id"));
 
         //user is absent
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/1000").accept(MediaType.APPLICATION_JSON_VALUE))
@@ -72,8 +70,7 @@ public class TestUserResourceController {
                 .andExpect(jsonPath("$.city").doesNotExist())
                 .andExpect(jsonPath("$.linkImage").doesNotExist())
                 .andExpect(jsonPath("$.reputation").doesNotExist())
-                .andExpect(jsonPath("$").doesNotHaveJsonPath())
-                .andExpect(jsonPath("$").doesNotExist());
+                .andExpect(jsonPath("$").value("User is absent or wrong Id"));
 
         //wrong type id
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/ggg").accept(MediaType.APPLICATION_JSON_VALUE))
@@ -85,7 +82,6 @@ public class TestUserResourceController {
                 .andExpect(jsonPath("$.city").doesNotExist())
                 .andExpect(jsonPath("$.linkImage").doesNotExist())
                 .andExpect(jsonPath("$.reputation").doesNotExist())
-                .andExpect(jsonPath("$").doesNotHaveJsonPath())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 }

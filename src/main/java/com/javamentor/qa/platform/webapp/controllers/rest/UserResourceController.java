@@ -34,10 +34,10 @@ public class UserResourceController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
             @ApiResponse(description = "User not found", responseCode = "404", content = @Content)
     })
-    public ResponseEntity<UserDto> getUserDto(@PathVariable("userId") Long id) {
+    public ResponseEntity<Object> getUserDto(@PathVariable("userId") Long id) {
         Optional<UserDto> dto = userDtoService.getUserDtoById(id);
         return dto.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(null)
+                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is absent or wrong Id")
                 : ResponseEntity.ok(dto.get());
     }
 }
