@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
+@Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
 @RequestMapping("/api/user")
 public class QuestionResourceController {

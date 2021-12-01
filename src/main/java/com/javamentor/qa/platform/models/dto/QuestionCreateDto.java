@@ -13,7 +13,7 @@ import java.util.List;
 public class QuestionCreateDto {
     @NotBlank(message = "Поле title не может быть пустым или null")
     private String title;
-    @NotBlank(message = "Поле message не может быть пустым или null")
+    @NotBlank(message = "Поле description не может быть пустым или null")
     private String description;
     @NotEmpty(message = "Поле tags не может быть пустым или null")
     private List<TagDto> tags;

@@ -38,7 +38,9 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
                 tagsToPersist.add(tag);
             }
         }
-        tagService.persistAll(tagsToPersist);
+        if(!tagsToPersist.isEmpty()) {
+            tagService.persistAll(tagsToPersist);
+        }
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);
         managedTags.addAll(tagService.getAllByNames(namesToFetch));
         question.setTags(managedTags);

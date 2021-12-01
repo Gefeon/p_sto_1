@@ -17,6 +17,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -26,8 +27,10 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     private final String url = "/api/user/question";
 
     @Test
-    @DataSet(value = "dataset/common.yml")
-    @ExpectedDataSet(value = "dataset/expected/common.yml")
+    @DataSet(value = {"dataset/DBUserExample.yml", "dataset/DBQuestionExample.yml",
+            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml"}, disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/DBUserExample.yml", "dataset/expected/DBQuestionAdded.yml",
+            "dataset/expected/DBTagThreeTagsAdded.yml", "dataset/expected/DBQuestionHasTagThreeTagsAdded.yml"})
     public void postCorrectData_checkResponse() throws Exception {
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
         questionCreateDto.setDescription("question description");
@@ -44,7 +47,8 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
         ResultActions response = mockMvc.perform(post(url)
                 .content(objectMapper.writeValueAsString(questionCreateDto))
                 .contentType(MediaType.APPLICATION_JSON));
-        response.andExpect(status().isCreated())
+        response.andDo(print())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.id").value(greaterThan(0L), Long.class))
                 .andExpect(jsonPath("$.title").value(questionCreateDto.getTitle()))
                 .andExpect(jsonPath("$.description").isNotEmpty())
@@ -57,7 +61,8 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml")
+    @DataSet(value = {"dataset/DBUserExample.yml", "dataset/DBQuestionExample.yml",
+            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml"}, disableConstraints = true)
     public void postBlankTitle_getBadRequest() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -71,12 +76,14 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
                 .perform(post(url)
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isBadRequest()).andReturn();
         Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml")
+    @DataSet(value = {"dataset/DBUserExample.yml", "dataset/DBQuestionExample.yml",
+            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml"}, disableConstraints = true)
     public void postNullDescription_getBadRequest() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -88,12 +95,14 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
         MvcResult result = mockMvc.perform(post(url)
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isBadRequest()).andReturn();
         Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml")
+    @DataSet(value = {"dataset/DBUserExample.yml", "dataset/DBQuestionExample.yml",
+            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml"}, disableConstraints = true)
     public void postNullTags_getBadRequest() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -103,14 +112,17 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
         MvcResult result = mockMvc.perform(post(url)
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isBadRequest()).andReturn();
         Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
 
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml")
-    @ExpectedDataSet(value = "dataset/expected/newUniqueIdAdded.yml")
+    @DataSet(value = {"dataset/DBUserExample.yml", "dataset/DBQuestionExample.yml",
+            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml"}, disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/DBUserExample.yml", "dataset/expected/DBQuestionAdded.yml",
+            "dataset/expected/DBTagTwoUniqueIdTagsAdded.yml", "dataset/expected/DBQuestionHasTagTwoTagsAdded.yml"})
     public void postTagsWithUniqueId_checkNewTagsAdded() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -125,13 +137,16 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
         mockMvc.perform(post(url)
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isCreated());
 
     }
 
     @Test
-    @DataSet(value = "dataset/common.yml")
-    @ExpectedDataSet(value = "dataset/expected/UniqueAndExistentIdAdded.yml")
+    @DataSet(value = {"dataset/DBUserExample.yml", "dataset/DBQuestionExample.yml",
+            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml"}, disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/DBUserExample.yml", "dataset/expected/DBQuestionAdded.yml",
+            "dataset/expected/DBTagTwoTagsWithExistentIdAdded.yml", "dataset/expected/DBQuestionHasTagUniqueAndWithExistentIdAdded.yml"})
     public void postTagsWithExistentId_checkNewTagsAdded() throws Exception {
 
         QuestionCreateDto questionCreateDto = new QuestionCreateDto();
@@ -143,27 +158,11 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
         tag2.setName("tagName1");
         questionCreateDto.setTags(List.of(tag1, tag2));
 
-        MvcResult result = mockMvc.perform(post(url)
-                        .content(objectMapper.writeValueAsString(questionCreateDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated()).andReturn();
-
-    }
-
-    @Test
-    @DataSet(value = "dataset/common.yml")
-    public void postQuestion_checkIsAdded() throws Exception {
-
-        QuestionCreateDto questionCreateDto = new QuestionCreateDto();
-        questionCreateDto.setDescription("question description");
-        questionCreateDto.setTitle("title");
-        TagDto tag = new TagDto();
-        tag.setName("tagName");
-        questionCreateDto.setTags(List.of(tag));
-
         mockMvc.perform(post(url)
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andDo(print())
+                .andExpect(status().isCreated()).andReturn();
+
     }
 }
