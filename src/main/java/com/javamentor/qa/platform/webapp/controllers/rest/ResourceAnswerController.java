@@ -31,10 +31,11 @@ public class ResourceAnswerController {
     })
     @DeleteMapping("/{answerId}")
     public ResponseEntity<?> deleteAnswer(@PathVariable Long questionId, @PathVariable Long answerId) {
-        if (answerService.deleteById(answerId)) {
+        if (answerService.existsById(answerId)) {
+            answerService.deleteById(answerId);
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 }
+

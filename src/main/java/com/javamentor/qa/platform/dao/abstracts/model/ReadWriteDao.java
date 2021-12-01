@@ -17,7 +17,7 @@ public interface ReadWriteDao<E, K> extends ReadOnlyDao<E, K> {
 
     void updateAll(Iterable<? extends E> entities);
 
-    boolean deleteById(K id);
+    void deleteById(K id);
 
 
 }

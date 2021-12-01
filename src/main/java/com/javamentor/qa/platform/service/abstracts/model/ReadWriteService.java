@@ -18,5 +18,5 @@ public interface ReadWriteService<E, K> extends ReadOnlyService<E, K> {
 
     void updateAll(Iterable<? extends E> entities);
 
-    boolean deleteById(K id);
+    void deleteById(K id);
 }

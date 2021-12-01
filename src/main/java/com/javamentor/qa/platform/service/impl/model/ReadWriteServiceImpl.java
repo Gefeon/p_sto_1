@@ -33,8 +33,8 @@ public abstract class ReadWriteServiceImpl<E, K> extends ReadOnlyServiceImpl<E, 
     }
 
     @Transactional
-    public boolean deleteById(K id) {
-        return readWriteDao.deleteById(id);
+    public void deleteById(K id) {
+        readWriteDao.deleteById(id);
     }
 
     @Transactional
