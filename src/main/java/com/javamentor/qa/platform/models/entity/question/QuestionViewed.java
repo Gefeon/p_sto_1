@@ -21,6 +21,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class QuestionViewed implements Serializable {
 
+
     @Id
     @GeneratedValue(generator = "QuestionViewed_seq")
     private Long id;

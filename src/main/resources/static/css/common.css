@@ -50,6 +50,10 @@ a:hover {
     right: 0 !important
 }
 
+.t0 {
+    top: 0 !important
+}
+
 .gs6 {
     margin: -3px
 }
@@ -191,7 +195,6 @@ a:hover {
 .badge:hover, .badge-tag:hover {
     color: hsl(0, 0%, 100%);
     text-decoration: none;
-    text-decoration-line: none;
     text-decoration-thickness: initial;
     text-decoration-style: initial;
     text-decoration-color: initial;

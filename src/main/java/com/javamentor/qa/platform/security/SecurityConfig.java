@@ -44,4 +44,5 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
                 .allowedOrigins("*")
                 .allowedMethods("*");
     }
+
 }

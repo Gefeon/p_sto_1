@@ -104,15 +104,6 @@ public class TestDataInitService {
         addRandomAnswers();
     }
 
-    //fill related tables user_entity and role with test data
-    public void clearTestData() {
-        answerService.deleteAll(answerService.getAll());
-        questionService.deleteAll(questionService.getAll());
-        tagService.deleteAll(tagService.getAll());
-        userService.deleteAll(userService.getAll());
-        roleService.deleteAll(roleService.getAll());
-    }
-
 
     private void addRandomAnswers() {
         List<Answer> answers = new ArrayList<>();
