@@ -28,7 +28,7 @@ Create Table user_entity (
   full_name VARCHAR(255),
   password VARCHAR(255),
   persist_date timestamp,
-  role_id bigint not null,
+  role_id bigint  not null,
   last_redaction_date timestamp,
   email VARCHAR(255),
   about TEXT,
@@ -39,7 +39,8 @@ Create Table user_entity (
   is_enabled boolean,
   is_deleted boolean,
   image_link VARCHAR(255),
-  nickname text
+  nickname text,
+  FOREIGN KEY (role_id) REFERENCES role(id)
 );
 
 Create Table question (
@@ -50,14 +51,17 @@ Create Table question (
   view_count INT,
   user_id bigint not null,
   is_deleted boolean,
-  last_redaction_date timestamp
+  last_redaction_date timestamp,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id)
 );
 
 Create Table question_viewed (
   id BIGSERIAL primary key not null,
   user_id bigint not null,
   question_id bigint not null,
-  persist_date timestamp
+  persist_date timestamp,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
 Create Table answer (
@@ -70,7 +74,9 @@ Create Table answer (
   is_deleted boolean,
   is_deleted_by_moderator boolean,
   date_accept_time timestamp,
-  update_date timestamp
+  update_date timestamp,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
 Create Table votes_on_answers (
@@ -78,7 +84,9 @@ Create Table votes_on_answers (
   user_id bigint not null,
   answer_id bigint not null,
   persist_date timestamp,
-  vote varchar(255)
+  vote varchar(255),
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (answer_id) REFERENCES answer(id)
 );
 
 Create Table votes_on_questions (
@@ -86,7 +94,9 @@ Create Table votes_on_questions (
   user_id bigint not null,
   question_id bigint not null,
   persist_date timestamp,
-  vote varchar(255)
+  vote varchar(255),
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
 Create Table tag (
@@ -100,19 +110,26 @@ Create Table tag_ignore (
   id BIGSERIAL primary key not null,
   ignored_tag_id bigint,
   user_id bigint,
-  persist_date timestamp
+  persist_date timestamp,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (ignored_tag_id) REFERENCES tag(id)
   );
 
 Create Table tag_tracked (
   id BIGSERIAL primary key not null,
   tracked_tag_id bigint,
   user_id bigint,
-  persist_date timestamp
+  persist_date timestamp,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (tracked_tag_id ) REFERENCES tag(id)
 );
 
 Create Table question_has_tag (
   tag_id bigint not null,
-  question_id bigint not null
+  question_id bigint not null,
+  FOREIGN KEY (tag_id) REFERENCES tag(id),
+  FOREIGN KEY (question_id) REFERENCES question(id)
+
 );
 
 Create Table comment (
@@ -121,30 +138,39 @@ Create Table comment (
   text TEXT,
   persist_date timestamp,
   last_redaction_date timestamp,
-  comment_type INT
+  comment_type INT,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id)
 );
 
 Create Table user_favorite_question (
   id BIGSERIAL primary key not null,
   persist_date timestamp,
   user_id bigint not null,
-  question_id bigint not null
+  question_id bigint not null,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
 Create Table comment_answer (
   comment_id bigint not null,
-  answer_id bigint not null
+  answer_id bigint not null,
+  FOREIGN KEY (comment_id) REFERENCES comment(id),
+  FOREIGN KEY (answer_id) REFERENCES answer(id)
 );
 
 Create Table comment_question (
   comment_id bigint not null,
-  question_id bigint not null
+  question_id bigint not null,
+  FOREIGN KEY (comment_id) REFERENCES comment(id),
+  FOREIGN KEY (question_id) REFERENCES answer(id)
 );
 
 Create Table related_tag (
   id BIGSERIAL primary key not null,
   child_tag bigint not null,
-  main_tag bigint not null
+  main_tag bigint not null,
+  FOREIGN KEY (child_tag) REFERENCES tag(id),
+  FOREIGN KEY (main_tag) REFERENCES tag(id)
 );
 
 Create Table reputation (
@@ -155,7 +181,11 @@ Create Table reputation (
   author_id bigint,
   sender_id bigint,
   question_id bigint,
-  answer_id bigint
+  answer_id bigint,
+  FOREIGN KEY (question_id) REFERENCES question(id),
+  FOREIGN KEY (author_id) REFERENCES user_entity(id),
+  FOREIGN KEY (sender_id) REFERENCES user_entity(id),
+  FOREIGN KEY (answer_id) REFERENCES answer(id)
 );
 
 Create Table badges (
@@ -169,7 +199,9 @@ Create Table user_badges (
   id BIGSERIAL primary key not null,
   ready boolean,
   user_id bigint,
-  badges_id bigint
+  badges_id bigint,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (badges_id) REFERENCES badges(id)
 );
 
 Create Table chat (
@@ -180,12 +212,15 @@ Create Table chat (
 );
 
 Create Table group_chat (
-  chat_id bigint
+  chat_id bigint,
+  FOREIGN KEY (chat_id) REFERENCES chat(id)
 );
 
 Create Table groupchat_has_users (
   chat_id bigint,
-  user_id bigint
+  user_id bigint,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (chat_id) REFERENCES chat(id)
 );
 
 Create Table message (
@@ -194,17 +229,24 @@ Create Table message (
   message TEXT,
   persist_date timestamp,
   user_sender_id bigint,
-  chat_id bigint
+  chat_id bigint,
+  FOREIGN KEY (user_sender_id) REFERENCES user_entity(id),
+  FOREIGN KEY (chat_id) REFERENCES chat(id)
 );
 
 Create Table single_chat (
   chat_id bigint,
   use_two_id bigint,
-  user_one_id bigint
+  user_one_id bigint,
+  FOREIGN KEY (chat_id) REFERENCES chat(id),
+  FOREIGN KEY (use_two_id) REFERENCES user_entity(id),
+  FOREIGN KEY (user_one_id) REFERENCES user_entity(id)
 );
 
 Create Table bookmarks (
   id bigint primary key not null,
   question_id bigint,
-  user_id bigint
+  user_id bigint,
+  FOREIGN KEY (user_id) REFERENCES user_entity(id),
+  FOREIGN KEY (question_id) REFERENCES question(id)
 );
