@@ -21,8 +21,8 @@ public class TagDaoImpl extends ReadWriteDaoImpl<Tag, Long> implements TagDao {
     private EntityManager entityManager;
 
     public boolean existsByName(String name) {
-         long count = (long) entityManager.createQuery("SELECT COUNT(t) FROM Tag t WHERE t.name =: name").setParameter("name", name).getSingleResult();
-         return count > 0;
+        long count = (long) entityManager.createQuery("SELECT COUNT(t) FROM Tag t WHERE t.name =: name").setParameter("name", name).getSingleResult();
+        return count > 0;
     }
 
     @SuppressWarnings("unchecked")
@@ -40,9 +40,8 @@ public class TagDaoImpl extends ReadWriteDaoImpl<Tag, Long> implements TagDao {
             return (List<Tag>) entityManager
                     .createQuery("FROM Tag t WHERE  t.name IN :names")
                     .setParameter("names", names).getResultList();
-        } else {
-            return new ArrayList<>();
         }
+        return new ArrayList<>();
     }
-
 }
+

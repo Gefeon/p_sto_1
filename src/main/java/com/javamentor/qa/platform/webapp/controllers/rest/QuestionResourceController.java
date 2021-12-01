@@ -46,6 +46,6 @@ public class QuestionResourceController {
     public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
         Question question = questionMapper.toModel(questionCreateDto);
         questionService.persist(question);
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.toDto(question));
+        return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.persistConvertToDto(question));
     }
 }

@@ -6,7 +6,6 @@ import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Mapper(componentModel = "spring", uses = {TagMapper.class})
@@ -22,8 +21,7 @@ public abstract class QuestionMapper {
     @Mapping( source = "question.user.id", target = "authorId")
     @Mapping( source = "question.user.fullName", target = "authorName")
     @Mapping( source = "question.user.imageLink", target = "authorImage")
-    public abstract QuestionDto toDto(Question question);
-
+    public abstract QuestionDto persistConvertToDto(Question question);
 
     public abstract Question toModel(QuestionCreateDto questionCreateDto);
     
