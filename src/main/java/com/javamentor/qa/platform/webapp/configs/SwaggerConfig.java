@@ -1,6 +1,5 @@
 package com.javamentor.qa.platform.webapp.configs;
 
-import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,12 +14,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
-
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
+    public static final String AUTHENTICATION_CONTROLLER = "Authentication";
+    public static final String USER_RESOURCE_CONTROLLER = "User resource";
     public static final String ANSWER_CONTROLLER = "Answer";
 
     @Bean
@@ -32,6 +32,10 @@ public class SwaggerConfig {
                 .build()
                 .tags(new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1))
                 .tags(new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",2))
+                .tags(
+                        new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1),
+                        new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
+                        new Tag(USER_RESOURCE_CONTROLLER, "This endpoint serves as a stub", 1))
                 .apiInfo(apiInfo());
     }
 

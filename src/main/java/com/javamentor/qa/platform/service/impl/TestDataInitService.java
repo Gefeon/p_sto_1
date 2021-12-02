@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class TestDataInitService {
 
     private final static int usersNum = 10;
-    private final static int rolesNum = 4;
+    private final static int rolesNum = 7;
     private final static int answersNum = 10;
     private final static int questionsNum = 10;
     private final static int tagsNum = 4;
@@ -65,7 +65,7 @@ public class TestDataInitService {
             "student", "dentist", "engineer", "social worker", "nurse", "doctor"};
 
     private static final String[] roles = new String[]{
-            "ADMIN", "USER", "ANONYMOUS", "GUEST", "UNDEFINED", "MAIN"};
+            "ROLE_ADMIN", "ROLE_USER", "ROLE_ANONYMOUS", "ROLE_GUEST", "ROLE_UNDEFINED", "ROLE_MAIN"};
 
     private static final String[] randomWords = new String[]{
             "teach", "about", "you", "may", "back", "going to",
