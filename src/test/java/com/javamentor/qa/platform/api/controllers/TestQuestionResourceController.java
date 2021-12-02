@@ -29,10 +29,10 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     private final String url = "/api/user/question";
 
     @Test
-    @DataSet(value = { "dataset/DBQuestionExample.yml",
-            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
-    @ExpectedDataSet(value = { "dataset/expected/DBQuestionAdded.yml",
-            "dataset/expected/DBTagThreeTagsAdded.yml", "dataset/expected/DBQuestionHasTagThreeTagsAdded.yml", USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {"dataset/question_resource_controller/DBQuestionExample.yml",
+            "dataset/question_resource_controller/DBTagExample.yml", "dataset/question_resource_controller/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/question resource controller/DBQuestionAdded.yml",
+            "dataset/expected/question resource controller/DBTagThreeTagsAdded.yml", "dataset/expected/question resource controller/DBQuestionHasTagThreeTagsAdded.yml", USER_ENTITY, ROLE_ENTITY})
     public void postCorrectData_checkResponse() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
@@ -69,7 +69,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     }
 
     @Test
-    @DataSet(value = {"dataset/DBQuestionExample.yml", "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {"dataset/question_resource_controller/DBQuestionExample.yml", "dataset/question_resource_controller/DBTagExample.yml", "dataset/question_resource_controller/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void postBlankTitle_getBadRequest() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
@@ -94,7 +94,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     }
 
     @Test
-    @DataSet(value = {"dataset/DBQuestionExample.yml", "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {"dataset/question_resource_controller/DBQuestionExample.yml", "dataset/question_resource_controller/DBTagExample.yml", "dataset/question_resource_controller/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void postNullDescription_getBadRequest() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
@@ -117,7 +117,7 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     }
 
     @Test
-    @DataSet(value = {"dataset/DBQuestionExample.yml", "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {"dataset/question_resource_controller/DBQuestionExample.yml", "dataset/question_resource_controller/DBTagExample.yml", "dataset/question_resource_controller/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void postNullTags_getBadRequest() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
@@ -139,9 +139,9 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     }
 
     @Test
-    @DataSet(value = {"dataset/DBQuestionExample.yml", "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
-    @ExpectedDataSet(value = { "dataset/expected/DBQuestionAdded.yml",
-            "dataset/expected/DBTagTwoUniqueIdTagsAdded.yml", "dataset/expected/DBQuestionHasTagTwoTagsAdded.yml", USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {"dataset/question_resource_controller/DBQuestionExample.yml", "dataset/question_resource_controller/DBTagExample.yml", "dataset/question_resource_controller/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/question resource controller/DBQuestionAdded.yml",
+            "dataset/expected/question resource controller/DBTagTwoUniqueIdTagsAdded.yml", "dataset/expected/question resource controller/DBQuestionHasTagTwoTagsAdded.yml", USER_ENTITY, ROLE_ENTITY})
     public void postTagsWithUniqueId_checkNewTagsAdded() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
@@ -167,10 +167,10 @@ public class TestQuestionResourceController extends AbstractTestControllerClass 
     }
 
     @Test
-    @DataSet(value = {"dataset/DBQuestionExample.yml",
-            "dataset/DBTagExample.yml", "dataset/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
-    @ExpectedDataSet(value = { "dataset/expected/DBQuestionAdded.yml",
-            "dataset/expected/DBTagTwoTagsWithExistentIdAdded.yml", "dataset/expected/DBQuestionHasTagUniqueAndWithExistentIdAdded.yml", USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {"dataset/question_resource_controller/DBQuestionExample.yml",
+            "dataset/question_resource_controller/DBTagExample.yml", "dataset/question_resource_controller/DBQuestionHasTagExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @ExpectedDataSet(value = {"dataset/expected/question resource controller/DBQuestionAdded.yml",
+            "dataset/expected/question resource controller/DBTagTwoTagsWithExistentIdAdded.yml", "dataset/expected/question resource controller/DBQuestionHasTagUniqueAndWithExistentIdAdded.yml", USER_ENTITY, ROLE_ENTITY})
     public void postTagsWithExistentId_checkNewTagsAdded() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
