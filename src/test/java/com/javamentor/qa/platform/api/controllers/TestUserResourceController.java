@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = {JmApplication.class })
-@TestPropertySource(properties = {"spring.config.location = src/main/resources/application.properties,src/main/resources/application-dev.properties"})
+@TestPropertySource(properties = {"spring.config.location = src/test/resources/application-test.properties"})
 @DBUnit(caseSensitiveTableNames = true, allowEmptyFields=true)
 @DBRider
 public class TestUserResourceController {
@@ -32,7 +32,11 @@ public class TestUserResourceController {
     }
 
     @Test
-    @DataSet(value="dataset/UserDtoResourceController.yml")
+    @DataSet(value={"datasets/userresourcecontroller/UserDto.yml",
+            "datasets/userresourcecontroller/Role.yml",
+            "datasets/userresourcecontroller/Reputation.yml",
+            "datasets/userresourcecontroller/Question.yml",
+            "datasets/userresourcecontroller/Answer.yml"}, disableConstraints = true)
     public void getUserDtoById() throws Exception {
 
         //user exist
@@ -57,8 +61,8 @@ public class TestUserResourceController {
                 .andExpect(jsonPath("$.email").doesNotExist())
                 .andExpect(jsonPath("$.city").doesNotExist())
                 .andExpect(jsonPath("$.linkImage").doesNotExist())
-                .andExpect(jsonPath("$.reputation").doesNotExist());
-//                .andExpect(jsonPath("$").value("User is absent or wrong Id"));
+                .andExpect(jsonPath("$.reputation").doesNotExist())
+                .andExpect(jsonPath("$").doesNotExist());
 
         //user is absent
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/1000").accept(MediaType.APPLICATION_JSON_VALUE))
