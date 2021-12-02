@@ -12,14 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
 @Api(tags = {SwaggerConfig.USER_CONTROLLER})
 @RestController
-@RequestMapping("/api/user")
 public class UserResourceController {
 
     private UserDtoService userDtoService;
@@ -28,7 +26,7 @@ public class UserResourceController {
         this.userDtoService = userDtoService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping(path = "/api/user/{userId}")
     @Operation(summary = "Get user dto", responses = {
             @ApiResponse(description = "Get user dto success", responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
