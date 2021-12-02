@@ -40,4 +40,13 @@ public class UserResourceController {
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is absent or wrong Id")
                 : ResponseEntity.ok(dto.get());
     }
-}
+
+//ToDo используется как заглушка для тестов
+
+        @GetMapping("stub")
+        @Operation(summary = "Returns Hello World!")
+        public ResponseEntity<?> stub() {
+            return ResponseEntity.ok("Hello World!");
+
+        }
+ }
