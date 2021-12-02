@@ -17,9 +17,14 @@ public class ResourceAnswerControllerTest extends AbstractTestControllerClass{
 
     private final String url = "/api/user/question/100/answer/100";
 
+    private static final String USER_ENTITY = "dataset/answerResourceController/user.yml";
+    private static final String ROLE_ENTITY = "dataset/answerResourceController/role.yml";
+    private static final String ANSWER_ENTITY = "dataset/answerResourceController/answer.yml";
+    private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/anotherAnswer.yml";
+
     @Test
-    @DataSet(value = {"dataset/DBAnswerExampleAnotherId.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
-    @ExpectedDataSet(value = "dataset/expected/DBAnswerExampleAnotherId.yml")
+    @DataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @ExpectedDataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY})
     public void deleteAnswerWithIncorrectId_returnBadRequest() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
@@ -31,8 +36,8 @@ public class ResourceAnswerControllerTest extends AbstractTestControllerClass{
     }
 
     @Test
-    @DataSet(value = {"dataset/DBAnswerExample.yml", USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
-    @ExpectedDataSet(value = {"dataset/expected/empty.yml"})
+    @DataSet(value = {ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @ExpectedDataSet(value = {USER_ENTITY, ROLE_ENTITY})
     public void deleteAnswer_returnStatusOk_AnswerDeleted() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc

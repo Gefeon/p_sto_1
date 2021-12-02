@@ -24,8 +24,6 @@ public abstract class AbstractTestControllerClass {
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
-    protected static final String USER_ENTITY = "dataset/auth/resourcecontroller/user_entity.yml";
-    protected static final String ROLE_ENTITY = "dataset/auth/resourcecontroller/role.yml";
     protected static final String AUTH_URI = "/api/auth/token";
     protected static final String AUTH_HEADER = "Authorization";
     protected static final String PREFIX = "Bearer ";
