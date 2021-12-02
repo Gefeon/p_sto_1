@@ -9,6 +9,8 @@ import com.javamentor.qa.platform.service.abstracts.model.question.QuestionServi
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -18,12 +20,12 @@ import java.util.List;
 public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> implements QuestionService {
 
     private final TagService tagService;
-    private final UserService userService;
+    private final UserDetailsService userDetailsService;
 
-    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService, UserService userService) {
+    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService, UserDetailsService userDetailsService) {
         super(questionDao);
         this.tagService = tagService;
-        this.userService = userService;
+        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -45,9 +47,7 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
         managedTags.addAll(tagService.getAllByNames(namesToFetch));
         question.setTags(managedTags);
 
-        //TODO: instead of using userFromDB we need attach
-        // to Question @AuthenticationPrincipal
-        User user = userService.getAll().stream().findFirst().orElseThrow();
+        User user = (User) userDetailsService.loadUserByUsername((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         question.setUser(user);
 
         super.persist(question);
