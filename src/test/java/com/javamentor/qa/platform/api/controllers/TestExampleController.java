@@ -42,7 +42,7 @@ public class TestExampleController {
     }
 
     @Test
-    @DataSet(value= "dataset/expected/question resource controller/DBUserExample.yml")
+    @DataSet(value= "dataset/DBUserExample.yml")
     public void shouldGetListOfUsers() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/listUsers").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
