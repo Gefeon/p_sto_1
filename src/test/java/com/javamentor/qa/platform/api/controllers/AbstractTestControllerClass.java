@@ -3,6 +3,7 @@ package com.javamentor.qa.platform.api.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.junit5.api.DBRider;
+import com.javamentor.qa.platform.security.jwt.JwtService;
 import com.javamentor.qa.platform.webapp.configs.JmApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -11,13 +12,23 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 @DBRider
-@AutoConfigureMockMvc
-@DBUnit(caseSensitiveTableNames = true)
 @SpringBootTest(classes = JmApplication.class)
-@TestPropertySource("classpath:application-test.properties")
+@TestPropertySource(properties = {"spring.config.location = src/test/resources/application-test.properties"})
+@DBUnit(caseSensitiveTableNames = true)
+@AutoConfigureMockMvc
 public abstract class AbstractTestControllerClass {
+
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
     protected ObjectMapper objectMapper;
+    @Autowired
+    protected JwtService jwtService;
+    protected static final String USER_ENTITY = "dataset/auth/resourcecontroller/user_entity.yml";
+    protected static final String ROLE_ENTITY = "dataset/auth/resourcecontroller/role.yml";
+    protected static final String AUTH_URI = "/api/auth/token";
+    protected static final String AUTH_HEADER = "Authorization";
+    protected static final String PREFIX = "Bearer ";
+
+
 }
