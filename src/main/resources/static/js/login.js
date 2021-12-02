@@ -18,6 +18,9 @@ $.ajax({
         window.location.replace("/main");
     },
     error: function () {
+        if($("#loginForm div").length > 1){
+            $("#loginForm div")[0].remove();
+        }
         $("#loginForm h1")[0].insertAdjacentHTML('afterend',"<div><span style='color: red'><b>Username or password were incorrect!</b></span></div>");
     }
 })
