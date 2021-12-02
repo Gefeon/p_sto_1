@@ -14,13 +14,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
-
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
     public static final String QUESTION_CONTROLLER = "Question";
+    public static final String AUTHENTICATION_CONTROLLER = "Authentication";
+    public static final String USER_RESOURCE_CONTROLLER = "User resource";
 
     @Bean
     public Docket api() {
@@ -29,6 +30,10 @@ public class SwaggerConfig {
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
                 .paths(PathSelectors.any())
                 .build()
+                .tags(
+                        new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1),
+                        new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
+                        new Tag(USER_RESOURCE_CONTROLLER, "This endpoint serves as a stub", 1))
                 .tags(new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1))
                 .tags(new Tag(USER_CONTROLLER,"These endpoints are used to manage the user questions",2))
                 .apiInfo(apiInfo());

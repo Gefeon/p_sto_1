@@ -1,6 +1,8 @@
 package com.javamentor.qa.platform.webapp.configs.initializer;
 
 import com.javamentor.qa.platform.service.impl.TestDataInitService;
+import org.flywaydb.core.Flyway;
+import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
@@ -20,5 +22,14 @@ public class TestEntityInit implements CommandLineRunner {
     @Override
     public void run(String... args) {
         testDataInitService.fillTableWithTestData();
+    }
+
+    @Autowired
+    protected Flyway flyway;
+
+    @Before
+    public void init() {
+        flyway.clean();
+        flyway.migrate();
     }
 }
