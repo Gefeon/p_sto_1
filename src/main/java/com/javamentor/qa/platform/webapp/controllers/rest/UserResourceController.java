@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
+<<<<<<< src/main/java/com/javamentor/qa/platform/webapp/controllers/rest/UserResourceController.java
 import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
@@ -39,5 +40,18 @@ public class UserResourceController {
         return dto.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is absent or wrong Id")
                 : ResponseEntity.ok(dto.get());
+=======
+
+//ToDo используется как заглушка для тестов
+
+@RestController
+@RequestMapping("/api/user")
+@Api(tags = {SwaggerConfig.USER_RESOURCE_CONTROLLER})
+public class UserResourceController {
+    @GetMapping("stub")
+    @Operation(summary = "Returns Hello World!")
+    public ResponseEntity<?> stub() {
+        return ResponseEntity.ok("Hello World!");
+>>>>>>> src/main/java/com/javamentor/qa/platform/webapp/controllers/rest/UserResourceController.java
     }
 }
