@@ -18,7 +18,7 @@ $.ajax({
         window.location.replace("/main");
     },
     error: function () {
-        alert("username or password were incorrect!")
+        $("#loginForm h1")[0].insertAdjacentHTML('afterend',"<div><span style='color: red'><b>Username or password were incorrect!</b></span></div>");
     }
 })
     return false;
