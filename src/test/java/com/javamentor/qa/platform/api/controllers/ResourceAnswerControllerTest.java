@@ -24,7 +24,6 @@ public class ResourceAnswerControllerTest extends AbstractTestControllerClass{
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         ResultActions response = mockMvc.perform(delete(url).header(AUTH_HEADER, PREFIX + token.getToken()));
@@ -38,7 +37,6 @@ public class ResourceAnswerControllerTest extends AbstractTestControllerClass{
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mockMvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
         ResultActions response = mockMvc.perform(delete(url).header(AUTH_HEADER, PREFIX + token.getToken()));
         response.andExpect(status().isOk());
