@@ -5,7 +5,7 @@ $(document).on('submit', '#loginForm', function(){
     const form_data = JSON.stringify(login_form.serializeObject());
 
 $.ajax({
-    url: "/login",
+    url: "/api/auth/token",
     type: "POST",
     contentType: 'application/json',
     data: form_data,
@@ -13,12 +13,12 @@ $.ajax({
 
         //Get token in response body.
         $.cookie("jwt_token", null, { path: '/' });
-        $.cookie("jwt_token", result.token, {expires: 5, path: '/' });
+        $.cookie("jwt_token", result.token, { path: '/' });
 
         window.location.replace("/main");
     },
     error: function () {
-        alert("error!")
+        alert("username or password were incorrect!")
     }
 })
     return false;
