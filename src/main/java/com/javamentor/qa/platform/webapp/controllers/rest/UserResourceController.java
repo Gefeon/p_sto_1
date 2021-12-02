@@ -41,7 +41,7 @@ public class UserResourceController {
 
 //ToDo используется как заглушка для тестов
 
-        @GetMapping("stub")
+        @GetMapping("/api/user/stub")
         @Operation(summary = "Returns Hello World!")
         public ResponseEntity<?> stub() {
             return ResponseEntity.ok("Hello World!");
