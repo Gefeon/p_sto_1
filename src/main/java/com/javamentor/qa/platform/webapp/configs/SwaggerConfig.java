@@ -34,7 +34,7 @@ public class SwaggerConfig {
                         new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1),
                         new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
                         new Tag(USER_RESOURCE_CONTROLLER, "This endpoint serves as a stub", 1),
-        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1))
+                        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1))
                 .apiInfo(apiInfo());
     }
 
