@@ -35,6 +35,8 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(role)));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+        //isEnable()?
+        //токен перехватывается всегда, даже на public url, и есл он недействителен то будет exception, его быть не должно на public url
 
         filterChain.doFilter(request, response);
     }
