@@ -29,7 +29,7 @@ public class TestExampleController {
     private MockMvc mvc;
 
     @Test
-    @DataSet(value = "dataset/answerResourceController/role.yml", disableConstraints = true)
+    @DataSet(value = "dataset/DBRoleExample.yml", disableConstraints = true)
     public void shouldGetListOfRoles() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/listRoles").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -42,7 +42,7 @@ public class TestExampleController {
     }
 
     @Test
-    @DataSet(value= "dataset/answerResourceController/user.yml")
+    @DataSet(value="dataset/DBUserExample.yml")
     public void shouldGetListOfUsers() throws Exception{
         mvc.perform(MockMvcRequestBuilders.get("/listUsers").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
