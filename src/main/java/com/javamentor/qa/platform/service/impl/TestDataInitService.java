@@ -10,6 +10,8 @@ import com.javamentor.qa.platform.service.abstracts.model.question.QuestionServi
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,15 +22,19 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-
 public class TestDataInitService {
 
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+
+    //Amount of test data
     private final static int usersNum = 10;
     private final static int rolesNum = 7;
     private final static int answersNum = 10;
     private final static int questionsNum = 10;
     private final static int tagsNum = 4;
 
+    //static fields for random values
     private static final Character[] alphabet = "abcdefghijklmnopqrstuvwxyz"
             .chars()
             .mapToObj(c -> (char) c).toArray(Character[]::new);
@@ -94,6 +100,7 @@ public class TestDataInitService {
     private final TagService tagService;
 
 
+    //fill related tables user_entity and role with test data
     public void fillTableWithTestData() {
         addRandomRoles();
         addRandomUsers();
@@ -101,6 +108,7 @@ public class TestDataInitService {
         addRandomQuestions();
         addRandomAnswers();
     }
+
 
     private void addRandomAnswers() {
         List<Answer> answers = new ArrayList<>();
@@ -180,7 +188,7 @@ public class TestDataInitService {
             String imageLink = getRandStr(10, 100);
             String nickname = fullName.substring(0, 3);
 
-            users.add(new User(email, password, fullName, city,
+            users.add(new User(email, passwordEncoder.encode(password), fullName, city,
                     linkSite, linkGithub, linkVk, about, imageLink, nickname));
         }
 
