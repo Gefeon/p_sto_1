@@ -24,9 +24,5 @@ public abstract class AbstractTestControllerClass {
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
-    protected static final String AUTH_URI = "/api/auth/token";
-    protected static final String AUTH_HEADER = "Authorization";
-    protected static final String PREFIX = "Bearer ";
-
 
 }

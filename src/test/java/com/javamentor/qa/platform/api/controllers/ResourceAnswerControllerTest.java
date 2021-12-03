@@ -21,6 +21,9 @@ public class ResourceAnswerControllerTest extends AbstractTestControllerClass{
     private static final String ROLE_ENTITY = "dataset/answerResourceController/role.yml";
     private static final String ANSWER_ENTITY = "dataset/answerResourceController/answer.yml";
     private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/anotherAnswer.yml";
+    private static final String AUTH_URI = "/api/auth/token";
+    private static final String AUTH_HEADER = "Authorization";
+    private static final String PREFIX = "Bearer ";
 
     @Test
     @DataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
