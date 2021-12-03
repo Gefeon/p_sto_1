@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.api.config;
+package com.javamentor.qa.platform.api.abstracts;
 
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.junit5.api.DBRider;
@@ -12,9 +12,9 @@ import org.springframework.test.web.servlet.MockMvc;
 @DBRider
 @SpringBootTest(classes = JmApplication.class)
 @TestPropertySource(properties = {"spring.config.location = src/test/resources/application-test.properties"})
-@DBUnit(caseSensitiveTableNames = true, cacheConnection = false)
+@DBUnit(caseSensitiveTableNames = true, cacheConnection = false, allowEmptyFields = true)
 @AutoConfigureMockMvc
-public class TestConfig {
+public class AbstractTestApi {
 
     @Autowired
     protected MockMvc mvc;
