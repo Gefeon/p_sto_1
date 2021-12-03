@@ -10,6 +10,8 @@ import com.javamentor.qa.platform.service.abstracts.model.question.QuestionServi
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,8 +22,11 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
-
 public class TestDataInitService {
+
+    @Autowired
+    BCryptPasswordEncoder passwordEncoder;
+
     //Amount of test data
     private final static int usersNum = 10;
     private final static int rolesNum = 7;
@@ -182,7 +187,7 @@ public class TestDataInitService {
             String imageLink = getRandStr(10, 100);
             String nickname = fullName.substring(0, 3);
 
-            users.add(new User(email, password, fullName, city,
+            users.add(new User(email, passwordEncoder.encode(password), fullName, city,
                     linkSite, linkGithub, linkVk, about, imageLink, nickname));
         }
 
