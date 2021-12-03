@@ -109,6 +109,7 @@ public class TestDataInitService {
         addRandomAnswers();
     }
 
+
     private void addRandomAnswers() {
         List<Answer> answers = new ArrayList<>();
         for (int i = 0; i < answersNum; i++) {
