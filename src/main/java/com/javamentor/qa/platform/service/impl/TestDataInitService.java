@@ -173,7 +173,7 @@ public class TestDataInitService {
     }
 
     private void addRandomUsers() {
-        Set<User> users = new HashSet<>();
+        List<User> users = new ArrayList<>();
         for (int i = 0; i < usersNum; i++) {
             String email = getRand(firstNames).toLowerCase() + "@" +
                     getRand(domains) + "." + getRand(domainCodes);
@@ -196,6 +196,11 @@ public class TestDataInitService {
         for (User user : users) {
             user.setRole(existingRoles.get(getRandInt(0, existingRoles.size())));
         }
+
+        users.get(0).setEmail("user");
+        users.get(0).setPassword(passwordEncoder.encode("user"));
+        users.get(0).setRole(roleService.getById(1L).orElse(existingRoles.get(0)));
+
         userService.persistAll(users);
     }
 
