@@ -25,7 +25,5 @@ public abstract class AbstractTestControllerClass {
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
-    @Autowired
-    protected BCryptPasswordEncoder passwordEncoder;
 
 }
