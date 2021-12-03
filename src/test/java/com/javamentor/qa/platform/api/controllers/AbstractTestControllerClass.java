@@ -8,6 +8,7 @@ import com.javamentor.qa.platform.webapp.configs.JmApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -24,8 +25,7 @@ public abstract class AbstractTestControllerClass {
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
-    protected static final String AUTH_URI = "/api/auth/token";
-    protected static final String AUTH_HEADER = "Authorization";
-    protected static final String PREFIX = "Bearer ";
+    @Autowired
+    protected BCryptPasswordEncoder passwordEncoder;
 
 }
