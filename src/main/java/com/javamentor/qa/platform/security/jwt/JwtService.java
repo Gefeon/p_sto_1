@@ -48,6 +48,7 @@ public class JwtService {
         String rawToken = request.getHeader(AUTHORIZATION);
         if (rawToken != null && rawToken.startsWith("Bearer ")) {
             String token = rawToken.substring(7);
+            System.out.println(token);
             JWTVerifier verifier = JWT.require(algorithm).build();
             return Optional.of(verifier.verify(token));
         }
