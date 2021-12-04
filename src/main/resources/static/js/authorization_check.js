@@ -1,12 +1,16 @@
-
-const url = window. location. toString();
-
-let jwt_token = document.cookie;
-console.log(jwt_token);
-
-
-fetch('http://localhost:8091/api/auth/token', {
-    headers: {Authentication: 'Bearer'+ jwt_token}
+$.ajax({
+    url: "/api/auth/check",
+    type: "POST",
+    async: false,
+    beforeSend: function (request) {
+        let token = $.cookie("jwt_token");
+        if (token != null) {
+            request.setRequestHeader("Authorization", "Bearer " + token);
+        }
+    },
+    error: function (error) {
+        if (error.status === 403) {
+            window.location.replace("/login");
+        }
+    }
 })
-    .then(resp => resp.json())
-    .then( json => console.log(json))

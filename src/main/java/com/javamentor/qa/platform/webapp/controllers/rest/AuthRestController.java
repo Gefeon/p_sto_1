@@ -14,7 +14,7 @@ public class AuthRestController {
     @PostMapping
     public ResponseEntity<?> createToken() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getPrincipal());
+
         if (Objects.equals(auth.getPrincipal().toString(), "anonymousUser")) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
