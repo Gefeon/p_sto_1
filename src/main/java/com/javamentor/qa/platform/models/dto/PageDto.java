@@ -16,7 +16,7 @@ public class PageDto <T>  implements Serializable {
 
     private int currentPageNumber;
     private int totalPageCount;
-    private int totalResultCount;
+    private int itemsOnPage;
+    private long totalResultCount;
     private List<T> items;
-    private long itemsOnPage;
 }

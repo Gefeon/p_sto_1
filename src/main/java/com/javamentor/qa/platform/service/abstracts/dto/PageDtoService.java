@@ -3,8 +3,8 @@ package com.javamentor.qa.platform.service.abstracts.dto;
 import java.util.List;
 import java.util.Map;
 
-public interface PageDtoService<E, P> {
+public interface PageDtoService<T> {
 
-    List<E> getItems(Map<P,E> param);
-    long getTotalResultCount(Map<P,E> param);
+    List<T> getItems(Map<Object,Object> param);
+    long getTotalResultCount(Map<Object,Object> param);
 }
