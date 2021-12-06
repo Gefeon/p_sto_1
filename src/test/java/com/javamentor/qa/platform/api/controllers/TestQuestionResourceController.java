@@ -29,11 +29,11 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question";
 
-    private static final String USER_ENTITY = "dataset/resourceQuestionController/user_entity.yml";
-    private static final String ROLE_ENTITY = "dataset/resourceQuestionController/role.yml";
-    private static final String QUESTION_ENTITY = "dataset/resourceQuestionController/question.yml";
-    private static final String TAG_ENTITY = "dataset/resourceQuestionController/tag.yml";
-    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/resourceQuestionController/questionHasTag.yml";
+    private static final String USER_ENTITY = "dataset/QuestionResourceController/user.yml";
+    private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
+    private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
+    private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
