@@ -24,4 +24,5 @@ public class AbstractTestApi {
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
+
 }
