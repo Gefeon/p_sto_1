@@ -36,7 +36,7 @@ public class QuestionResourceController {
     }
 
     @Operation(summary = "add new question", responses = {
-            @ApiResponse(description = "Question was added to DB", responseCode = "201",
+            @ApiResponse(description = "Question was added to DB", responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Question.class))),
             @ApiResponse(description = "Received tags, description or title were empty or null", responseCode = "400")
     })
