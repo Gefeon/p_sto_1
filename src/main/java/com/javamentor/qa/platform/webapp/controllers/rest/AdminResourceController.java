@@ -22,7 +22,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/admin")
 @RequiredArgsConstructor
-@Api(SwaggerConfig.ADMIN_RESOURCE_CONTROLLER)
+@Api(tags = SwaggerConfig.ADMIN_RESOURCE_CONTROLLER)
 @Validated
 public class AdminResourceController {
 

@@ -1,12 +1,10 @@
 package com.javamentor.qa.platform.api.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,11 +22,8 @@ public class TestAdminResourceController extends AbstractTestApi {
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Test
-    @DataSet({USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void shouldDeleteUser() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("admin100@admin.ru", "admin");
         String token = objectMapper.readValue(mvc
@@ -43,7 +38,7 @@ public class TestAdminResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet({USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void shouldNotGetAccessToDeletedUser() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user102deleted@user.ru", "user");
 
@@ -52,7 +47,7 @@ public class TestAdminResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet({USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void shouldNotGetAccessToDeletedUserWithValidJwt() throws Exception {
         AuthenticationRequestDto authDtoAdmin = new AuthenticationRequestDto("admin100@admin.ru", "admin");
         String tokenAdmin = objectMapper.readValue(mvc
