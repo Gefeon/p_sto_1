@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.api.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
@@ -18,6 +19,7 @@ public class TestTagController extends AbstractTestApi {
     private static final String getIgnoredUrl = "/api/user/tag/ignored";
     private static final String USER_ENTITY = "dataset/tagController/user.yml";
     private static final String TAG_ENTITY = "dataset/tagController/tag.yml";
+    private static final String EMPTY = "dataset/tagController/empty.yml";
     private static final String IGNORED_TAG_ENTITY = "dataset/tagController/ignoredTag.yml";
     private static final String OTHER_USER_IGNORED_TAG_ENTITY = "dataset/tagController/otherUserIgnoredTag.yml";
     private static final String AUTH_URI = "/api/auth/token";
@@ -51,8 +53,9 @@ public class TestTagController extends AbstractTestApi {
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
+
     @Test
-    @DataSet(value = {USER_ENTITY}, disableConstraints = true)
+    @DataSet(value = {EMPTY, USER_ENTITY}, disableConstraints = true)
     public void NoTagsInBD_returnEmptyArray() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc

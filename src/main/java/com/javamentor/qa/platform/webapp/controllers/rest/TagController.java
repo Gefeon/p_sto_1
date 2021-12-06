@@ -44,7 +44,9 @@ public class TagController {
         //TODO сделать чтобы Security загружала UserDetails в Principal
         User user = (User) userDetailsService.loadUserByUsername((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         List<Tag> ignoredTags = ignoredTagService.getTagsByUser(user);
-        ignoredTags.forEach(tag -> tag.setDescription(null));
+        if(!ignoredTags.isEmpty()) {
+            ignoredTags.forEach(tag -> tag.setDescription(null));
+        }
         return new ResponseEntity<>(tagMapper.toDto(ignoredTags), HttpStatus.OK);
     }
 }
