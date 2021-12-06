@@ -17,11 +17,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TestResourceTagController extends AbstractTestApi {
 
-    private static final String QUESTION = "datasets/userresourcecontroller/Question.yml";
-    private static final String TAG = "dataset/Tag.yml";
-    private static final String QUESTION_HAS_TAG = "dataset/QuestionHasTag.yml";
-    private static final String USER_ENTITY = "dataset/auth/resourcecontroller/user_entity.yml";
-    private static final String ROLE_ENTITY = "dataset/auth/resourcecontroller/role.yml";
+    private static final String QUESTION = "dataset/resourceTagController/Question.yml";
+    private static final String TAG = "dataset/resourceTagController/Tag.yml";
+    private static final String QUESTION_HAS_TAG = "dataset/resourceTagController/QuestionHasTag.yml";
+    private static final String USER_ENTITY = "dataset/resourceTagController/User.yml";
+    private static final String ROLE_ENTITY = "dataset/resourceTagController/Role.yml";
 
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";
     private static final String AUTH_URI = "/api/auth/token";
