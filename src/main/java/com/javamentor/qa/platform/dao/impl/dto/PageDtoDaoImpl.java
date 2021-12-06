@@ -7,11 +7,7 @@ import java.util.Map;
 
 public abstract class PageDtoDaoImpl<T> implements PageDtoDao<T> {
 
-    public List<T> getItems(Map<Object, Object> param) {
-        return List.of((T) null);
-    }
+    public abstract List<T> getItems(Map<Object, Object> param);
 
-    public long getTotalResultCount(Map<Object, Object> param) {
-        return 0;
-    }
+    public abstract long getTotalResultCount(Map<Object, Object> param);
 }

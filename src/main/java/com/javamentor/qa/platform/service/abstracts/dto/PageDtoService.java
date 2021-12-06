@@ -1,10 +1,10 @@
 package com.javamentor.qa.platform.service.abstracts.dto;
 
-import java.util.List;
+import com.javamentor.qa.platform.models.dto.PageDto;
+
 import java.util.Map;
 
 public interface PageDtoService<T> {
-
-    List<T> getItems(Map<Object,Object> param);
-    long getTotalResultCount(Map<Object,Object> param);
+    PageDto<T> getPage(int currentPageNumber, int totalPageCount, int itemsOnPage,
+                       Map<Object, Object> resultCountParam, Map<Object, Object> itemsParam);
 }
