@@ -1,0 +1,13 @@
+role:
+  - id: 100
+    name: "ROLE_USER"
+  - id: 101
+    name: "ROLE_ADMIN"
+  - id: 102
+    name: "ROLE_ANONYMOUS"
+  - id: 103
+    name: "ROLE_GUEST"
+  - id: 104
+    name: "ROLE_UNDEFINED"
+  - id: 105
+    name: "ROLE_MAIN"
