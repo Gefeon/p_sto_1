@@ -22,7 +22,7 @@ public class IgnoredTagDaoImpl extends ReadWriteDaoImpl<IgnoredTag, Long> implem
     public List<Tag> getTagsByUser(User user) {
         if(user != null) {
             return entityManager
-                    .createQuery("SELECT t FROM IgnoredTag ign JOIN FETCH User JOIN FETCH Tag t WHERE  ign.user = :user", Tag.class)
+                    .createQuery("SELECT ign.ignoredTag FROM IgnoredTag ign INNER JOIN ign.user LEFT JOIN ign.ignoredTag WHERE  ign.user = :user", Tag.class)
                     .setParameter("user", user).getResultList();
         }
         return new ArrayList<>();
