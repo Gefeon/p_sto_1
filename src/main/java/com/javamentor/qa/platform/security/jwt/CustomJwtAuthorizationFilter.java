@@ -1,10 +1,12 @@
 package com.javamentor.qa.platform.security.jwt;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserService userService;
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
@@ -29,14 +32,15 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Optional<DecodedJWT> optionalDecodedJWT = jwtService.processToken(request);
         if (optionalDecodedJWT.isPresent()) {
-            String username = optionalDecodedJWT.get().getSubject();
+            String email = optionalDecodedJWT.get().getSubject();
             String role = optionalDecodedJWT.get().getClaim("role").asString();
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(username, null, Collections.singleton(new SimpleGrantedAuthority(role)));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+            if (userService.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found")).isEnabled()) {
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(email, null, Collections.singleton(new SimpleGrantedAuthority(role)));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
         }
-        //isEnable()?
-        //токен перехватывается всегда, даже на public url, и есл он недействителен то будет exception, его быть не должно на public url
 
         filterChain.doFilter(request, response);
     }

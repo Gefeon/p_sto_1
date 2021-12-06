@@ -12,7 +12,7 @@ user_entity:
     link_site: "test.ru"
     link_vk: "test.ru"
     nickname: "user"
-    password: "user"
+    password: "$2a$12$xNpFeZACLSEcKqx1XUy1ROE3lbsksyvdAJlsxhW7zVWUrxjFH/Bl."
     persist_date: "2021-11-24 00:00:00"
     role_id: 100
   - id: 101
@@ -28,6 +28,6 @@ user_entity:
     link_site: "test.ru"
     link_vk: "test.ru"
     nickname: "admin"
-    password: "admin"
+    password: "$2a$12$39h6d6MzoIDzAK7e8zj8iuOkHrCnusDm7yVwfarSrN/..CgkPsTeG"
     persist_date: "2021-11-24 00:00:00"
     role_id: 101

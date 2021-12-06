@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +26,6 @@ public class AuthenticationResourceController {
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-//    private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
 
     @PostMapping
     @Operation(summary = "Authenticate user", responses = {
@@ -43,13 +41,6 @@ public class AuthenticationResourceController {
                 .findFirst()
                 .orElseThrow(NoSuchElementException::new)
                 .getAuthority());
-
-//        Authentication auth2 = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken("admin101@admin.ru", "admin"));
-//        System.out.println("USER /api/user/stub: " + privilegeEvaluator.isAllowed("/api/user/stub", auth));
-//        System.out.println("ADMIN /api/user/stub: " + privilegeEvaluator.isAllowed("/api/user/stub", auth2));
-//        System.out.println("USER /getUsers: " + privilegeEvaluator.isAllowed("/getUsers", auth));
-//        System.out.println("ADMIN /getUsers: " + privilegeEvaluator.isAllowed("/getUsers", auth2));
-
         return ResponseEntity.ok(token);
     }
 }

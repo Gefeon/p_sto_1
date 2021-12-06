@@ -2,9 +2,9 @@ package com.javamentor.qa.platform.security;
 
 import com.javamentor.qa.platform.security.jwt.CustomJwtAuthorizationFilter;
 import com.javamentor.qa.platform.security.jwt.JwtService;
+import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.webapp.controllers.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,16 +24,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
     private final JwtService jwtService;
+    private final UserService userService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
-    @Autowired
-        BCryptPasswordEncoder passwordEncoder;
-
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -54,16 +52,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http
+                .antMatcher("/api/**")
+                .addFilterBefore(new CustomJwtAuthorizationFilter(jwtService, userService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlerFilter(), CustomJwtAuthorizationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/api/user/**").access("hasRole('USER')")
                 .antMatchers("/api/admin/**").access("hasRole('ADMIN')")
                 .antMatchers("/api/auth/token", "/**").permitAll()
                 .anyRequest().permitAll();
-
-        http.addFilterBefore(new CustomJwtAuthorizationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new ExceptionHandlerFilter(), CustomJwtAuthorizationFilter.class);
     }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")

@@ -32,8 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DBUnit(caseSensitiveTableNames = true, cacheConnection = false)
 @AutoConfigureMockMvc
 public class TestAuthenticationResourceController {
-    private static final String USER_ENTITY = "dataset/auth/resourcecontroller/user_entity.yml";
-    private static final String ROLE_ENTITY = "dataset/auth/resourcecontroller/role.yml";
+    private static final String USER_ENTITY = "authenticationresourcecontroller/user_entity.yml";
+    private static final String ROLE_ENTITY = "authenticationresourcecontroller/role.yml";
 
     private static final String AUTH_URI = "/api/auth/token";
     private static final String WITH_AUTH_URI = "/api/user/stub";
