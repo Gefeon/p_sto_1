@@ -1,7 +1,6 @@
 package com.javamentor.qa.platform.api.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
-import com.github.database.rider.core.api.dataset.SeedStrategy;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
@@ -17,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TestTagController extends AbstractTestApi {
     private static final String getIgnoredUrl = "/api/user/tag/ignored";
+
     private static final String USER_ENTITY = "dataset/tagController/user.yml";
     private static final String TAG_ENTITY = "dataset/tagController/tag.yml";
     private static final String EMPTY = "dataset/tagController/empty.yml";
