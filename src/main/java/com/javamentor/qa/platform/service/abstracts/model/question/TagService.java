@@ -11,5 +11,5 @@ public interface TagService extends ReadWriteService<Tag, Long> {
     boolean existsByName(String name);
     Optional<Tag> getByName(String name);
 
-    List<Tag> getAllByNames(Collection<String> names);
+    List<Tag> getByAllNames(Collection<String> names);
 }

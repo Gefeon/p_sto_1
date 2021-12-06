@@ -72,7 +72,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .content(objectMapper.writeValueAsString(questionCreateDto))
                 .contentType(MediaType.APPLICATION_JSON));
         response.andDo(print())
-                .andExpect(status().isCreated())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(greaterThan(0L), Long.class))
                 .andExpect(jsonPath("$.title").value(questionCreateDto.getTitle()))
                 .andExpect(jsonPath("$.description").isNotEmpty())
@@ -177,7 +177,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated());
+                .andExpect(status().isOk());
 
     }
 
@@ -204,7 +204,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isCreated()).andReturn();
+                .andExpect(status().isOk()).andReturn();
 
     }
 }

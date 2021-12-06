@@ -12,6 +12,7 @@ import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -44,9 +45,11 @@ public class QuestionResourceController {
             @ApiResponse(description = "Received tags, description or title were empty or null", responseCode = "400")
     })
     @PostMapping("/question")
-    public ResponseEntity<QuestionDto> addQuestion(@Valid @RequestBody QuestionCreateDto questionCreateDto) {
+    public ResponseEntity<QuestionDto> addQuestion(
+            @ApiParam(value = "A JSON object containing question title, description and tags", required = true)
+            @Valid @RequestBody final QuestionCreateDto questionCreateDto) {
         Question question = questionMapper.toModel(questionCreateDto);
         questionService.persist(question);
-        return ResponseEntity.status(HttpStatus.CREATED).body(questionMapper.persistConvertToDto(question));
+        return ResponseEntity.status(HttpStatus.OK).body(questionMapper.persistConvertToDto(question));
     }
 }

@@ -31,7 +31,7 @@ public class TagServiceImpl extends ReadWriteServiceImpl<Tag, Long> implements T
     }
 
     @Override
-    public List<Tag> getAllByNames(Collection<String> names) {
+    public List<Tag> getByAllNames(Collection<String> names) {
         return tagDao.getByAllNames(names);
     }
 }

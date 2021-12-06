@@ -25,20 +25,18 @@ public class TagDaoImpl extends ReadWriteDaoImpl<Tag, Long> implements TagDao {
         return count > 0;
     }
 
-    @SuppressWarnings("unchecked")
     public Optional<Tag> getByName(String name) {
-        TypedQuery<Tag> query = (TypedQuery<Tag>) entityManager
-                .createQuery("FROM Tag t WHERE  t.name= :name")
+        TypedQuery<Tag> query = entityManager
+                .createQuery("FROM Tag t WHERE  t.name= :name", Tag.class)
                 .setParameter("name", name);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
 
-    @SuppressWarnings("unchecked") //because row use of List is bad practice
     @Override
     public List<Tag> getByAllNames(Collection<String> names) {
         if (names != null && names.size() > 0) {
-            return (List<Tag>) entityManager
-                    .createQuery("FROM Tag t WHERE  t.name IN :names")
+            return entityManager
+                    .createQuery("FROM Tag t WHERE  t.name IN :names", Tag.class)
                     .setParameter("names", names).getResultList();
         }
         return new ArrayList<>();

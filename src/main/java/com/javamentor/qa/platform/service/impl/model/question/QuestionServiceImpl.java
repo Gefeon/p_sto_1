@@ -9,16 +9,21 @@ import com.javamentor.qa.platform.service.abstracts.model.question.QuestionServi
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> implements QuestionService {
 
+
+    private User user;
     private final TagService tagService;
     private final UserDetailsService userDetailsService;
 
@@ -30,21 +35,20 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
 
     @Override
     public void persist(Question question){
-        List<String> namesToFetch = new ArrayList<>();
-        List<Tag> tagsToPersist = new ArrayList<>();
 
-        for (Tag tag : question.getTags()) {
-            if (tagService.getAll().stream().anyMatch(tag1 -> tag1.getName().equals(tag.getName()))) {
-                namesToFetch.add(tag.getName());
-            } else {
-                tagsToPersist.add(tag);
-            }
-        }
+        Set<String> tagNames = question.getTags().stream().map(Tag::getName).collect(Collectors.toSet());
+
+        List<Tag> existedTags = tagService.getByAllNames(tagNames);
+        Set<String> existedTagNames = existedTags.stream().map(Tag::getName).collect(Collectors.toSet());
+
+        List<Tag> tagsToPersist = question.getTags();
+        tagsToPersist.removeIf(tag -> existedTagNames.contains(tag.getName()));
+
         if(!tagsToPersist.isEmpty()) {
             tagService.persistAll(tagsToPersist);
         }
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);
-        managedTags.addAll(tagService.getAllByNames(namesToFetch));
+        managedTags.addAll(existedTags);
         question.setTags(managedTags);
 
         User user = (User) userDetailsService.loadUserByUsername((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
