@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-public class ResourceAnswerControllerTest extends AbstractTestApi {
+public class AnswerResourceControllerTest extends AbstractTestApi {
 
     private final String url = "/api/user/question/100/answer/100";
 

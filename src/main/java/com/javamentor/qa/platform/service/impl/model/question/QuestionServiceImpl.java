@@ -1,15 +1,12 @@
 package com.javamentor.qa.platform.service.impl.model.question;
 
 import com.javamentor.qa.platform.dao.abstracts.model.question.QuestionDao;
-
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
-import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -23,7 +20,6 @@ import java.util.stream.Collectors;
 public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> implements QuestionService {
 
 
-    private User user;
     private final TagService tagService;
     private final UserDetailsService userDetailsService;
 
@@ -50,7 +46,7 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);
         managedTags.addAll(existedTags);
         question.setTags(managedTags);
-
+        //TODO сделать чтобы Security загружала UserDetails в Principal
         User user = (User) userDetailsService.loadUserByUsername((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         question.setUser(user);
 
