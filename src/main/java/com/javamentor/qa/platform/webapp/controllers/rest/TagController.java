@@ -35,7 +35,7 @@ public class TagController {
     }
 
     @Operation(summary = "Get ignored tags from authenticated user", responses = {
-            @ApiResponse(description = "tags were retreived from DB", responseCode = "200",
+            @ApiResponse(description = "tags were retrieved from DB", responseCode = "200",
                     content = @Content(schema = @Schema(implementation = Tag.class)))
     })
 
