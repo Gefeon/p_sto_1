@@ -49,13 +49,15 @@ public class AuthenticationResourceController {
     }
 
     @PostMapping("/check")
-    public ResponseEntity<UserDto> checkUser() {
+    public ResponseEntity<UserDto> checkUserRole() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.equals(auth.getAuthorities().toString(), "[ROLE_USER]")) {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+
     }
 
 

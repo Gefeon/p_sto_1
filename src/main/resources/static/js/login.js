@@ -15,7 +15,7 @@ $.ajax({
         $.cookie("jwt_token", null, { path: '/' });
         $.cookie("jwt_token", result.token, { path: '/' });
 
-        window.location.replace("/user");
+        window.location.replace("/main");
     },
     error: function () {
         if($("#loginForm div").length > 1){
