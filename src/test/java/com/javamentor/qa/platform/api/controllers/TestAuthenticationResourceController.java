@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.junit5.api.DBRider;
+import com.javamentor.qa.platform.api.UtilAuthorizationTest;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.security.jwt.JwtService;
@@ -58,14 +59,7 @@ public class TestAuthenticationResourceController {
     @Test
     @DataSet({USER_ENTITY, ROLE_ENTITY})
     public void shouldAllowAccessToPrivateResourceToAuthorizedRequest() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + token.getToken()))
+        mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + UtilAuthorizationTest.getToken("user100@user.ru", "user")))
                 .andExpect(status().isOk());
     }
 
