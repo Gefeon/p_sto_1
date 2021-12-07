@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,10 +35,10 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
         if (optionalDecodedJWT.isPresent()) {
             String email = optionalDecodedJWT.get().getSubject();
             String role = optionalDecodedJWT.get().getClaim("role").asString();
-
-            if (userService.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found")).isEnabled()) {
+            UserDetails userDetails = userService.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            if (userDetails.isEnabled()) {
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(email, null, Collections.singleton(new SimpleGrantedAuthority(role)));
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }
@@ -45,3 +46,10 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+
+/*
+передавай в UsernamePasswordAuthenticationToken не email а user,
+collections.singleton(new SimpleGrantedAuthority(role) и вот это не нужно просто передавай объект role
+
+
+* */

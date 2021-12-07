@@ -30,8 +30,8 @@ public class AdminResourceController {
 
     @PostMapping("/delete/{email}")
     @Operation(summary = "Delete user", responses = {
-            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "User with submitted email not found")})
+            @ApiResponse(responseCode = "200", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "400", description = "User with submitted email not found")})
     public ResponseEntity<?> deleteUser(
             @ApiParam("Email of the user to be deleted")
             @NotBlank(message = "Email cannot be empty") @PathVariable("email") final String email) {
@@ -39,9 +39,9 @@ public class AdminResourceController {
         if (optionalUser.isPresent()) {
             optionalUser.get().setIsEnabled(false);
             userService.update(optionalUser.get());
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 }
