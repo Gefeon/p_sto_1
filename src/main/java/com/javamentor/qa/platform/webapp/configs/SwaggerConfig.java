@@ -23,6 +23,7 @@ public class SwaggerConfig {
     public static final String USER_RESOURCE_CONTROLLER = "User resource";
     public static final String ANSWER_CONTROLLER = "Answer";
     public static final String TAG_CONTROLLER = "Tag";
+    public static final String RESOURCE_TAG_CONTROLLER = "Related tags";
 
     @Bean
     public Docket api() {
@@ -35,6 +36,8 @@ public class SwaggerConfig {
                         new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1),
                         new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
                         new Tag(USER_RESOURCE_CONTROLLER, "This endpoint serves as a stub", 1),
+                        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
+                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags"))
                         new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
                         new Tag(TAG_CONTROLLER,"These endpoints are used to manage the user tags",1))
                 .apiInfo(apiInfo());
