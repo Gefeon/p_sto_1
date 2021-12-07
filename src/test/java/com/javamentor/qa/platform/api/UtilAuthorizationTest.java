@@ -22,7 +22,7 @@ public class UtilAuthorizationTest {
     private static final String AUTH_URI = "/api/auth/token";
 
     public static String getToken(String username, String password) throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto(username, password);
 
         TokenResponseDto token = objectMapper.readValue(mvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
