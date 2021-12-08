@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.webapp.configs;
 
+import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,13 +15,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
+@Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
+    public static final String QUESTION_CONTROLLER = "Question";
     public static final String AUTHENTICATION_CONTROLLER = "Authentication";
-    public static final String USER_RESOURCE_CONTROLLER = "User resource";
+    public static final String ADMIN_RESOURCE_CONTROLLER = "Admin";
     public static final String ANSWER_CONTROLLER = "Answer";
     public static final String RESOURCE_TAG_CONTROLLER = "Related tags";
 
@@ -33,8 +36,8 @@ public class SwaggerConfig {
                 .build()
                 .tags(
                         new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1),
-                        new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
-                        new Tag(USER_RESOURCE_CONTROLLER, "This endpoint serves as a stub", 1),
+                        new Tag(AUTHENTICATION_CONTROLLER, "These endpoints are used to authenticate the client", 1),
+                        new Tag(ADMIN_RESOURCE_CONTROLLER, "These endpoints are used to admin actions", 1),
                         new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
                         new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags"))
                 .apiInfo(apiInfo());
