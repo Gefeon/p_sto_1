@@ -1,0 +1,11 @@
+question_has_tag:
+  - question_id: 100
+    tag_id: 100
+  - question_id: 100
+    tag_id: 101
+  - question_id: "regex:^\\d+"
+    tag_id: "regex:^\\d+"
+  - question_id: "regex:^\\d+"
+    tag_id: "regex:^\\d+"
+  - question_id: "regex:^\\d+"
+    tag_id: "regex:^\\d+"
