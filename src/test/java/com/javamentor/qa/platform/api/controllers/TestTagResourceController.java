@@ -34,7 +34,7 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String PREFIX = "Bearer ";
 
     @Test
-    @DataSet(value = {QUESTION, TAG, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY})
+    @DataSet(value = {QUESTION, TAG, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getRelatedTags() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
 
