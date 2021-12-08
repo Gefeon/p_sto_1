@@ -8,5 +8,5 @@ import com.javamentor.qa.platform.models.entity.user.User;
 import java.util.List;
 
 public interface IgnoredTagDtoDao extends ReadWriteDao<IgnoredTag, Long> {
-    List<TagDto> getTagsByUser(User user);
+    List<TagDto> getTagsByUserId(Long id);
 }

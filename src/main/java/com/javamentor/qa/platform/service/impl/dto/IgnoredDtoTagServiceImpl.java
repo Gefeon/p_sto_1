@@ -21,7 +21,7 @@ public class IgnoredDtoTagServiceImpl extends ReadWriteServiceImpl<IgnoredTag, L
     }
 
     @Override
-    public List<TagDto> getTagsByUser(User user) {
-        return ignoredTagDao.getTagsByUser(user);
+    public List<TagDto> getTagsByUserId(Long id) {
+        return ignoredTagDao.getTagsByUserId(id);
     }
 }
