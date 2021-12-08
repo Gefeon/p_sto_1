@@ -46,8 +46,7 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);
         managedTags.addAll(existedTags);
         question.setTags(managedTags);
-        //TODO сделать чтобы Security загружала UserDetails в Principal
-        User user = (User) userDetailsService.loadUserByUsername((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         question.setUser(user);
 
         super.persist(question);

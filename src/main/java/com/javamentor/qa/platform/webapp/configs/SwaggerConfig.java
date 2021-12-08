@@ -40,8 +40,8 @@ public class SwaggerConfig {
                         new Tag(AUTHENTICATION_CONTROLLER, "These endpoints are used to authenticate the client", 1),
                         new Tag(ADMIN_RESOURCE_CONTROLLER, "These endpoints are used to admin actions", 1),
                         new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
-                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags"))
-                        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
+                        new Tag(QUESTION_CONTROLLER,"These endpoints are used to manage the user questions",1),
+                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags", 1),
                         new Tag(TAG_CONTROLLER,"These endpoints are used to manage the user tags",1))
                 .apiInfo(apiInfo());
     }
