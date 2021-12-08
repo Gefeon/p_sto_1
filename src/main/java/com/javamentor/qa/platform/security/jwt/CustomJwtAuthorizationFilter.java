@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.security.jwt;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,11 +35,11 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
         Optional<DecodedJWT> optionalDecodedJWT = jwtService.processToken(request);
         if (optionalDecodedJWT.isPresent()) {
             String email = optionalDecodedJWT.get().getSubject();
-            String role = optionalDecodedJWT.get().getClaim("role").asString();
-            UserDetails userDetails = userService.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-            if (userDetails.isEnabled()) {
+            //String role = optionalDecodedJWT.get().getClaim("role").asString();
+            User user = userService.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            if (user.isEnabled()) {
                 UsernamePasswordAuthenticationToken authenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
         }

@@ -31,10 +31,10 @@ public class TestAdminResourceController extends AbstractTestApi {
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class).getToken();
 
         mvc.perform(post(DELETE_URI + "/user101@user.ru").header(AUTH_HEADER, PREFIX + token))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isOk());
 
         mvc.perform(post(DELETE_URI + "/test@test.ru").header(AUTH_HEADER, PREFIX + token))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
