@@ -5,8 +5,6 @@ import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.service.abstracts.dto.PageDtoService;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 import java.util.Map;
 
 @Component
@@ -19,18 +17,12 @@ public class PageDtoServiceImpl<T> implements PageDtoService<T> {
         this.pageDtoDao = pageDtoDao;
     }
 
-    @Transactional
-    public List<T> getItems(Map<Object, Object> param) {
-        return pageDtoDao.getItems(param);
-    }
-
-    @Transactional
-    public long getTotalResultCount(Map<Object, Object> param) {
-        return pageDtoDao.getTotalResultCount(param);
-    }
-
     @Override
-    public PageDto<T> getPage(int currentPageNumber, int totalPageCount, int itemsOnPage, Map<Object, Object> map) {
-        return new PageDto<>(currentPageNumber, totalPageCount, itemsOnPage, getTotalResultCount(map), getItems(map));
+    public PageDto<T> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
+
+        long totalResultCount = pageDtoDao.getTotalResultCount(map);
+
+        return new PageDto<>(currentPageNumber, (int) Math.ceil((double) totalResultCount/itemsOnPage),
+                itemsOnPage, totalResultCount, pageDtoDao.getItems(map));
     }
 }
