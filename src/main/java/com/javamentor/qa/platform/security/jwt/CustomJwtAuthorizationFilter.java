@@ -16,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -35,7 +34,6 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
         Optional<DecodedJWT> optionalDecodedJWT = jwtService.processToken(request);
         if (optionalDecodedJWT.isPresent()) {
             String email = optionalDecodedJWT.get().getSubject();
-            //String role = optionalDecodedJWT.get().getClaim("role").asString();
             User user = userService.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
             if (user.isEnabled()) {
                 UsernamePasswordAuthenticationToken authenticationToken =
@@ -47,10 +45,3 @@ public class CustomJwtAuthorizationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-
-/*
-передавай в UsernamePasswordAuthenticationToken не email а user,
-collections.singleton(new SimpleGrantedAuthority(role) и вот это не нужно просто передавай объект role
-
-
-* */
