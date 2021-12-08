@@ -6,5 +6,5 @@ import java.util.Map;
 
 public interface PageDtoService<T> {
     PageDto<T> getPage(int currentPageNumber, int totalPageCount, int itemsOnPage,
-                       Map<Object, Object> resultCountParam, Map<Object, Object> itemsParam);
+                       Map<Object, Object> map);
 }
