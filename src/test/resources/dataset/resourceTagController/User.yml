@@ -28,6 +28,6 @@ user_entity:
     link_site: "test.ru"
     link_vk: "test.ru"
     nickname: "admin"
-    password: "$2a$12$39h6d6MzoIDzAK7e8zj8iuOkHrCnusDm7yVwfarSrN/..CgkPsTeG"
+    password: "admin"
     persist_date: "2021-11-24 00:00:00"
     role_id: 101
