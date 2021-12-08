@@ -26,11 +26,9 @@ import java.util.List;
 public class TagController {
 
     private final IgnoredTagDtoService ignoredTagService;
-    private final UserDetailsService userDetailsService;
 
-    public TagController(IgnoredTagDtoService ignoredTagService, UserDetailsService userDetailsService) {
+    public TagController(IgnoredTagDtoService ignoredTagService) {
         this.ignoredTagService = ignoredTagService;
-        this.userDetailsService = userDetailsService;
     }
 
     @Operation(summary = "Get ignored tags from authenticated user", responses = {

@@ -21,12 +21,11 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
 
 
     private final TagService tagService;
-    private final UserDetailsService userDetailsService;
 
-    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService, UserDetailsService userDetailsService) {
+
+    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService) {
         super(questionDao);
         this.tagService = tagService;
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
