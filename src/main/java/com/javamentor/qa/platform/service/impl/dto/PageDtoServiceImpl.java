@@ -4,7 +4,6 @@ import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.service.abstracts.dto.PageDtoService;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -16,7 +15,6 @@ public class PageDtoServiceImpl<T> implements PageDtoService<T> {
 
     private PageDtoDao<T> pageDtoDao;
 
-    @Autowired
     public PageDtoServiceImpl(PageDtoDao<T> pageDtoDao) {
         this.pageDtoDao = pageDtoDao;
     }
