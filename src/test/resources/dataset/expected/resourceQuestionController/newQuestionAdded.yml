@@ -1,0 +1,15 @@
+question:
+  - id: "regex:^(\\d+)"
+    description: "question description"
+    title: "question title"
+    is_deleted: false
+    last_redaction_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    user_id: 100
+  - id: 100
+    description: "fix lazyInitialization Exception"
+    is_deleted: false
+    last_redaction_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    title: "lazyEx"
+    user_id: 100

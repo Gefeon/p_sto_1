@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.webapp.configs;
 
+import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,11 +15,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.Collections;
 
+@Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
 
     public static final String USER_CONTROLLER = "User";
+    public static final String QUESTION_CONTROLLER = "Question";
     public static final String AUTHENTICATION_CONTROLLER = "Authentication";
     public static final String ADMIN_RESOURCE_CONTROLLER = "Admin";
     public static final String ANSWER_CONTROLLER = "Answer";

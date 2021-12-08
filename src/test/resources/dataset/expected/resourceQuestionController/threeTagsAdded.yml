@@ -1,0 +1,21 @@
+tag:
+  - id: "regex:^(\\d+)"
+    description: null
+    name: "tagName0"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+  - id: "regex:^(\\d+)"
+    description: null
+    name: "tagName1"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+  - id: "regex:^(\\d+)"
+    description: null
+    name: "tagName2"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+  - id: 100
+    description: "my sql database architecture"
+    name: "db_architecture"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 101
+    description: "Room Android best practises"
+    name: "Room"
+    persist_date: "2021-11-30 00:29:29.586848"

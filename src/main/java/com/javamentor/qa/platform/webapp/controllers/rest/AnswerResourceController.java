@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
 @RestController
 @RequestMapping("/api/user/question/{questionId}/answer")
-public class ResourceAnswerController {
+public class AnswerResourceController {
 
     private final AnswerService answerService;
 
-    public ResourceAnswerController(AnswerService answerService) {
+    public AnswerResourceController(AnswerService answerService) {
         this.answerService = answerService;
     }
 
