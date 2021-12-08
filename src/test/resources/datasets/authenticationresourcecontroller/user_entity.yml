@@ -1,0 +1,33 @@
+user_entity:
+  - id: 100
+    about: "информация о втором пользователе"
+    city: "Санкт-Петербург"
+    email: "user100@user.ru"
+    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
+    image_link: "test.ru"
+    is_deleted: "false"
+    is_enabled: "true"
+    last_redaction_date: "2021-11-24 00:00:00"
+    link_github: "test.ru"
+    link_site: "test.ru"
+    link_vk: "test.ru"
+    nickname: "user"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
+    persist_date: "2021-11-24 00:00:00"
+    role_id: 100
+  - id: 101
+    about: "информация о первом пользователе"
+    city: "Москва"
+    email: "admin101@admin.ru"
+    full_name: "ПЕТРОВ ПЕТР ПЕТРОВИЧ"
+    image_link: "test.ru"
+    is_deleted: "false"
+    is_enabled: "true"
+    last_redaction_date: "2021-11-24 00:00:00"
+    link_github: "test.ru"
+    link_site: "test.ru"
+    link_vk: "test.ru"
+    nickname: "admin"
+    password: "$2a$12$39h6d6MzoIDzAK7e8zj8iuOkHrCnusDm7yVwfarSrN/..CgkPsTeG"
+    persist_date: "2021-11-24 00:00:00"
+    role_id: 101
