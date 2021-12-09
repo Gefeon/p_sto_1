@@ -21,9 +21,9 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
 
     private final QuestionDao questionDao;
     private final TagService tagService;
-    private final UserDetailsService userDetailsService;
 
-    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService, UserDetailsService userDetailsService) {
+
+    public QuestionServiceImpl(QuestionDao questionDao, TagService tagService) {
         super(questionDao);
         this.tagService = tagService;
         this.userDetailsService = userDetailsService;
@@ -53,8 +53,7 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
         List<Tag> managedTags = new ArrayList<>(tagsToPersist);
         managedTags.addAll(existedTags);
         question.setTags(managedTags);
-        //TODO сделать чтобы Security загружала UserDetails в Principal
-        User user = (User) userDetailsService.loadUserByUsername((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         question.setUser(user);
 
         super.persist(question);
