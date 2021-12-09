@@ -96,3 +96,30 @@ $.fn.serializeToQuestionCreateDto = function () {
 
     return questionCreateDto;
 };
+
+let tagsInput = document.getElementById("tags");
+tagsInput.addEventListener("keyup", getTagsClue, false);
+
+function getTagsClue() {
+    let letters={
+        letters: $("#tags").val(),
+    }
+    $.post({
+        url: "/api/user/tag/letters",
+            contentType: 'application/json',
+            data: JSON.stringify(letters),
+            beforeSend: function (request) {
+            let token = $.cookie("jwt_token");
+            if (token != null) {
+                request.setRequestHeader("Authorization", "Bearer " + token);
+            }
+        },
+        success: function (result) {
+            //отобразить подсказки
+            let e = 5;
+        },
+        error: function (error) {
+            alert(error)
+        }
+    })
+}
