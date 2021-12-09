@@ -9,16 +9,16 @@ import java.util.Map;
 
 @Component
 @NoArgsConstructor
-public class PageDtoServiceImpl<T, E> implements PageDtoService<T, E> {
+public class PageDtoServiceImpl<T> implements PageDtoService<T> {
 
-    private PageDtoDao<T, E> pageDtoDao;
+    private PageDtoDao<T> pageDtoDao;
 
-    public PageDtoServiceImpl(PageDtoDao<T, E> pageDtoDao) {
+    public PageDtoServiceImpl(PageDtoDao<T> pageDtoDao) {
         this.pageDtoDao = pageDtoDao;
     }
 
     @Override
-    public PageDto<T> getPage(int currentPageNumber, int itemsOnPage, Map<E, Object> map) {
+    public PageDto<T> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 
         long totalResultCount = pageDtoDao.getTotalResultCount(map);
 
