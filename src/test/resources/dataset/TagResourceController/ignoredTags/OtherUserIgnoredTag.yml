@@ -1,0 +1,13 @@
+tag_ignore:
+  - id: 100
+    ignored_tag_id: 100
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 101
+    ignored_tag_id: 101
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 102
+    ignored_tag_id: 103
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
