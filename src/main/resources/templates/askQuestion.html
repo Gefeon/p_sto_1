@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -23,33 +23,40 @@
                     </div>
                 </div>
 
-                <form action="/question/add" method="post">
+                <form method="post" id="askQuestionForm">
                     <div class="shadow p-3 bg-white rounded">
                         <div class="bg-white p-3">
                             <div class='form-group'>
                                 <label for="title" class="w-100">
                                     <h5>Заголовок</h5>
                                     <p>Будьте конкретны. Представьте, что вы задаёте вопрос другому человеку.</p>
-                                    <input class="form-control" type="text" id="title"
+                                    <input class="form-control" name="title" type="text" id="title"
                                            placeholder="В чём заключается ваш вопрос? Будьте конкретны.">
                                 </label>
+                                <div class="errorField" id="titleError">
+                                </div>
                             </div>
 
                             <div class="form-group">
                                 <label for="description " class="w-100">
                                     <h5>Основная часть</h5>
                                     <p>Добавьте всю информацию, которая может понадобиться для ответа на ваш вопрос</p>
-                                    <textarea class="no-resize form-control" rows="3" id="description "></textarea>
+                                    <textarea class="no-resize form-control" rows="3" name="description"
+                                              id="description "></textarea>
                                 </label>
+                                <div class="errorField" id="descriptionError">
+                                </div>
                             </div>
 
                             <div class='form-group mb-0'>
                                 <label for="tags" class="w-100">
                                     <h5>Метки</h5>
                                     <p>Добавьте не более 5 меток, описывающих о чём ваш вопрос</p>
-                                    <input class="form-control" type="text" id="tags"
+                                    <input class="form-control" type="text" name="tags" id="tags"
                                            placeholder="например, [java регулярные-выражения база-данных]">
                                 </label>
+                                <div class="errorField" id="tagsError">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -63,5 +70,8 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/static/js/jquery.cookie.js" th:src="@{/js/jquery.cookie.js}"></script>
+<script src="/static/js/question.js" th:src="@{/js/question.js}"></script>
 </body>
 </html>
