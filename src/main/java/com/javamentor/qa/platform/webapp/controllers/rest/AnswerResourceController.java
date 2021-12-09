@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.entity.question.answer.Answer;
+import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
@@ -10,10 +11,12 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.NoSuchElementException;
+
+import static com.javamentor.qa.platform.models.entity.question.answer.VoteType.UP_VOTE;
 
 
 @Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
@@ -39,6 +42,27 @@ public class AnswerResourceController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>("No answer with such id exists in DB", HttpStatus.BAD_REQUEST);
+    }
+
+    @PostMapping("{id}/upVote")
+    public ResponseEntity<?> upVote(@PathVariable("questionId") Long questionId,
+                                    @PathVariable("id") Long answerId) {
+        System.out.println("**UpVote** questionId = " + questionId + "; answerId = " + answerId);
+//        User user = userService.findByEmail(auth.getName()).orElseThrow(NoSuchElementException::new);
+//        Answer answer = answerService.getById(answerId).get();
+//
+//        if (answerService.canUserVote(answer.getId(), user.getId(), UP_VOTE)) {
+//            Long count = answerService.voteOnAnswer(answer, user, UP_VOTE);
+//            System.out.println("Count: " + count);
+//            return ResponseEntity.ok("count here: " + count);
+//        }
+        return ResponseEntity.badRequest().build();
+    }
+
+    @PostMapping("{id}/downVote")
+    public ResponseEntity<?> downVote(@PathVariable("questionId") Long questionId, @PathVariable("id") Long answerId) {
+        System.out.println("**DownVote** questionId = " + questionId + "; answerId = " + answerId);
+        return ResponseEntity.ok("**DownVote** questionId = " + questionId + "; answerId = " + answerId);
     }
 }
 
