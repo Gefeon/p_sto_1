@@ -1,5 +1,5 @@
 $.ajax({
-    url: "/api/auth/check",
+    url: "/api/auth/check/user",
     type: "POST",
 
     beforeSend: function (request) {

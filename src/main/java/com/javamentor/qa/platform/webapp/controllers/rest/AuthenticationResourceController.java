@@ -3,6 +3,7 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
+import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.security.jwt.JwtService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
@@ -19,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
@@ -41,25 +43,26 @@ public class AuthenticationResourceController {
         Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authDto.getUsername(), authDto.getPassword()));
         TokenResponseDto token = jwtService.createAccessToken(authDto.getUsername(),
                 auth.getAuthorities()
-                .stream()
-                .findFirst()
-                .orElseThrow(NoSuchElementException::new)
-                .getAuthority());
+                        .stream()
+                        .findFirst()
+                        .orElseThrow(NoSuchElementException::new)
+                        .getAuthority());
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/check")
-    public ResponseEntity<UserDto> checkUserRole() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    @PostMapping("/check/user")
+    @Operation(summary = "checking user authorization", responses = {
+            @ApiResponse(responseCode = "200", description = "user successful authorization"),
+            @ApiResponse(responseCode = "403", description = "user failed authorization")})
+    public ResponseEntity<UserDto> checkUser() {
 
-        if (Objects.equals(auth.getAuthorities().toString(), "[ROLE_USER]")) {
-            return new ResponseEntity<>(HttpStatus.OK);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof User) {
+            User user = (User) principal;
+            if (Objects.equals(user.getRole().getAuthority(), "ROLE_USER")) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-
-
     }
-
-
-
 }
