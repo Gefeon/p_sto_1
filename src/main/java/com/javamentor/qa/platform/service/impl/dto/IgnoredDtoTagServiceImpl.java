@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class IgnoredDtoTagServiceImpl extends ReadWriteServiceImpl<IgnoredTag, Long> implements IgnoredTagDtoService {
+public class IgnoredDtoTagServiceImpl implements IgnoredTagDtoService {
 
     private final IgnoredTagDtoDao ignoredTagDao;
 
     public IgnoredDtoTagServiceImpl( IgnoredTagDtoDao ignoredTagDao) {
-        super(ignoredTagDao);
         this.ignoredTagDao = ignoredTagDao;
     }
 

@@ -73,7 +73,7 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + token.getToken()));
-        response.andExpect(status().isNotFound())
+        response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 
@@ -86,7 +86,7 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + token.getToken()));
-        response.andExpect(status().isNotFound())
+        response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 

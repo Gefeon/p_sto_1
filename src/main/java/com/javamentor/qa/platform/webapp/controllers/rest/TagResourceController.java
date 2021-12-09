@@ -38,27 +38,21 @@ public class TagResourceController {
     @Operation(summary = "Get related tags dto", responses = {
             @ApiResponse(description = "Get related tags success", responseCode = "200",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RelatedTagsDto.class))),
-            @ApiResponse(description = "No related tags found", responseCode = "404", content = @Content)
+                            schema = @Schema(implementation = RelatedTagsDto.class)))
     })
     public ResponseEntity<?> getRelatedTagsDto() {
         List<RelatedTagsDto> relatedTags = relatedTagsDtoService.getRelatedTagsDto();
-        return relatedTags.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No related tags found")
-                : ResponseEntity.ok(relatedTags);
+        return ResponseEntity.ok(relatedTags);
     }
 
     @Operation(summary = "Get ignored tags from authenticated user", responses = {
-            @ApiResponse(description = "tags were retrieved from DB", responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = Tag.class))),
-            @ApiResponse(description = "No ignored tags found", responseCode = "404", content = @Content)
+            @ApiResponse(description = "Get ignored tags success", responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = Tag.class)))
     })
     @GetMapping("/ignored")
     public ResponseEntity<?> getAllIgnoredTags() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<TagDto> ignoredTags = ignoredTagService.getTagsByUserId(user.getId());
-        return ignoredTags.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No ignored tags found")
-                : ResponseEntity.ok(ignoredTags);
+        return ResponseEntity.ok(ignoredTags);
     }
 }

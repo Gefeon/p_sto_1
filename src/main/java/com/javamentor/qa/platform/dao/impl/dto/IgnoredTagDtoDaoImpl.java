@@ -1,10 +1,7 @@
 package com.javamentor.qa.platform.dao.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.IgnoredTagDtoDao;
-import com.javamentor.qa.platform.dao.impl.model.ReadWriteDaoImpl;
 import com.javamentor.qa.platform.models.dto.TagDto;
-import com.javamentor.qa.platform.models.entity.question.IgnoredTag;
-import com.javamentor.qa.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class IgnoredTagDtoDaoImpl extends ReadWriteDaoImpl<IgnoredTag, Long> implements IgnoredTagDtoDao {
+public class IgnoredTagDtoDaoImpl implements IgnoredTagDtoDao {
 
     @PersistenceContext
     private EntityManager entityManager;
