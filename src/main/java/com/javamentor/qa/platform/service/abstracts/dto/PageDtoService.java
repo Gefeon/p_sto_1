@@ -4,7 +4,7 @@ import com.javamentor.qa.platform.models.dto.PageDto;
 
 import java.util.Map;
 
-public interface PageDtoService<T> {
+public interface PageDtoService<T, E> {
     PageDto<T> getPage(int currentPageNumber, int itemsOnPage,
-                       Map<Object, Object> map);
+                       Map<E, Object> map);
 }
