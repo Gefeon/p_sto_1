@@ -18,6 +18,7 @@ public class UserDtoServiceImpl extends PageDtoServiceImpl<UserDto> implements U
     @Autowired
     public UserDtoServiceImpl(UserDtoDao userDtoDao, PageDtoDao<UserDto> pageDtoDao) {
         super(pageDtoDao);
+        this.userDtoDao = userDtoDao;
     }
 
     @Override
