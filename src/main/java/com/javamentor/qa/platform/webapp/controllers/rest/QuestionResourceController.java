@@ -4,6 +4,7 @@ import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
+import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -61,11 +63,12 @@ public class QuestionResourceController {
             @ApiResponse(description = "No votes found", responseCode = "404", content = @Content)
     })
     @PostMapping("/question/{questionId}/upVote")
-    public ResponseEntity<?> upVote(@PathVariable("questionId") Long id){
-       Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.UP_VOTE);
-       return sum.isEmpty()
-               ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
-               : ResponseEntity.ok(sum.get());
+    public ResponseEntity<?> upVote(@PathVariable("questionId") Long id) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.UP_VOTE, user);
+        return sum.isEmpty()
+                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
+                : ResponseEntity.ok(sum.get());
     }
 
     @Operation(summary = "Down Vote on this Question", responses = {
@@ -75,8 +78,9 @@ public class QuestionResourceController {
             @ApiResponse(description = "No votes found", responseCode = "404", content = @Content)
     })
     @PostMapping("/question/{questionId}/downVote")
-    public ResponseEntity<?> downVote(@PathVariable("questionId") Long id){
-        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.DOWN_VOTE);
+    public ResponseEntity<?> downVote(@PathVariable("questionId") Long id) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.DOWN_VOTE, user);
         return sum.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
                 : ResponseEntity.ok(sum.get());
