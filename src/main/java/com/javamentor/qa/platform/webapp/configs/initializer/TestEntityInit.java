@@ -24,12 +24,5 @@ public class TestEntityInit implements CommandLineRunner {
         testDataInitService.fillTableWithTestData();
     }
 
-    @Autowired
-    protected Flyway flyway;
 
-    @Before
-    public void init() {
-        flyway.clean();
-        flyway.migrate();
-    }
 }
