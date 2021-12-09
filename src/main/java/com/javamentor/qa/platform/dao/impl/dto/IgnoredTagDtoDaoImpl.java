@@ -17,13 +17,10 @@ public class IgnoredTagDtoDaoImpl implements IgnoredTagDtoDao {
 
     @Override
     public List<TagDto> getTagsByUserId(Long userId) {
-        if(userId != null) {
-             return entityManager
-                    .createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
-                            "FROM IgnoredTag ign INNER JOIN ign.user LEFT JOIN ign.ignoredTag tag WHERE ign.user.id = :userId", TagDto.class)
-                    .setParameter("userId", userId).getResultList();
-        }
-        return new ArrayList<>();
+        return entityManager
+                .createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
+                        "FROM IgnoredTag ign INNER JOIN ign.user LEFT JOIN ign.ignoredTag tag WHERE ign.user.id = :userId", TagDto.class)
+                .setParameter("userId", userId).getResultList();
     }
 }
 
