@@ -21,15 +21,8 @@ public class TestEntityInit implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //testDataInitService.fillTableWithTestData();
+       testDataInitService.fillTableWithTestData();
     }
 
-    @Autowired
-    protected Flyway flyway;
 
-    @Before
-    public void init() {
-        flyway.clean();
-        flyway.migrate();
-    }
 }
