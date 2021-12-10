@@ -4,7 +4,7 @@ $(document).on('submit', '#askQuestionForm', function () {
     const questionDtoArray = ask_form.serializeToQuestionCreateDto();
     const form_data = JSON.stringify(questionDtoArray);
 
-    if(validate(questionDtoArray)) {
+    if (validate(questionDtoArray)) {
 
         $.ajax({
             url: "/api/user/question",
@@ -48,8 +48,8 @@ function validate(formData) {
     if (formData.title === "") {
         $("#titleError")[0].insertAdjacentHTML('afterbegin',
             "<span style='color: red'>" +
-                    "<b>Title cannot be empty!</b>" +
-                "</span>");
+            "<b>Title cannot be empty!</b>" +
+            "</span>");
         isValidationsFails = true;
     }
     if (formData.description === "") {
@@ -97,29 +97,43 @@ $.fn.serializeToQuestionCreateDto = function () {
     return questionCreateDto;
 };
 
-let tagsInput = document.getElementById("tags");
-tagsInput.addEventListener("keyup", getTagsClue, false);
-
-function getTagsClue() {
-    let letters={
-        letters: $("#tags").val(),
-    }
-    $.post({
-        url: "/api/user/tag/letters",
+let demo = new autoComplete({
+    selector: 'input[name="tags"]',
+    minChars: 1,
+    source: function (term, suggest) {
+        term = term.split(/\s*[ ,;]\s*/).filter(item => item !== "").pop();
+        term = term.toLowerCase();
+        let letters = {
+            letters: term,
+        }
+        $.post({
+            url: "/api/user/tag/letters",
             contentType: 'application/json',
             data: JSON.stringify(letters),
             beforeSend: function (request) {
-            let token = $.cookie("jwt_token");
-            if (token != null) {
-                request.setRequestHeader("Authorization", "Bearer " + token);
+                let token = $.cookie("jwt_token");
+                if (token != null) {
+                    request.setRequestHeader("Authorization", "Bearer " + token);
+                }
+            },
+            success: function (result) {
+                let suggestions = result.map(elem => elem.name);
+                suggest(suggestions);
+            },
+            error: function (error) {
+                alert(error)
             }
-        },
-        success: function (result) {
-            //отобразить подсказки
-            let e = 5;
-        },
-        error: function (error) {
-            alert(error)
+        })
+    },
+    onSelect(event, term, item) {
+        let tags = $("#tags");
+        let modifiedText = tags.val().replace(/[ ,;]*[^ ,;]*$/ig, "");
+        if(modifiedText === "") {
+            tags.val(term);
+        } else {
+            tags.val(modifiedText + ", " + term);
         }
-    })
-}
+    }
+});
+
+

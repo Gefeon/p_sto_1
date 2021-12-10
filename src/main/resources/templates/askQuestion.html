@@ -8,6 +8,7 @@
     <title>Задать вопрос</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/auto-complete.css" th:href="@{/css/auto-complete.css}">
 </head>
 
 <body>
@@ -53,7 +54,7 @@
                                     <h5>Метки</h5>
                                     <p>Добавьте не более 5 меток, описывающих о чём ваш вопрос</p>
                                     <input class="form-control" type="text" name="tags" id="tags"
-                                           placeholder="например, [java регулярные-выражения база-данных]">
+                                           placeholder="например, [java регулярные-выражения база-данных]" autocomplete="off" autofocus>
                                 </label>
                                 <div class="errorField" id="tagsError">
                                 </div>
@@ -72,6 +73,7 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/static/js/jquery.cookie.js" th:src="@{/js/jquery.cookie.js}"></script>
+<script src="/static/js/auto-complete.js" th:src="@{/js/auto-complete.js}"></script>
 <script src="/static/js/question.js" th:src="@{/js/question.js}"></script>
 </body>
 </html>
