@@ -26,9 +26,9 @@ public class VoteAnswerServiceImpl extends ReadWriteServiceImpl<VoteAnswer, Long
     private final VoteAnswerDao voteAnswerDao;
     private final ReputationDao reputationDao;
 
-    @Value("${reputation.vote.up}")
+    @Value("${reputation.answer.vote.up}")
     private Integer voteUpReputation;
-    @Value("${reputation.vote.down}")
+    @Value("${reputation.answer.vote.down}")
     private Integer voteDownReputation;
 
     public VoteAnswerServiceImpl(AnswerDao answerDao, VoteAnswerDao voteAnswerDao, ReputationDao reputationDao) {

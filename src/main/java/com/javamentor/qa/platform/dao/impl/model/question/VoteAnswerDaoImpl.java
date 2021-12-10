@@ -21,7 +21,7 @@ public class VoteAnswerDaoImpl extends ReadWriteDaoImpl<VoteAnswer, Long> implem
     @Override
     public Optional<Long> getReputationCount(Answer answer) {
         return SingleResultUtil.getSingleResultOrNull(entityManager
-                .createQuery("SELECT count(*) from VoteAnswer v INNER JOIN v.answer where v.answer=:answer", Long.class)
+                .createQuery("SELECT count(*) from VoteAnswer v where v.answer=:answer", Long.class)
                 .setParameter("answer", answer));
     }
 
