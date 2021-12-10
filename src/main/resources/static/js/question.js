@@ -1,3 +1,42 @@
+new autoComplete({
+    selector: 'input[name="tags"]',
+    minChars: 1,
+    source: function (term, suggest) {
+        term = term.split(/\s*[ ,;]\s*/).filter(item => item !== "").pop();
+        term = term.toLowerCase();
+        let letters = {
+            letters: term,
+        }
+        $.post({
+            url: "/api/user/tag/letters",
+            contentType: 'application/json',
+            data: JSON.stringify(letters),
+            beforeSend: function (request) {
+                let token = $.cookie("jwt_token");
+                if (token != null) {
+                    request.setRequestHeader("Authorization", "Bearer " + token);
+                }
+            },
+            success: function (result) {
+                let suggestions = result.map(elem => elem.name);
+                suggest(suggestions);
+            },
+            error: function (error) {
+                alert(error)
+            }
+        })
+    },
+    onSelect(event, term, item) {
+        let tags = $("#tags");
+        let modifiedText = tags.val().replace(/[ ,;]*[^ ,;]*$/ig, "");
+        if(modifiedText === "") {
+            tags.val(term);
+        } else {
+            tags.val(modifiedText + ", " + term);
+        }
+    }
+});
+
 $(document).on('submit', '#askQuestionForm', function () {
 
     const ask_form = $(this);
@@ -5,7 +44,6 @@ $(document).on('submit', '#askQuestionForm', function () {
     const form_data = JSON.stringify(questionDtoArray);
 
     if (validate(questionDtoArray)) {
-
         $.ajax({
             url: "/api/user/question",
             type: "POST",
@@ -93,47 +131,9 @@ $.fn.serializeToQuestionCreateDto = function () {
             }
         }
     });
-
     return questionCreateDto;
 };
 
-let demo = new autoComplete({
-    selector: 'input[name="tags"]',
-    minChars: 1,
-    source: function (term, suggest) {
-        term = term.split(/\s*[ ,;]\s*/).filter(item => item !== "").pop();
-        term = term.toLowerCase();
-        let letters = {
-            letters: term,
-        }
-        $.post({
-            url: "/api/user/tag/letters",
-            contentType: 'application/json',
-            data: JSON.stringify(letters),
-            beforeSend: function (request) {
-                let token = $.cookie("jwt_token");
-                if (token != null) {
-                    request.setRequestHeader("Authorization", "Bearer " + token);
-                }
-            },
-            success: function (result) {
-                let suggestions = result.map(elem => elem.name);
-                suggest(suggestions);
-            },
-            error: function (error) {
-                alert(error)
-            }
-        })
-    },
-    onSelect(event, term, item) {
-        let tags = $("#tags");
-        let modifiedText = tags.val().replace(/[ ,;]*[^ ,;]*$/ig, "");
-        if(modifiedText === "") {
-            tags.val(term);
-        } else {
-            tags.val(modifiedText + ", " + term);
-        }
-    }
-});
+
 
 

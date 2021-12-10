@@ -16,7 +16,7 @@ public class TagDtoDaoImpl implements TagDtoDao {
     private EntityManager entityManager;
 
     @Override
-    public List<TagDto> getTagsByFirstLetters(String letters) {
+    public List<TagDto> getTagsByLetters(String letters) {
         return entityManager
                 .createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
                         "FROM Tag tag WHERE tag.name LIKE :letters", TagDto.class)

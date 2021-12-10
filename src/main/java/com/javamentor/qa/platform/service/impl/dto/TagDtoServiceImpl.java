@@ -17,7 +17,7 @@ public class TagDtoServiceImpl implements TagDtoService {
     }
 
     @Override
-    public List<TagDto> getTagsByFirstLetters(String letters) {
-        return tagDao.getTagsByFirstLetters(letters);
+    public List<TagDto> getTagsByLetters(String letters) {
+        return tagDao.getTagsByLetters(letters);
     }
 }

@@ -10,6 +10,7 @@ import com.javamentor.qa.platform.service.abstracts.dto.RelatedTagsDtoService;
 import com.javamentor.qa.platform.service.abstracts.dto.TagDtoService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -63,8 +64,10 @@ public class TagResourceController {
                     content = @Content(schema = @Schema(implementation = Tag.class)))
     })
     @PostMapping("/letters")
-    public ResponseEntity<?> getTagsByFirstLetters(@RequestBody Map<String, String> json) {
-        List<TagDto> tags = tagService.getTagsByFirstLetters(json.get("letters"));
+    public ResponseEntity<?> getTagsByFirstLetters(
+            @ApiParam(value = "A JSON object containing letters for the next desired tag to attach to question", required = true)
+            @RequestBody Map<String, String> json) {
+        List<TagDto> tags = tagService.getTagsByLetters(json.get("letters"));
         return ResponseEntity.ok(tags);
     }
 }
