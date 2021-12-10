@@ -4,6 +4,7 @@ import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.service.abstracts.dto.PageDtoService;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Map;
 
@@ -11,14 +12,17 @@ import java.util.Map;
 @NoArgsConstructor
 public class PageDtoServiceImpl<T> implements PageDtoService<T> {
 
-    private PageDtoDao<T> pageDtoDao;
+    public Map<String, PageDtoDao> pageDtoDaoMap;
 
-    public PageDtoServiceImpl(PageDtoDao<T> pageDtoDao) {
-        this.pageDtoDao = pageDtoDao;
+    @Autowired
+    public void setPageDtoDaoMap(Map<String, PageDtoDao> pageDtoDaoMap) {
+        this.pageDtoDaoMap = pageDtoDaoMap;
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public PageDto<T> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
+        PageDtoDao<T> pageDtoDao = pageDtoDaoMap.get((String) map.get("class"));
 
         long totalResultCount = pageDtoDao.getTotalResultCount(map);
 
