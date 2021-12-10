@@ -49,16 +49,15 @@ public class VoteAnswerServiceImpl extends ReadWriteServiceImpl<VoteAnswer, Long
             Optional<Reputation> reputationOpt = reputationDao.findByAnswerAndSender(answer, user);
 
             if (voteAnswerOpt.isEmpty() || voteAnswerOpt.get().getVote() != voteType) {
+                voteAnswerOpt.ifPresent(voteAnswerDao::delete);
+                reputationOpt.ifPresent(reputationDao::delete);
+
                 Reputation rep = new Reputation();
                 rep.setAuthor(answer.getUser());
                 rep.setSender(user);
                 rep.setCount(getReputationCount(voteType));
                 rep.setAnswer(answer);
                 rep.setType(ReputationType.VoteAnswer);
-                reputationDao.persist(rep);
-
-                voteAnswerOpt.ifPresent(voteAnswerDao::delete);
-                reputationOpt.ifPresent(reputationDao::delete);
 
                 voteAnswerDao.persist(new VoteAnswer(user, answer, voteType));
                 reputationDao.persist(rep);
