@@ -27,14 +27,16 @@ public class UserDtoDaoImpl implements UserDtoDao, PageDtoDao<UserDto> {
                     .setParameter("id", id));
     }
 
-    //ToDo реализовать методы для пагинации
     @Override
     public List<UserDto> getItems(Map<Object, Object> param) {
-        return null;
+        return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
+                        "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(r.count )) " +
+                        "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id", UserDto.class)
+                .getResultList();
     }
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return 0;
+        return (Long) entityManager.createQuery("SELECT count (id) FROM User").getSingleResult();
     }
 }
