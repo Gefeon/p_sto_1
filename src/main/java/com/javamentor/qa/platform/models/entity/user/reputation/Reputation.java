@@ -20,7 +20,6 @@ import java.util.Objects;
 @AllArgsConstructor
 @CombinedNotNullQuestionOrAnswer
 @Table(name = "reputation")
-@ToString
 public class Reputation implements Serializable {
     private static final long serialVersionUID = 7177182244933788025L;
     @Id
