@@ -23,6 +23,4 @@ public class TestEntityInit implements CommandLineRunner {
     public void run(String... args) {
        testDataInitService.fillTableWithTestData();
     }
-
-
 }
