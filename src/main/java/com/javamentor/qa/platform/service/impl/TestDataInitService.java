@@ -32,7 +32,7 @@ public class TestDataInitService {
     private final static int rolesNum = 7;
     private final static int answersNum = 10;
     private final static int questionsNum = 10;
-    private final static int tagsNum = 4;
+    private final static int tagsNum = 10;
 
     //static fields for random values
     private static final Character[] alphabet = "abcdefghijklmnopqrstuvwxyz"

@@ -44,9 +44,9 @@ const autoComplete = function () {
             }
             for (var a = "object" == typeof l.selector ? [l.selector] : document.querySelectorAll(l.selector), u = 0; u < a.length; u++) {
                 const i = a[u];
-                i.sc = document.createElement("div"), i.sc.className = "autocomplete-suggestions " + l.menuClass, i.autocompleteAttr = i.getAttribute("autocomplete"), i.setAttribute("autocomplete", "off"), i.cache = {}, i.last_val = "", i.updateSC = function (e, t) {
+                i.sc = document.createElement("div"), i.sc.className = "autocomplete-suggestions row mw600 ml-1 " + l.menuClass, i.autocompleteAttr = i.getAttribute("autocomplete"), i.setAttribute("autocomplete", "off"), i.cache = {}, i.last_val = "", i.updateSC = function (e, t) {
                     const o = i.getBoundingClientRect();
-                    if (i.sc.style.left = Math.round(o.left + (window.pageXOffset || document.documentElement.scrollLeft) + l.offsetLeft) + "px", i.sc.style.top = Math.round(o.bottom + (window.pageYOffset || document.documentElement.scrollTop) + l.offsetTop) + "px", i.sc.style.width = Math.round(o.right - o.left) + "px", !e && (i.sc.style.display = "block", i.sc.maxHeight || (i.sc.maxHeight = parseInt((window.getComputedStyle ? getComputedStyle(i.sc, null) : i.sc.currentStyle).maxHeight)), i.sc.suggestionHeight || (i.sc.suggestionHeight = i.sc.querySelector(".autocomplete-suggestion").offsetHeight), i.sc.suggestionHeight)) if (t) {
+                    if (i.sc.style.left = Math.round(o.left + (window.pageXOffset || document.documentElement.scrollLeft) + l.offsetLeft) + "px", i.sc.style.top = Math.round(o.bottom + (window.pageYOffset || document.documentElement.scrollTop) + l.offsetTop) + "px", i.sc.style.width = Math.round(o.right - o.left) + "px", !e && (i.sc.style.display = "flex", i.sc.maxHeight || (i.sc.maxHeight = parseInt((window.getComputedStyle ? getComputedStyle(i.sc, null) : i.sc.currentStyle).maxHeight)), i.sc.suggestionHeight || (i.sc.suggestionHeight = i.sc.querySelector(".autocomplete-suggestion").offsetHeight), i.sc.suggestionHeight)) if (t) {
                         const s = i.sc.scrollTop, n = t.getBoundingClientRect().top - i.sc.getBoundingClientRect().top;
                         n + i.sc.suggestionHeight - i.sc.maxHeight > 0 ? i.sc.scrollTop = n + i.sc.suggestionHeight + s - i.sc.maxHeight : 0 > n && (i.sc.scrollTop = n + s)
                     } else i.sc.scrollTop = 0
@@ -105,10 +105,10 @@ const autoComplete = function () {
                             if (o !== i.last_val) {
                                 if (i.last_val = o, l.cache) {
                                     if (o in i.cache) return void r(i.cache[o]);
-                                    for (var s = 1; s < o.length - l.minChars; s++) {
-                                        var n = o.slice(0, o.length - s);
-                                        if (n in i.cache && !i.cache[n].length) return void r([])
-                                    }
+                                    // for (var s = 1; s < o.length - l.minChars; s++) {
+                                    //     var n = o.slice(0, o.length - s);
+                                    //     if (n in i.cache && !i.cache[n].length) return void r([])
+                                    // }
                                 }
                                 i.timer = setTimeout(function () {
                                     l.source(o, r)
@@ -128,6 +128,7 @@ const autoComplete = function () {
             }
         }
     }
+
     return e
 }();
 !function () {

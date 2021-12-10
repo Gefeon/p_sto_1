@@ -18,8 +18,7 @@ new autoComplete({
                 }
             },
             success: function (result) {
-                let suggestions = result.map(elem => elem.name);
-                suggest(suggestions);
+                suggest(result);
             },
             error: function (error) {
                 alert(error)
@@ -34,6 +33,13 @@ new autoComplete({
         } else {
             tags.val(modifiedText + ", " + term);
         }
+    },
+    renderItem: function (item, search) {
+        search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+        const re = new RegExp("(" + search.split(" ").join("|") + ")", "gi");
+        const descr = item.description !== null ? item.description : "";
+        return '<div class="autocomplete-suggestion col-md-6" data-val="' + item.name + '">' + '<span>' + item.name.replace(re, "<b>$1</b>") + '</span>' +
+            "<br>" + '<div class="description">' + descr + '</div>' + "</div>"
     }
 });
 
