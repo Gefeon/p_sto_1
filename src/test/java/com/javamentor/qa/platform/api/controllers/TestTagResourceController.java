@@ -50,7 +50,7 @@ public class TestTagResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getAllIgnoredTags_returnStatusOkAndCorrectTags() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
@@ -65,7 +65,7 @@ public class TestTagResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoUserRelated_returnEmptyArray() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
@@ -78,7 +78,7 @@ public class TestTagResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {EMPTY, USER_ENTITY}, disableConstraints = true)
+    @DataSet(value = {EMPTY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoTagsInBD_returnEmptyArray() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
