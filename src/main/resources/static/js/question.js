@@ -21,7 +21,8 @@ new autoComplete({
                 suggest(result);
             },
             error: function (error) {
-                alert(error)
+                if(error.status === 403) window.location.replace("/login");
+                else alert(error.responseText);
             }
         })
     },
@@ -68,7 +69,8 @@ $(document).on('submit', '#askQuestionForm', function () {
                 window.location.replace("/question");
             },
             error: function (error) {
-                alert(error)
+                if(error.status === 403) window.location.replace("/login");
+                else alert(error.responseText);
             }
         })
     }
