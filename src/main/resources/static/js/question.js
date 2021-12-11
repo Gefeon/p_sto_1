@@ -3,7 +3,9 @@ new autoComplete({
     minChars: 1,
     source: function (term, suggest) {
         term = term.split(/\s*[ ,;]\s*/).filter(item => item !== "").pop();
-        term = term.toLowerCase();
+        if(term !== undefined){
+            term = term.toLowerCase();
+        }
         let letters = {
             letters: term,
         }
@@ -142,6 +144,14 @@ $.fn.serializeToQuestionCreateDto = function () {
     return questionCreateDto;
 };
 
+$(document).ready(function() {
+    $("#askQuestionForm").keydown(function(event){
+        if(event.keyCode === 13 && $(".autocomplete-suggestions").is(":visible")) {
+            event.preventDefault();
+            return false;
+        }
+    });
+});
 
 
 
