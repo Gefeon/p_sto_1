@@ -6,6 +6,7 @@ import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.dto.IgnoredTagDtoService;
 import com.javamentor.qa.platform.service.abstracts.dto.RelatedTagsDtoService;
+import com.javamentor.qa.platform.service.abstracts.dto.TrackedTagDtoService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,10 +27,12 @@ import java.util.List;
 @RequestMapping("/api/user/tag")
 public class TagResourceController {
 
+    private final TrackedTagDtoService trackedTagService;
     private final IgnoredTagDtoService ignoredTagService;
     private final RelatedTagsDtoService relatedTagsDtoService;
 
-    public TagResourceController(IgnoredTagDtoService ignoredTagService, RelatedTagsDtoService relatedTagsDtoService) {
+    public TagResourceController(TrackedTagDtoService trackedTagService, IgnoredTagDtoService ignoredTagService, RelatedTagsDtoService relatedTagsDtoService) {
+        this.trackedTagService = trackedTagService;
         this.ignoredTagService = ignoredTagService;
         this.relatedTagsDtoService = relatedTagsDtoService;
     }
@@ -54,5 +57,16 @@ public class TagResourceController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<TagDto> ignoredTags = ignoredTagService.getTagsByUserId(user.getId());
         return ResponseEntity.ok(ignoredTags);
+    }
+
+    @GetMapping("/tracked")
+    @Operation(summary = "Get tracked tags from authenticated user", responses = {
+            @ApiResponse(description = "Get tracked tags success", responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = Tag.class)))
+    })
+    public ResponseEntity<?> getAllTrackedTags() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<TagDto> trackedTags = trackedTagService.getTagsByUserId(user.getId());
+        return ResponseEntity.ok(trackedTags);
     }
 }
