@@ -86,17 +86,17 @@ const autoComplete = function () {
                 };
                 i.keydownHandler = function (e) {
                     var t = window.event ? e.keyCode : e.which;
-                    // if ((40 === t || 38 === t) && i.sc.innerHTML) {
-                    //     var o, s = i.sc.querySelector(".autocomplete-suggestion.selected");
-                    //     return s ? (o = 40 === t ? s.nextSibling : s.previousSibling, o ? (s.className = s.className.replace("selected", ""), o.className += " selected", i.value = o.getAttribute("data-val")) : (s.className = s.className.replace("selected", ""), i.value = i.last_val, o = 0)) : (o = 40 == t ? i.sc.querySelector(".autocomplete-suggestion") : i.sc.childNodes[i.sc.childNodes.length - 1], o.className += " selected", i.value = o.getAttribute("data-val")), i.updateSC(0, o), !1
-                    // }
+                    if ((40 === t || 38 === t) && i.sc.innerHTML) {
+                        var o, s = i.sc.querySelector(".autocomplete-suggestion.selected");
+                        return s ? (o = 40 === t ? s.nextSibling : s.previousSibling, o ? (s.className = s.className.replace("selected", ""), o.className += " selected") : (s.className = s.className.replace("selected", ""), o = 0)) : (o = 40 == t ? i.sc.querySelector(".autocomplete-suggestion") : i.sc.childNodes[i.sc.childNodes.length - 1], o.className += " selected"), i.updateSC(0, o), !1
+                    }
                     if (27 === t) i.value = i.last_val, i.sc.style.display = "none";
-                    // else if (13 === t || 9 === t) {
-                    //     var s = i.sc.querySelector(".autocomplete-suggestion.selected");
-                    //     s && "none" !== i.sc.style.display && (l.onSelect(e, s.getAttribute("data-val"), s), setTimeout(function () {
-                    //         i.sc.style.display = "none"
-                    //     }, 20))
-                    // }
+                    else if (13 === t || 9 === t) {
+                        var s = i.sc.querySelector(".autocomplete-suggestion.selected");
+                        s && "none" !== i.sc.style.display && (l.onSelect(e, s.getAttribute("data-val"), s), setTimeout(function () {
+                            i.sc.style.display = "none"
+                        }, 20))
+                    }
                 }, o(i, "keydown", i.keydownHandler), i.keyupHandler = function (e) {
                     var t = window.event ? e.keyCode : e.which;
                     if (!t || (35 > t || t > 40) && 13 !== t && 27 !== t) {
