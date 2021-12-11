@@ -1,41 +1,45 @@
 package com.javamentor.qa.platform.service.impl.model.question;
 
+import com.javamentor.qa.platform.dao.abstracts.model.ReadWriteDao;
 import com.javamentor.qa.platform.dao.abstracts.model.question.VoteQuestionDao;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
+import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
+import com.javamentor.qa.platform.models.entity.user.reputation.ReputationType;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
-public class VoteQuestionServiceImpl implements VoteQuestionService {
+public class VoteQuestionServiceImpl extends ReadWriteServiceImpl<VoteQuestion, Long> implements VoteQuestionService {
 
-    @Autowired
-    private VoteQuestionDao voteQuestionDao;
+    private final VoteQuestionDao voteQuestionDao;
+
+    public VoteQuestionServiceImpl(ReadWriteDao<VoteQuestion, Long> readWriteDao, VoteQuestionDao voteQuestionDao) {
+        super(readWriteDao);
+        this.voteQuestionDao = voteQuestionDao;
+    }
 
     @Override
     @Transactional
-    public Optional<Long> voteAndGetSumOfVotes(Long id, VoteType type, User user) {
+    public Long voteAndGetSumOfVotes(Long questionId, VoteType type, User user) {
 
-        int reputationCount;
-        if (type == VoteType.DOWN_VOTE) {
-            reputationCount = -5;
-        } else {
-            reputationCount = 10;
+        int reputationCount = 0;
+        if (type == VoteType.DOWN_VOTE) reputationCount = -5;
+        if (type == VoteType.UP_VOTE) reputationCount = 10;
+
+        Question question = voteQuestionDao.getQuestionByIdWithAuthor(questionId);
+        User author = question.getUser();
+
+        if (voteQuestionDao.getVoteQuestionByQuestionIdAndUserId(questionId, user.getId()).isEmpty()) {
+            voteQuestionDao.persist(new VoteQuestion(user, question, type));
+            voteQuestionDao.saveReputation(new Reputation(author, user,
+                    reputationCount, ReputationType.VoteQuestion, question));
         }
 
-        Question question = voteQuestionDao.getQuestion(id);
-
-        if (voteQuestionDao.getVoteQuestion(id, user.getId()).isEmpty()) {
-            voteQuestionDao.saveVoteQuestion(new VoteQuestion(user, question, type));
-            voteQuestionDao.updateReputation(reputationCount, id);
-        }
-
-        return voteQuestionDao.getSumOfVotes(id);
+        return voteQuestionDao.getSumOfVotes(questionId);
     }
 }

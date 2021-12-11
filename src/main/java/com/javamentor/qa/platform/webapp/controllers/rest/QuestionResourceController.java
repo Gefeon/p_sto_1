@@ -21,7 +21,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -63,12 +62,10 @@ public class QuestionResourceController {
             @ApiResponse(description = "No votes found", responseCode = "404", content = @Content)
     })
     @PostMapping("/question/{questionId}/upVote")
-    public ResponseEntity<?> upVote(@PathVariable("questionId") Long id) {
+    public ResponseEntity<Long> upVote(@PathVariable("questionId") Long questionId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.UP_VOTE, user);
-        return sum.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
-                : ResponseEntity.ok(sum.get());
+        Long sum = voteQuestionService.voteAndGetSumOfVotes(questionId, VoteType.UP_VOTE, user);
+        return ResponseEntity.ok(sum);
     }
 
     @Operation(summary = "Down Vote on this Question", responses = {
@@ -78,11 +75,9 @@ public class QuestionResourceController {
             @ApiResponse(description = "No votes found", responseCode = "404", content = @Content)
     })
     @PostMapping("/question/{questionId}/downVote")
-    public ResponseEntity<?> downVote(@PathVariable("questionId") Long id) {
+    public ResponseEntity<Long> downVote(@PathVariable("questionId") Long questionId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.DOWN_VOTE, user);
-        return sum.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
-                : ResponseEntity.ok(sum.get());
+        Long sum = voteQuestionService.voteAndGetSumOfVotes(questionId, VoteType.DOWN_VOTE, user);
+        return ResponseEntity.ok(sum);
     }
 }

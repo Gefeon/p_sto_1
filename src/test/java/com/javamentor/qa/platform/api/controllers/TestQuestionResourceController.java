@@ -37,7 +37,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
-    private static final String REPUTATION = "dataset/QuestionResourceController/Reputation.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
 
@@ -215,7 +214,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD, REPUTATION}, disableConstraints = true)
+    @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD}, disableConstraints = true)
     public void shouldUpVote() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user101@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
@@ -244,7 +243,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
 
     @Test
-    @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD, REPUTATION}, disableConstraints = true)
+    @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD}, disableConstraints = true)
     public void shouldDownVote() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user103@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
