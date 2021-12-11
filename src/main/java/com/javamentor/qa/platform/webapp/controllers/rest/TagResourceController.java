@@ -53,7 +53,7 @@ public class TagResourceController {
                     content = @Content(schema = @Schema(implementation = IgnoredTag.class)))
     })
     @GetMapping("/ignored")
-    public ResponseEntity<?> getAllIgnoredTags() {
+    public ResponseEntity<?> getIgnoredTags() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<TagDto> ignoredTags = ignoredTagService.getTagsByUserId(user.getId());
         return ResponseEntity.ok(ignoredTags);
@@ -64,7 +64,7 @@ public class TagResourceController {
                     content = @Content(schema = @Schema(implementation = Tag.class)))
     })
     @PostMapping("/letters")
-    public ResponseEntity<?> getTagsByFirstLetters(
+    public ResponseEntity<?> getTagsByLetters(
             @ApiParam(value = "A JSON object containing letters for the next desired tag to attach to question", required = true)
             @RequestBody Map<String, String> json) {
         List<TagDto> tags = tagService.getTagsByLetters(json.get("letters"));
