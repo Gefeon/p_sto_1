@@ -19,7 +19,12 @@ class Header extends HTMLElement {
 
         <div class="text-end">
           <button type="button" class="btn btn-primary">Login</button>
-          <button type="button" class="btn btn-primary">Sign-up</button>
+          <button type="button" class="btn btn-primary">Sign-up</button> 
+            <a href="/logout"/>"Logout</a>
+          <button type="submit" value="logout"/ class="btn btn-primary">Logout</button>
+          <form <a href="/logout"/> method="post">
+                <input type="submit" value="Log out"/>
+           </form>
         </div>
       </div>
 
