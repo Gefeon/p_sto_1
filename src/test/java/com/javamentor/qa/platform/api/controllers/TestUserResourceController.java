@@ -102,7 +102,7 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.itemsOnPage", is(5)))
                 .andExpect(jsonPath("$.totalResultCount", is(14)))
                 .andExpect(jsonPath("$.items").value(hasSize(5)))
-                .andExpect(jsonPath("$.items.id").value(containsInRelativeOrder(104, 105, 106, 108, 109)));
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(104, 105, 106, 108, 109)));
     }
 
     @Test
@@ -128,14 +128,14 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         // нет необязательного параметра - кол-во элементов на странице по умолчанию 10
-        mvc.perform(get("/api/user/new?currPage=2").header(AUTH_HEADER, PREFIX + token.getToken()))
+        mvc.perform(get("/api/user/new?currPage=1").header(AUTH_HEADER, PREFIX + token.getToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
                 .andExpect(jsonPath("$.totalPageCount", is(2)))
                 .andExpect(jsonPath("$.itemsOnPage", is(10)))
                 .andExpect(jsonPath("$.totalResultCount", is(14)))
-                .andExpect(jsonPath("$.items").isNotEmpty());//TODO hasSize(10)?????????????????
+                .andExpect(jsonPath("$.items").value(hasSize(10)));
     }
 
     @Test
