@@ -13,13 +13,12 @@ import java.util.List;
 public class TrackedTagDtoDaoImpl implements TrackedTagDtoDao {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    private EntityManager em;
 
     @Override
     public List<TagDto> getTagsByUserId(Long userId) {
-        return entityManager
-                .createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
-                        "FROM TrackedTag track INNER JOIN track.user LEFT JOIN track.trackedTag tag WHERE track.user.id = :userId", TagDto.class)
+        return em.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
+                        "FROM TrackedTag tracked INNER JOIN tracked.user LEFT JOIN tracked.trackedTag tag WHERE tracked.user.id = :userId", TagDto.class)
                 .setParameter("userId", userId).getResultList();
     }
 }
