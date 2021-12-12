@@ -21,4 +21,5 @@ public class QuestionDto {
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto;
+
 }

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
@@ -28,12 +29,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question";
+    private final String url1 = "/api/user/question/100";
+
 
     private static final String USER_ENTITY = "dataset/QuestionResourceController/user.yml";
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
+    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/Answer.yml";
+    private static final String QUESTION_VIEWED_ENTITY = "dataset/QuestionResourceController/QuestionViewed.yml";
+    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/Reputation.yml";
+    private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/QuestionVote.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
@@ -206,5 +213,22 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
 
+    }
+
+    @Test
+    @DataSet(value = {USER_ENTITY,
+            ROLE_ENTITY,
+            ANSWER_ENTITY,
+            QUESTION_ENTITY,
+            QUESTION_VIEWED_ENTITY,
+            REPUTATION_ENTITY,
+            TAG_ENTITY,
+            VOTE_QUESTION_ENTITY}, disableConstraints = true)
+    public void getQuestionDtoById() throws Exception {
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+        mvc.perform(MockMvcRequestBuilders.get(url1).header(AUTH_HEADER, PREFIX + token.getToken())).andExpect(status().isOk());
     }
 }
