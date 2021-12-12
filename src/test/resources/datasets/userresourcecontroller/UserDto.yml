@@ -12,7 +12,7 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "Iv"
-    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 100
   - id: 101
@@ -60,6 +60,6 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "Rn"
-    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 103
