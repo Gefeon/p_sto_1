@@ -21,7 +21,7 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String PREFIX = "Bearer ";
 
     private static final String USER_ENTITY = "datasets/userresourcecontroller/UserDto.yml";
-    private static final String ROLE_ENTITY = "datasets/userresourcecontroller/Role.yml";
+    private static final String ROLE_ENTITY = "datasets/userresourcecontroller/RoleReputation.yml";
     private static final String REPUTATION_ENTITY = "datasets/userresourcecontroller/Reputation.yml";
     private static final String QUESTION_ENTITY = "datasets/userresourcecontroller/Question.yml";
     private static final String ANSWER_ENTITY = "datasets/userresourcecontroller/Answer.yml";

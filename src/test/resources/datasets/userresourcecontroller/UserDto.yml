@@ -18,7 +18,7 @@ user_entity:
   - id: 101
     about: "second user"
     city: "Smolensk"
-    email: "two@come"
+    email: "user101@user.ru"
     full_name: "Olga"
     image_link: "link.com"
     is_deleted: "false"
@@ -34,7 +34,7 @@ user_entity:
   - id: 102
     about: "third user"
     city: "Voronej"
-    email: "three@come"
+    email: "user102@user.ru"
     full_name: "Elena"
     image_link: "link.com"
     is_deleted: "false"
