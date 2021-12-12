@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class LogoutController {
-    @GetMapping("logout")
+    @GetMapping("/logout")
     public String eraseCookie(HttpServletRequest request, HttpServletResponse response) {
 
         Cookie[] cookies = request.getCookies();
