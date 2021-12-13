@@ -29,10 +29,7 @@ public class PageDtoServiceImpl<T> implements PageDtoService<T> {
 
         long totalResultCount = pageDtoDao.getTotalResultCount(map);
         int totalPageCount = (int) Math.ceil((double) totalResultCount / itemsOnPage);
-        return (totalPageCount < currentPageNumber)
-                ? new PageDto<>(currentPageNumber, totalPageCount,
-                itemsOnPage, totalResultCount, null)
-                : new PageDto<>(currentPageNumber, totalPageCount,
+        return new PageDto<>(currentPageNumber, totalPageCount,
                 itemsOnPage, totalResultCount, pageDtoDao.getItems(map));
     }
 }

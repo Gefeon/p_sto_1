@@ -151,7 +151,7 @@ public class TestUserResourceController extends AbstractTestApi {
         mvc.perform(get("/api/user/new?currPage=2&items=100").header(AUTH_HEADER, PREFIX + token.getToken()))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items").doesNotExist());
+                .andExpect(jsonPath("$.items").isEmpty());
     }
 
     @Test

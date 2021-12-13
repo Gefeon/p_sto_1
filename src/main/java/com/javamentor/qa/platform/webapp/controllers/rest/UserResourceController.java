@@ -32,11 +32,9 @@ import java.util.Optional;
 public class UserResourceController {
 
     private final UserDtoService userDtoService;
-    private final PageDtoService<UserDto> pageDtoService;
 
-    public UserResourceController(UserDtoService userDtoService, PageDtoService<UserDto> pageDtoService) {
+    public UserResourceController(UserDtoService userDtoService) {
             this.userDtoService = userDtoService;
-            this.pageDtoService = pageDtoService;
         }
 
         @GetMapping(path = "/api/user/{userId}")
@@ -62,10 +60,10 @@ public class UserResourceController {
                 @ApiParam(value = "positive number representing number of current page", required = true)
                 @RequestParam @Positive(message = "current page must be positive number") int currPage,
                 @ApiParam(value = "positive number representing number of items to show on page")
-                @RequestParam(required = false) @Positive(message = "items must be positive number") Integer items) {
+                @RequestParam(required = false, defaultValue = "10") @Positive(message = "items must be positive number") int items) {
             Map<Object, Object> map = new HashMap<>();
             map.put("class", "paginationByPersistDate");
-            PageDto<UserDto> page = pageDtoService.getPage(currPage, items == null ? 10 : items, map);
+            PageDto<UserDto> page = userDtoService.getPage(currPage, items, map);
             return ResponseEntity.ok(page);
         }
 
