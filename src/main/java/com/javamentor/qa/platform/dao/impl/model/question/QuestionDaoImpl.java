@@ -17,9 +17,11 @@ public class QuestionDaoImpl extends ReadWriteDaoImpl<Question, Long> implements
 
     @Override
     public Long countQuestions() {
-        String result = entityManager.createQuery("select count_big(*) from question where is_deleted=faulse").getSingleResult().toString();
-        Long rs = Long.parseLong(result);
 
+        Long rs = (long) entityManager
+                .createQuery("select COUNT(q) from Question q where q.isDeleted=: del")
+                .setParameter("del", false)
+                .getSingleResult();
         return rs;
     }
 }

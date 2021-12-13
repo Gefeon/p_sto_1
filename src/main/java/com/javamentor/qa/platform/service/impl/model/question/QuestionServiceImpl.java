@@ -26,7 +26,6 @@ public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> im
     public QuestionServiceImpl(QuestionDao questionDao, TagService tagService) {
         super(questionDao);
         this.tagService = tagService;
-        this.userDetailsService = userDetailsService;
         this.questionDao = questionDao;
     }
 
