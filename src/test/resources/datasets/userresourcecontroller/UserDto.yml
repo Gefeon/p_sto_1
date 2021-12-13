@@ -1,19 +1,19 @@
 user_entity:
   - id: 100
-    about: "first user"
-    city: "Irkutsk"
-    email: "one@come"
-    full_name: "Ivan"
-    image_link: "link.com"
+    about: "информация о втором пользователе"
+    city: "Санкт-Петербург"
+    email: "user100@user.ru"
+    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
+    image_link: "test.ru"
     is_deleted: "false"
     is_enabled: "true"
-    last_redaction_date: "2021-11-29 00:00:00"
-    link_github: "link.com"
-    link_site: "link.com"
-    link_vk: "link.com"
-    nickname: "Iv"
+    last_redaction_date: "2021-11-24 00:00:00"
+    link_github: "test.ru"
+    link_site: "test.ru"
+    link_vk: "test.ru"
+    nickname: "user"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
-    persist_date: "2021-11-29 00:00:00"
+    persist_date: "2021-11-24 00:00:00"
     role_id: 100
   - id: 101
     about: "second user"
@@ -60,6 +60,6 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "Rn"
-    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
+    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 103
