@@ -6,5 +6,6 @@ import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.ReadWriteService;
 
 public interface VoteQuestionService extends ReadWriteService<VoteQuestion, Long> {
-    Long voteAndGetSumOfVotes(Long questionId, VoteType type, User user);
+    boolean checkIfVoteQuestionDoesNotExist(Long questionId, Long userId);
+    Long voteAndGetCountVoteQuestionFotThisQuestion(Long questionId, VoteType type, User user);
 }

@@ -5,7 +5,6 @@ import com.javamentor.qa.platform.dao.impl.model.ReadWriteDaoImpl;
 import com.javamentor.qa.platform.dao.util.SingleResultUtil;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
-import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -19,7 +18,7 @@ public class VoteQuestionDaoImpl extends ReadWriteDaoImpl<VoteQuestion, Long> im
     private EntityManager em;
 
     @Override
-    public Long getSumOfVotes(Long questionId) {
+    public Long getCountVoteQuestionByQuestionId(Long questionId) {
         return em.createQuery(
                         "select count(v.id) from VoteQuestion v " +
                                 "where v.question.id=:ID", Long.class)
@@ -43,10 +42,4 @@ public class VoteQuestionDaoImpl extends ReadWriteDaoImpl<VoteQuestion, Long> im
                 .setParameter("qID", questionId)
                 .setParameter("vID", userId));
     }
-
-    @Override
-    public void saveReputation(Reputation reputation) {
-        em.persist(reputation);
-    }
-
 }

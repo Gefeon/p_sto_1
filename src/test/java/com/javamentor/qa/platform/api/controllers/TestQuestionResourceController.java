@@ -5,6 +5,9 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
+import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
+import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
+import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -177,57 +181,55 @@ public class TestQuestionResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD}, disableConstraints = true)
     public void shouldUpVote() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user101@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
-        mvc.perform(post(urlUpVote).header(AUTH_HEADER, PREFIX + token.getToken())
+        String authToken = getToken("user102@user.ru", "user");
+
+        mvc.perform(post(urlUpVote).header(AUTH_HEADER, PREFIX + authToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        AuthenticationRequestDto authDto2 = new AuthenticationRequestDto("user102@user.ru", "user");
-        TokenResponseDto token2 = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto2))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+        VoteQuestion vt = em.createQuery("select vt from VoteQuestion vt " +
+                "where vt.user.id = 102 and vt.question.id = 100", VoteQuestion.class).getSingleResult();
+        assertThat(vt).isNotNull();
+        assertThat(vt.getVote()).isEqualTo(VoteType.UP_VOTE);
 
-        mvc.perform(post(urlUpVote).header(AUTH_HEADER, PREFIX + token2.getToken())
+        Reputation rt = em.createQuery("select rt from Reputation rt " +
+                "where rt.question.id = 100 and rt.sender.id = 102", Reputation.class).getSingleResult();
+        assertThat(rt).isNotNull();
+        assertThat(rt.getCount()).isEqualTo(10);
+
+        mvc.perform(post(urlUpVote).header(AUTH_HEADER, PREFIX + authToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
 
     @Test
     @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD}, disableConstraints = true)
     public void shouldDownVote() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user103@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
-        mvc.perform(post(urlDownVote).header(AUTH_HEADER, PREFIX + token.getToken())
+        String authToken = getToken("user103@user.ru", "user");
+
+        mvc.perform(post(urlDownVote).header(AUTH_HEADER, PREFIX + authToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
 
-        AuthenticationRequestDto authDto2 = new AuthenticationRequestDto("user104@user.ru", "user");
-        TokenResponseDto token2 = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto2))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+        VoteQuestion vt = em.createQuery("select vt from VoteQuestion vt " +
+                "where vt.user.id = 103 and vt.question.id = 100", VoteQuestion.class).getSingleResult();
+        assertThat(vt).isNotNull();
+        assertThat(vt.getVote()).isEqualTo(VoteType.DOWN_VOTE);
 
-        mvc.perform(post(urlDownVote).header(AUTH_HEADER, PREFIX + token2.getToken())
+        Reputation rt = em.createQuery("select rt from Reputation rt " +
+                "where rt.question.id = 100 and rt.sender.id = 103", Reputation.class).getSingleResult();
+        assertThat(rt).isNotNull();
+        assertThat(rt.getCount()).isEqualTo(-5);
+
+        mvc.perform(post(urlUpVote).header(AUTH_HEADER, PREFIX + authToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 }
