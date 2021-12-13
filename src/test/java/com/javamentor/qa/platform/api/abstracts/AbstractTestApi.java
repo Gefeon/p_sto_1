@@ -3,13 +3,19 @@ package com.javamentor.qa.platform.api.abstracts;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.junit5.api.DBRider;
+import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
+import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.security.jwt.JwtService;
 import com.javamentor.qa.platform.webapp.configs.JmApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DBRider
 @SpringBootTest(classes = JmApplication.class)
@@ -18,11 +24,24 @@ import org.springframework.test.web.servlet.MockMvc;
 @AutoConfigureMockMvc
 public class AbstractTestApi {
 
+    private static final String AUTH_URI = "/api/auth/token";
+
     @Autowired
     protected MockMvc mvc;
     @Autowired
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
+
+    public String getToken(String username, String password) throws Exception {
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto(username, password);
+
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+
+        return token.getToken();
+    }
 
 }
