@@ -10,9 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserDtoServiceImpl implements UserDtoService{
+public class UserDtoServiceImpl extends PageDtoServiceImpl<UserDto> implements UserDtoService{
 
-    private UserDtoDao userDtoDao;
+    private final UserDtoDao userDtoDao;
 
     @Autowired
     public UserDtoServiceImpl(UserDtoDao userDtoDao) {
