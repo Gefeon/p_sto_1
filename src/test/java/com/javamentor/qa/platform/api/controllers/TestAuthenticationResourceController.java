@@ -4,7 +4,6 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.security.jwt.JwtService;
-import com.javamentor.qa.platform.api.util.UtilAuthorizationTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -12,7 +11,8 @@ import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +38,7 @@ public class TestAuthenticationResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void shouldAllowAccessToPrivateResourceToAuthorizedRequest() throws Exception {
-        mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + UtilAuthorizationTest.getToken("user100@user.ru", "user")))
+        mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andExpect(status().isOk());
     }
 
