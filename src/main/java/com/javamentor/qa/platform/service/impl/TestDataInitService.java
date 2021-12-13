@@ -179,7 +179,7 @@ public class TestDataInitService {
                     getRand(domains) + "." + getRand(domainCodes);
             String fullName = getRand(firstNames) + " " +
                     getRand(middleNames) + " " + getRand(lastNames);
-            String password = getRandStr(4, 20);
+            String password = "user";
             String city = getRand(cities);
             String linkSite = "https://" + getRandStr(10, 50);
             String linkGithub = "https://" + getRandStr(5, 30);

@@ -2,34 +2,39 @@ package com.javamentor.qa.platform.api.controllers;
 
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
+import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
+import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TestUserResourceController extends AbstractTestApi {
 
+    private static final String USER_ENTITY = "datasets/userresourcecontroller/UserDto.yml";
+    private static final String USER_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/user_entity.yml";
+    private static final String ROLE_ENTITY = "datasets/userresourcecontroller/Role.yml";
+    private static final String REPUTATION_ENTITY = "datasets/userresourcecontroller/Reputation.yml";
+    private static final String REPUTATION_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/reputation.yml";
+    private static final String QUESTION_ENTITY = "datasets/userresourcecontroller/Question.yml";
+    private static final String ANSWER_ENTITY = "datasets/userresourcecontroller/Answer.yml";
+
+    private static final String AUTH_URI = "/api/auth/token";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
     @Test
-    @DataSet(value={"datasets/userresourcecontroller/UserDto.yml",
-            "datasets/userresourcecontroller/Role.yml",
-            "datasets/userresourcecontroller/Reputation.yml",
-            "datasets/userresourcecontroller/Question.yml",
-            "datasets/userresourcecontroller/Answer.yml"}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoById() throws Exception {
 
-        //user exist
-        mvc.perform(get("/api/user/103").header(AUTH_HEADER, PREFIX +
-                        getToken("one@come", "user")).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
+        ResultActions response = mvc.perform(get("/api/user/103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$").hasJsonPath())
                 .andExpect(jsonPath("$.id", is(103)))
@@ -40,10 +45,8 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.reputation", is(41)));
 
         //id is absent
-        mvc.perform(get("/api/user/").header(AUTH_HEADER, PREFIX +
-                getToken("one@come", "user")).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
+        ResultActions response2 = mvc.perform(get("/api/user/").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response2.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.fullName").doesNotExist())
                 .andExpect(jsonPath("$.email").doesNotExist())
@@ -53,10 +56,8 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$").doesNotExist());
 
         //user is absent
-        mvc.perform(get("/api/user/1000").header(AUTH_HEADER, PREFIX +
-                getToken("one@come", "user")).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isNotFound())
+        ResultActions response3 = mvc.perform(get("/api/user/1000").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response3.andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.fullName").doesNotExist())
                 .andExpect(jsonPath("$.email").doesNotExist())
@@ -66,10 +67,8 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$").value("User is absent or wrong Id"));
 
         //wrong type id
-        mvc.perform(get("/api/user/ggg").header(AUTH_HEADER, PREFIX +
-                getToken("one@come", "user")).contentType(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
+        ResultActions response4 = mvc.perform(get("/api/user/ggg").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response4.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.id").doesNotExist())
                 .andExpect(jsonPath("$.fullName").doesNotExist())
                 .andExpect(jsonPath("$.email").doesNotExist())
@@ -78,4 +77,89 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.reputation").doesNotExist())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDate_expectCorrectData() throws Exception {
+
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=2&items=5").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(3)))
+                .andExpect(jsonPath("$.itemsOnPage", is(5)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").value(hasSize(5)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(104, 105, 106, 108, 109)));
+    }
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDateWithoutRequiredParam_expectBadRequest() throws Exception {
+
+
+        // нет обязательного параметра - текущей страницы
+        ResultActions response = mvc.perform(get("/api/user/new?items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDateWithoutNonRequiredParam_expectTenElementsOnPage() throws Exception {
+        // нет необязательного параметра - кол-во элементов на странице по умолчанию 10
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=1").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").value(hasSize(10)));
+    }
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDateWithPageNumberBiggerThanHaveItems_expectEmptyItemsArray() throws Exception {
+
+        // страница больше, чем элементов
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=2&items=100").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").isEmpty());
+    }
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDateZeroRequiredParam_expectBadRequest() throws Exception {
+        // параметр страницы равен 0
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=0&items=100").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDateZeroNonRequiredParam_expectBadRequest() throws Exception {
+        // параметр элементов на странице равен 0
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=10&items=0").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    public void getUserDtoByPersistDateAllItemsPerOnePage_expectAllItemsFromDB() throws Exception {
+        // хотим получить больше чем есть
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=1&items=100").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(100)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").value(hasSize(14)));
+    }
+
 }
