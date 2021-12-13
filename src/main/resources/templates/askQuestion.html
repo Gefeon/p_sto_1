@@ -6,7 +6,8 @@
             integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/libs/jquery.cookie.js" th:src="@{/js/libs/jquery.cookie.js}"></script>
+    <script type="text/javascript" src="/static/js/libs/jquery.cookie.js"
+            th:src="@{/js/libs/jquery.cookie.js}"></script>
     <script src="/static/js/authorization_check.js" th:src="@{/js/authorization_check.js}"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/auto-complete.css" th:href="@{/css/auto-complete.css}">
+    <link rel="stylesheet" href="/static/css/askQuestion.css" th:href="@{/css/askQuestion.css}">
 </head>
 
 <body>
@@ -48,9 +50,32 @@
                                 <label for="description " class="w-100">
                                     <h5>Основная часть</h5>
                                     <p>Добавьте всю информацию, которая может понадобиться для ответа на ваш вопрос</p>
-                                    <textarea class="no-resize form-control" rows="3" name="description"
-                                              id="description "></textarea>
                                 </label>
+                                <div id="wmd-button-bar" class="wmd-button-bar btr-sm mt-0">
+                                    <ul id="wmd-button-row" class="wmd-button-row">
+                                        <li class="wmd-button" id="wmd-bold-button"
+                                            title="Полужирный шрифт <strong> Ctrl+B" style="margin-top: 0;">
+                                            <span></span>
+                                        </li>
+                                        <li class="wmd-button" id="wmd-italic-button" title="Курсив <em> Ctrl+I">
+                                            <span ></span>
+                                        </li>
+                                        <li class="wmd-button" id="wmd-quote-button" title="Цитата <blockquote> Ctrl+Q">
+                                            <span></span>
+                                        </li>
+                                        <li class="wmd-button" id="wmd-code-button" title="Пример кода <pre><code> Ctrl+K">
+                                            <span></span>
+                                        </li>
+                                        <li class="wmd-button" id="wmd-olist-button" title="Нумерованный список <ol> Ctrl+O">
+                                            <span></span>
+                                        </li>
+                                        <li class="wmd-button" id="wmd-ulist-button" title="Маркированный список <ul> Ctrl+U">
+                                            <span></span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <textarea class="no-resize form-control" rows="3" name="description"
+                                          id="description "></textarea>
                                 <div class="errorField" id="descriptionError">
                                 </div>
                             </div>
@@ -60,7 +85,8 @@
                                     <h5>Метки</h5>
                                     <p>Добавьте не более 5 меток, описывающих о чём ваш вопрос</p>
                                     <input class="form-control" type="text" name="tags" id="tags"
-                                           placeholder="например, [java регулярные-выражения база-данных]" autocomplete="off" autofocus>
+                                           placeholder="например, [java регулярные-выражения база-данных]"
+                                           autocomplete="off" autofocus>
                                 </label>
                                 <div class="errorField" id="tagsError">
                                 </div>
