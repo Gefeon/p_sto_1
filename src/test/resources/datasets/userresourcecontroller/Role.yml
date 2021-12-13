@@ -7,3 +7,7 @@ role:
     name: "ROLE_ANONYMOUS"
   - id: 103
     name: "ROLE_GUEST"
+  - id: 104
+    name: "ROLE_UNDEFINED"
+  - id: 105
+    name: "ROLE_MAIN"
