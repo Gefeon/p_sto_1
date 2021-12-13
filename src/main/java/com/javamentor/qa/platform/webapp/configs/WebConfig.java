@@ -16,6 +16,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addViewController("/user").setViewName("userPage");
         registry.addViewController("/users").setViewName("usersPage");
         registry.addViewController("/question/ask").setViewName("askQuestion");
+        registry.addViewController("/question/{id}").setViewName("questionPage");
     }
 
     @Bean
