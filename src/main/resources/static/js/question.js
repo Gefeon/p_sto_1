@@ -68,7 +68,7 @@ $(document).on('submit', '#askQuestionForm', function () {
                 let id = result.id;
                 let persistDateTime = result.persistDateTime;
                 let listTagDto = result.listTagDto;
-                window.location.replace("/question");
+                window.location.replace("/question/" + id);
             },
             error: function (error) {
                 if(error.status === 403) window.location.replace("/login");
