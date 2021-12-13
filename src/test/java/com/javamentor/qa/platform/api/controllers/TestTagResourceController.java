@@ -38,14 +38,7 @@ public class TestTagResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {QUESTION, TAG, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getRelatedTags() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        mvc.perform(get(GET_RELATED_TAGS).header(AUTH_HEADER, PREFIX + token.getToken()).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get(GET_RELATED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(jsonPath("$", hasSize(10)))
                 .andExpect(status().isOk());
@@ -54,12 +47,7 @@ public class TestTagResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getAllIgnoredTags_returnStatusOkAndCorrectTags() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + token.getToken()));
+        ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(3)))
                 .andExpect(jsonPath("$[*].id", containsInAnyOrder(100, 101, 104)))
@@ -69,25 +57,15 @@ public class TestTagResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoUserRelated_returnEmptyArray() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + token.getToken()));
+        ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 
     @Test
-    @DataSet(value = {EMPTY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {EMPTY, USER_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoTagsInBD_returnEmptyArray() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + token.getToken()));
+        ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
