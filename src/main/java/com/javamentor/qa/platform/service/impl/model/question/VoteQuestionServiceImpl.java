@@ -1,41 +1,58 @@
 package com.javamentor.qa.platform.service.impl.model.question;
 
+import com.javamentor.qa.platform.dao.abstracts.model.ReadWriteDao;
 import com.javamentor.qa.platform.dao.abstracts.model.question.VoteQuestionDao;
+import com.javamentor.qa.platform.dao.abstracts.model.user.ReputationDao;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
+import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
+import com.javamentor.qa.platform.models.entity.user.reputation.ReputationType;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
-public class VoteQuestionServiceImpl implements VoteQuestionService {
+public class VoteQuestionServiceImpl extends ReadWriteServiceImpl<VoteQuestion, Long> implements VoteQuestionService {
 
-    @Autowired
-    private VoteQuestionDao voteQuestionDao;
+    private final VoteQuestionDao voteQuestionDao;
+    private final ReputationDao reputationDao;
+
+    public VoteQuestionServiceImpl(ReadWriteDao<VoteQuestion, Long> readWriteDao, VoteQuestionDao voteQuestionDao,
+                                   ReputationDao reputationDao) {
+        super(readWriteDao);
+        this.voteQuestionDao = voteQuestionDao;
+        this.reputationDao = reputationDao;
+    }
+
 
     @Override
     @Transactional
-    public Optional<Long> voteAndGetSumOfVotes(Long id, VoteType type, User user) {
+    public boolean checkIfVoteQuestionDoesNotExist(Long questionId, Long userId) {
+        return voteQuestionDao.getVoteQuestionByQuestionIdAndUserId(questionId, userId).isEmpty();
+    }
 
-        int reputationCount;
+    @Override
+    @Transactional
+    public Long voteAndGetCountVoteQuestionFotThisQuestion(Long questionId, VoteType type, User user) {
+
+        int reputationCount = 0;
         if (type == VoteType.DOWN_VOTE) {
             reputationCount = -5;
-        } else {
+        }
+        if (type == VoteType.UP_VOTE) {
             reputationCount = 10;
         }
 
-        Question question = voteQuestionDao.getQuestion(id);
+        Question question = voteQuestionDao.getQuestionByIdWithAuthor(questionId);
+        User author = question.getUser();
 
-        if (voteQuestionDao.getVoteQuestion(id, user.getId()).isEmpty()) {
-            voteQuestionDao.saveVoteQuestion(new VoteQuestion(user, question, type));
-            voteQuestionDao.updateReputation(reputationCount, id);
-        }
+        voteQuestionDao.persist(new VoteQuestion(user, question, type));
+        reputationDao.persist(new Reputation(author, user,
+                reputationCount, ReputationType.VoteQuestion, question));
 
-        return voteQuestionDao.getSumOfVotes(id);
+        return voteQuestionDao.getCountVoteQuestionByQuestionId(questionId);
     }
 }

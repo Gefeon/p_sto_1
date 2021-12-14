@@ -18,10 +18,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -57,32 +60,34 @@ public class QuestionResourceController {
     }
 
     @Operation(summary = "Up Vote on this Question", responses = {
-            @ApiResponse(description = "Get sum of votes on this question", responseCode = "200",
+            @ApiResponse(description = "Vote and get sum of votes on this question", responseCode = "200",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Long.class))),
-            @ApiResponse(description = "No votes found", responseCode = "404", content = @Content)
+            @ApiResponse(description = "Vote for this question already exists", responseCode = "400", content = @Content)
     })
     @PostMapping("/question/{questionId}/upVote")
-    public ResponseEntity<?> upVote(@PathVariable("questionId") Long id) {
+    public ResponseEntity<?> upVote(@PathVariable("questionId") Long questionId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.UP_VOTE, user);
-        return sum.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
-                : ResponseEntity.ok(sum.get());
+        if (voteQuestionService.checkIfVoteQuestionDoesNotExist(questionId, user.getId())) {
+            return ResponseEntity.ok(voteQuestionService.voteAndGetCountVoteQuestionFotThisQuestion(
+                    questionId, VoteType.UP_VOTE, user));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vote for this question already exists");
     }
 
     @Operation(summary = "Down Vote on this Question", responses = {
-            @ApiResponse(description = "Get sum of votes on this question", responseCode = "200",
+            @ApiResponse(description = "Vote and get sum of votes on this question", responseCode = "200",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Long.class))),
-            @ApiResponse(description = "No votes found", responseCode = "404", content = @Content)
+            @ApiResponse(description = "Vote for this question already exists", responseCode = "400", content = @Content)
     })
     @PostMapping("/question/{questionId}/downVote")
-    public ResponseEntity<?> downVote(@PathVariable("questionId") Long id) {
+    public ResponseEntity<?> downVote(@PathVariable("questionId") Long questionId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Long> sum = voteQuestionService.voteAndGetSumOfVotes(id, VoteType.DOWN_VOTE, user);
-        return sum.isEmpty()
-                ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("No votes found")
-                : ResponseEntity.ok(sum.get());
+        if (voteQuestionService.checkIfVoteQuestionDoesNotExist(questionId, user.getId())) {
+            return ResponseEntity.ok(voteQuestionService.voteAndGetCountVoteQuestionFotThisQuestion(
+                    questionId, VoteType.DOWN_VOTE, user));
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vote for this question already exists");
     }
 }
