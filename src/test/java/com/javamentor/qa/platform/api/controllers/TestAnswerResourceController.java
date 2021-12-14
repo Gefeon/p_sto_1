@@ -6,7 +6,11 @@ import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -17,6 +21,12 @@ public class TestAnswerResourceController extends AbstractTestApi {
     private static final String USER_ENTITY = "dataset/answerResourceController/user.yml";
     private static final String ROLE_ENTITY = "dataset/answerResourceController/role.yml";
     private static final String ANSWER_ENTITY = "dataset/answerResourceController/answer.yml";
+    private static final String ANSWER_DTO = "dataset/answerResourceController/AnswerForDto.yml";
+    private static final String USER_DTO = "dataset/answerResourceController/UserForDto.yml";
+    private static final String ROLE_DTO = "dataset/answerResourceController/RoleForDto.yml";
+    private static final String QUESTION_DTO = "dataset/answerResourceController/QuestionForDto.yml";
+    private static final String REPUTATION_DTO = "dataset/answerResourceController/ReputationForDto.yml";
+    private static final String VOTE_ANSWER_DTO = "dataset/answerResourceController/VoteAnswer.yml";
     private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/anotherAnswer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
@@ -37,4 +47,42 @@ public class TestAnswerResourceController extends AbstractTestApi {
         response.andExpect(status().isOk());
     }
 
+    @Test
+    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO}, disableConstraints = true)
+    public void getAnswersByQuestionId() throws Exception {
+        // стандартный запрос
+        mvc.perform(get("/api/user/question/100/answer").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].questionId", is(100)))
+                .andExpect(jsonPath("$[0].userId", is(100)))
+                .andExpect(jsonPath("$[0].userReputation", is(30)))
+                .andExpect(jsonPath("$[0].countValuable", is(2)))
+                .andExpect(jsonPath("$[1].questionId", is(100)))
+                .andExpect(jsonPath("$[1].userId", is(101)))
+                .andExpect(jsonPath("$[1].userReputation", is(33)))
+                .andExpect(jsonPath("$[1].countValuable", is(1)))
+                .andExpect(jsonPath("$[2].questionId", is(100)))
+                .andExpect(jsonPath("$[2].userId", is(103)))
+                .andExpect(jsonPath("$[2].userReputation", is(33)))
+                .andExpect(jsonPath("$[2].countValuable", is(-1)));
+
+        // вопроса с таким Id не существует
+        mvc.perform(get("/api/user/question/1000/answer").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isEmpty());
+
+        // Id не задан
+        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        // не верный формат Id
+        mvc.perform(get("/api/user/question/ggg/answer").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
 }
