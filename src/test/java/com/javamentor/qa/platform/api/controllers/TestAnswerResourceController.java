@@ -33,12 +33,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
     @DataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     @ExpectedDataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY})
     public void deleteAnswerWithIncorrectId_returnBadRequest() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        ResultActions response = mvc.perform(delete(url).header(AUTH_HEADER, PREFIX + token.getToken()));
+        ResultActions response = mvc.perform(delete(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isBadRequest());
     }
 
@@ -46,11 +41,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
     @DataSet(value = {ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     @ExpectedDataSet(value = {USER_ENTITY, ROLE_ENTITY})
     public void deleteAnswer_returnStatusOk_AnswerDeleted() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-        ResultActions response = mvc.perform(delete(url).header(AUTH_HEADER, PREFIX + token.getToken()));
+        ResultActions response = mvc.perform(delete(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk());
     }
 
