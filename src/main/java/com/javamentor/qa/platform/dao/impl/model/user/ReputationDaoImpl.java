@@ -19,10 +19,10 @@ public class ReputationDaoImpl extends ReadWriteDaoImpl<Reputation, Long> implem
     private EntityManager entityManager;
 
     @Override
-    public Optional<Reputation> findByAnswerAndSender(Answer answer, User sender) {
+    public Optional<Reputation> findByAnswerAndSender(Long answerId, Long userId) {
         return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
-                        "FROM Reputation r WHERE r.answer=:answer AND r.sender=:sender", Reputation.class)
-                .setParameter("answer", answer)
-                .setParameter("sender", sender));
+                        "FROM Reputation r WHERE r.answer.id=:answerId AND r.sender.id=:userId", Reputation.class)
+                .setParameter("answerId", answerId)
+                .setParameter("userId", userId));
     }
 }

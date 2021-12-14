@@ -8,5 +8,5 @@ import com.javamentor.qa.platform.service.abstracts.model.ReadWriteService;
 import java.util.Optional;
 
 public interface VoteAnswerService extends ReadWriteService<VoteAnswer, Long> {
-    Optional<Long> vote(Long answerId, User user, VoteType voteType);
+    Long vote(Long answerId, User user, VoteType voteType);
 }

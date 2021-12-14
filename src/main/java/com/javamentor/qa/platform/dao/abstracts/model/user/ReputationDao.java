@@ -8,5 +8,5 @@ import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
 import java.util.Optional;
 
 public interface ReputationDao extends ReadWriteDao<Reputation, Long> {
-    Optional<Reputation> findByAnswerAndSender(Answer answer, User user);
+    Optional<Reputation> findByAnswerAndSender(Long answerId, Long userId);
 }

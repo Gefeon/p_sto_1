@@ -8,6 +8,6 @@ import com.javamentor.qa.platform.models.entity.user.User;
 import java.util.Optional;
 
 public interface VoteAnswerDao extends ReadWriteDao<VoteAnswer, Long> {
-    Optional<Long> getReputationCount(Answer answer);
-    Optional<VoteAnswer> findByAnswerAndUser(Answer answer, User user);
+    Long getReputationCount(Long answerId);
+    Optional<VoteAnswer> findByAnswerAndUser(Long answerId, Long userId);
 }

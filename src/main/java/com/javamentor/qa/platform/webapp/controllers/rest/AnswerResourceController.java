@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.javamentor.qa.platform.models.entity.question.answer.VoteType.DOWN_VOTE;
@@ -44,7 +45,7 @@ public class AnswerResourceController {
         }
         return new ResponseEntity<>("No answer with such id exists in DB", HttpStatus.BAD_REQUEST);
     }
-
+    //==================================================================================================================
     @Operation(summary = "Vote up for answer", responses = {
             @ApiResponse(responseCode = "200", description = "Vote up successful. Author's reputation increased"),
             @ApiResponse(responseCode = "400", description = "Cannot vote")})
@@ -52,8 +53,8 @@ public class AnswerResourceController {
     public ResponseEntity<?> upVote(@PathVariable final Long questionId,
                                     @PathVariable final Long answerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Long> totalVotesOpt = voteAnswerService.vote(answerId, user, UP_VOTE);
-        return totalVotesOpt.isPresent() ? ResponseEntity.ok(totalVotesOpt.get()) : ResponseEntity.badRequest().build();
+        Long totalCount = voteAnswerService.vote(answerId, user, UP_VOTE);
+        return Objects.isNull(totalCount) ? ResponseEntity.badRequest().build() : ResponseEntity.ok(totalCount);
     }
 
     @Operation(summary = "Vote up for answer", responses = {
@@ -63,9 +64,8 @@ public class AnswerResourceController {
     public ResponseEntity<?> downVote(@PathVariable final Long questionId,
                                       @PathVariable final Long answerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Optional<Long> totalVotesOpt = voteAnswerService.vote(answerId, user, DOWN_VOTE);
-        return totalVotesOpt.isPresent() ? ResponseEntity.ok(totalVotesOpt.get()) : ResponseEntity.badRequest().build();
-
+        Long totalCount = voteAnswerService.vote(answerId, user, UP_VOTE);
+        return Objects.isNull(totalCount) ? ResponseEntity.badRequest().build() : ResponseEntity.ok(totalCount);
     }
 }
 

@@ -19,17 +19,17 @@ public class VoteAnswerDaoImpl extends ReadWriteDaoImpl<VoteAnswer, Long> implem
     private EntityManager entityManager;
 
     @Override
-    public Optional<Long> getReputationCount(Answer answer) {
-        return SingleResultUtil.getSingleResultOrNull(entityManager
-                .createQuery("SELECT count(*) from VoteAnswer v where v.answer=:answer", Long.class)
-                .setParameter("answer", answer));
+    public Long getReputationCount(Long answerId) {
+        return entityManager
+                .createQuery("SELECT count(*) from VoteAnswer v where v.answer.id=:answerId", Long.class)
+                .setParameter("answerId", answerId).getSingleResult();
     }
 
     @Override
-    public Optional<VoteAnswer> findByAnswerAndUser(Answer answer, User user) {
+    public Optional<VoteAnswer> findByAnswerAndUser(Long answerId, Long userId) {
         return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
-                        "FROM VoteAnswer v where v.answer=:answer and v.user=:user", VoteAnswer.class)
-                .setParameter("answer", answer)
-                .setParameter("user", user));
+                        "FROM VoteAnswer v where v.answer.id=:answerId and v.user.id=:userId", VoteAnswer.class)
+                .setParameter("answerId", answerId)
+                .setParameter("userId", userId));
     }
 }
