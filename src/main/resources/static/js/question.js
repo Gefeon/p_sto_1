@@ -182,9 +182,15 @@ function makeTransformation(sign) {
         descriptionField.value = spliceString(text, startSymbPos - 1, 1, "");
         descriptionField.value = spliceString(descriptionField.value, endSymbPos - 1, 1, "");
         updateDisplayField();
+        descriptionField.selectionStart = startSymbPos - 1;
+        descriptionField.selectionEnd = endSymbPos - 1;
+        descriptionField.focus();
     } else {
         let selected = descriptionField.value.slice(startSymbPos, endSymbPos);
         descriptionField.setRangeText(`${sign}${selected}${sign}`);
+        descriptionField.selectionStart = descriptionField.selectionStart + 1;
+        descriptionField.selectionEnd = descriptionField.selectionEnd - 1;
+        descriptionField.focus();
         updateDisplayField();
     }
 }
