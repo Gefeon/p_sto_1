@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserDtoServiceImpl extends PageDtoServiceImpl<UserDto> implements UserDtoService{
+public class UserDtoServiceImpl extends PageDtoServiceImpl<UserDto> implements UserDtoService {
 
     private final UserDtoDao userDtoDao;
 

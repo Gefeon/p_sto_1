@@ -19,14 +19,21 @@ import java.util.stream.Collectors;
 @Service
 public class QuestionServiceImpl extends ReadWriteServiceImpl<Question, Long> implements QuestionService {
 
-
+    private final QuestionDao questionDao;
     private final TagService tagService;
 
 
     public QuestionServiceImpl(QuestionDao questionDao, TagService tagService) {
         super(questionDao);
         this.tagService = tagService;
+        this.questionDao = questionDao;
     }
+
+
+
+    @Override
+    public Long countQuestions() { return questionDao.countQuestions();}
+
 
     @Override
     public void persist(Question question){
