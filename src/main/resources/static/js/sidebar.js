@@ -1,7 +1,7 @@
 class Sidebar extends HTMLElement {
     connectedCallback() {
         this.innerHTML = `
-    <div class="menu sticky-top p-4 bg-light" style="width: 300px; max-width: 300px;">
+    <div class="menu sticky-top p-4 bg-light" style="width: 300px; max-width: 300px; top: 10%;">
         <a href="/" class="link-dark">
             <span><h3><small>Home</small></h3></span>
         </a>
