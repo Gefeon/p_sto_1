@@ -1,38 +1,40 @@
 package com.javamentor.qa.platform.service.impl;
 
+import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
+import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
+import com.javamentor.qa.platform.models.entity.user.reputation.ReputationType;
 import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
+import com.javamentor.qa.platform.service.abstracts.model.user.ReputationService;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 public class TestDataInitService {
 
-    @Autowired
-    BCryptPasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     //Amount of test data
-    private final static int usersNum = 10;
+    private final static int usersNum = 60;//first 50 with permanent email and password and has role USER, others with random parameters
     private final static int rolesNum = 7;
     private final static int answersNum = 10;
     private final static int questionsNum = 10;
     private final static int tagsNum = 4;
+    private final static int reputationsNum = 10;
+
+    private final List<AuthenticationRequestDto> permanentUserParameters = new ArrayList<>();
 
     //static fields for random values
     private static final Character[] alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -83,32 +85,55 @@ public class TestDataInitService {
     private static final String[] htmlTags = new String[]{
             "div", "span", "h1", "button", "b", "strong", "sup", "sub"};
 
-    public TestDataInitService(UserService userService, RoleService roleService, AnswerService answerService,
-                               QuestionService questionService, TagService tagService) {
+    public TestDataInitService(BCryptPasswordEncoder passwordEncoder, UserService userService,
+                               RoleService roleService, AnswerService answerService,
+                               QuestionService questionService, TagService tagService, ReputationService reputationService) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
         this.answerService = answerService;
         this.questionService = questionService;
         this.tagService = tagService;
+        this.reputationService = reputationService;
     }
-
 
     private final UserService userService;
     private final RoleService roleService;
     private final AnswerService answerService;
     private final QuestionService questionService;
     private final TagService tagService;
+    private final ReputationService reputationService;
 
 
     //fill related tables user_entity and role with test data
     public void fillTableWithTestData() {
         addRandomRoles();
-        addRandomUsers();
+        addRandomUsersPermanentEmailPassword();
         addRandomTags();
         addRandomQuestions();
         addRandomAnswers();
+        addRandomReputation();
     }
 
+    private void addRandomReputation() {
+        Set<Reputation> reputations = new HashSet<>();
+        for (int i = 0; i < reputationsNum; i++) {
+            int count = getRandInt(0, 1000);
+            ReputationType type = ReputationType.values()[getRandInt(0,3)];
+            Reputation reputation = new Reputation();
+            reputation.setCount(count);
+            reputation.setType(type);
+            reputation.setAuthor(userService.getById((long) getRandInt(1, usersNum)).orElse(null));
+            reputation.setSender(userService.getById((long) getRandInt(1, usersNum)).orElse(null));
+            if ((type == ReputationType.Answer || type == ReputationType.VoteAnswer)) {
+                reputation.setAnswer(answerService.getById((long) getRandInt(1, answersNum)).orElse(null));
+            } else {
+                reputation.setQuestion(questionService.getById((long) getRandInt(1, questionsNum)).orElse(null));
+            }
+            reputations.add(reputation);
+        }
+        reputationService.persistAll(reputations);
+    }
 
     private void addRandomAnswers() {
         List<Answer> answers = new ArrayList<>();
@@ -172,36 +197,51 @@ public class TestDataInitService {
         tagService.persistAll(tags);
     }
 
-    private void addRandomUsers() {
+    private void addRandomUsersPermanentEmailPassword() {
+        fillPermanentUserParameters();
         List<User> users = new ArrayList<>();
         for (int i = 0; i < usersNum; i++) {
-            String email = getRand(firstNames).toLowerCase() + "@" +
-                    getRand(domains) + "." + getRand(domainCodes);
-            String fullName = getRand(firstNames) + " " +
-                    getRand(middleNames) + " " + getRand(lastNames);
-            String password = getRandStr(4, 20);
-            String city = getRand(cities);
-            String linkSite = "https://" + getRandStr(10, 50);
-            String linkGithub = "https://" + getRandStr(5, 30);
-            String linkVk = "https://vk.com/" + getRandStr(1, 30);
-            String about = getRand(abouts);
-            String imageLink = getRandStr(10, 100);
-            String nickname = fullName.substring(0, 3);
+            String email = (i < permanentUserParameters.size())
+                    ? permanentUserParameters.get(i).getUsername()
+                    : getRand(firstNames).toLowerCase() + "@" + getRand(domains) + "." + getRand(domainCodes);
+        String fullName = getRand(firstNames) + " " +
+                getRand(middleNames) + " " + getRand(lastNames);
+            String password = (i < permanentUserParameters.size())
+                    ? permanentUserParameters.get(i).getPassword()
+                    : getRandStr(4, 20);
+        String city = getRand(cities);
+        String linkSite = "https://" + getRandStr(10, 50);
+        String linkGithub = "https://" + getRandStr(5, 30);
+        String linkVk = "https://vk.com/" + getRandStr(1, 30);
+        String about = getRand(abouts);
+        String imageLink = getRandStr(10, 100);
+        String nickname = fullName.substring(0, 3);
 
-            users.add(new User(email, passwordEncoder.encode(password), fullName, city,
-                    linkSite, linkGithub, linkVk, about, imageLink, nickname));
+        users.add(new User(email, passwordEncoder.encode(password), fullName, city,
+                linkSite, linkGithub, linkVk, about, imageLink, nickname));
+    }
+
+    List<Role> existingRoles = roleService.getAll();
+        for(int i = 0; i < usersNum; i++) {
+            if ((i < permanentUserParameters.size())) {
+                users.get(i).setRole(existingRoles.get(0));
+            } else {
+                users.get(i).setRole(existingRoles.get(getRandInt(0, existingRoles.size())));
+            }
         }
 
-        List<Role> existingRoles = roleService.getAll();
-        for (User user : users) {
-            user.setRole(existingRoles.get(getRandInt(0, existingRoles.size())));
-        }
-
-        users.get(0).setEmail("user");
-        users.get(0).setPassword(passwordEncoder.encode("user"));
-        users.get(0).setRole(roleService.getById(1L).orElse(existingRoles.get(0)));
 
         userService.persistAll(users);
+}
+
+    private void fillPermanentUserParameters() {
+        permanentUserParameters.add(new AuthenticationRequestDto("user", "user"));
+        permanentUserParameters.add(new AuthenticationRequestDto("test", "test"));
+        permanentUserParameters.add(new AuthenticationRequestDto("commonUser", "common"));
+        permanentUserParameters.add(new AuthenticationRequestDto("user@mail.ru", "somePass"));
+        for (int i = 1; i <= 46; i++){
+            permanentUserParameters.add(new AuthenticationRequestDto("user" + i, "user" + i));
+        }
     }
 
     private void addRandomRoles() {
