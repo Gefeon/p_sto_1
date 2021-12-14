@@ -17,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import static com.javamentor.qa.platform.models.entity.question.answer.VoteType.DOWN_VOTE;
 import static com.javamentor.qa.platform.models.entity.question.answer.VoteType.UP_VOTE;
@@ -45,7 +44,7 @@ public class AnswerResourceController {
         }
         return new ResponseEntity<>("No answer with such id exists in DB", HttpStatus.BAD_REQUEST);
     }
-    //==================================================================================================================
+
     @Operation(summary = "Vote up for answer", responses = {
             @ApiResponse(responseCode = "200", description = "Vote up successful. Author's reputation increased"),
             @ApiResponse(responseCode = "400", description = "Cannot vote")})
@@ -53,19 +52,27 @@ public class AnswerResourceController {
     public ResponseEntity<?> upVote(@PathVariable final Long questionId,
                                     @PathVariable final Long answerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long totalCount = voteAnswerService.vote(answerId, user, UP_VOTE);
-        return Objects.isNull(totalCount) ? ResponseEntity.badRequest().build() : ResponseEntity.ok(totalCount);
+        if (voteAnswerService.isUserNonVoted(answerId, user.getId())) {
+            Long totalCount = voteAnswerService.vote(answerId, user, UP_VOTE);
+            return Objects.nonNull(totalCount) ? ResponseEntity.ok(totalCount) :
+                    ResponseEntity.badRequest().body("Answer with this id does not exist");
+        }
+        return ResponseEntity.badRequest().body("User is already voted");
     }
 
-    @Operation(summary = "Vote up for answer", responses = {
+    @Operation(summary = "Vote down for answer", responses = {
             @ApiResponse(responseCode = "200", description = "Vote down successful. Author's reputation decreased"),
             @ApiResponse(responseCode = "400", description = "Cannot vote")})
     @PostMapping("{answerId}/downVote")
     public ResponseEntity<?> downVote(@PathVariable final Long questionId,
                                       @PathVariable final Long answerId) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long totalCount = voteAnswerService.vote(answerId, user, UP_VOTE);
-        return Objects.isNull(totalCount) ? ResponseEntity.badRequest().build() : ResponseEntity.ok(totalCount);
+        if (voteAnswerService.isUserNonVoted(answerId, user.getId())) {
+            Long totalCount = voteAnswerService.vote(answerId, user, DOWN_VOTE);
+            return Objects.nonNull(totalCount) ? ResponseEntity.ok(totalCount) :
+                    ResponseEntity.badRequest().body("Answer with this id does not exist");
+        }
+        return ResponseEntity.badRequest().body("User is already voted");
     }
 }
 

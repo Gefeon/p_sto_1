@@ -9,4 +9,5 @@ import java.util.Optional;
 
 public interface VoteAnswerService extends ReadWriteService<VoteAnswer, Long> {
     Long vote(Long answerId, User user, VoteType voteType);
+    boolean isUserNonVoted(Long answerId, Long userId);
 }

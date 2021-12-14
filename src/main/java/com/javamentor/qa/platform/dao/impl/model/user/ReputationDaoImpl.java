@@ -14,15 +14,4 @@ import java.util.Optional;
 
 @Repository
 public class ReputationDaoImpl extends ReadWriteDaoImpl<Reputation, Long> implements ReputationDao {
-
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    @Override
-    public Optional<Reputation> findByAnswerAndSender(Long answerId, Long userId) {
-        return SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
-                        "FROM Reputation r WHERE r.answer.id=:answerId AND r.sender.id=:userId", Reputation.class)
-                .setParameter("answerId", answerId)
-                .setParameter("userId", userId));
-    }
 }

@@ -1,11 +1,19 @@
 reputation:
   - id: "regex:^(\\d+)"
-    count: -5
+    count: 10
     persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
     type: 2
     answer_id: 100
     author_id: 101
     sender_id: 100
+
+  - id: "regex:^(\\d+)"
+    count: -5
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    type: 2
+    answer_id: 100
+    author_id: 101
+    sender_id: 101
 
   - id: "regex:^(\\d+)"
     count: -5
@@ -21,4 +29,4 @@ reputation:
     type: 2
     answer_id: 100
     author_id: 101
-    sender_id: 101
+    sender_id: 103

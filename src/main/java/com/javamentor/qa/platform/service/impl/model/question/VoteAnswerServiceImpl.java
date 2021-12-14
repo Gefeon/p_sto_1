@@ -40,27 +40,29 @@ public class VoteAnswerServiceImpl extends ReadWriteServiceImpl<VoteAnswer, Long
 
     @Override
     @Transactional
+    public boolean isUserNonVoted(Long answerId, Long userId) {
+        return voteAnswerDao.findByAnswerAndUser(answerId, userId).isEmpty();
+    }
+
+    @Override
+    @Transactional
     public Long vote(Long answerId, User user, VoteType voteType) {
         Optional<Answer> answerOpt = answerDao.getById(answerId);
 
         if (answerOpt.isPresent()) {
             Answer answer = answerOpt.get();
-            Optional<VoteAnswer> voteAnswerOpt = voteAnswerDao.findByAnswerAndUser(answerId, user.getId());
-            Optional<Reputation> reputationOpt = reputationDao.findByAnswerAndSender(answerId, user.getId());
 
-            if (voteAnswerOpt.isEmpty() && reputationOpt.isEmpty()) {
-                Reputation rep = new Reputation();
-                rep.setAuthor(answer.getUser());
-                rep.setSender(user);
-                rep.setCount(getReputationCount(voteType));
-                rep.setAnswer(answer);
-                rep.setType(ReputationType.VoteAnswer);
+            Reputation rep = new Reputation();
+            rep.setAuthor(answer.getUser());
+            rep.setSender(user);
+            rep.setCount(getReputationCount(voteType));
+            rep.setAnswer(answer);
+            rep.setType(ReputationType.VoteAnswer);
 
-                voteAnswerDao.persist(new VoteAnswer(user, answer, voteType));
-                reputationDao.persist(rep);
+            voteAnswerDao.persist(new VoteAnswer(user, answer, voteType));
+            reputationDao.persist(rep);
 
-                return voteAnswerDao.getReputationCount(answer.getId());
-            }
+            return voteAnswerDao.getVoteCount(answer.getId());
         }
         return null;
     }

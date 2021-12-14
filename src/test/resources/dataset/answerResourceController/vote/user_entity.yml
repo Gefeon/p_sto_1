@@ -22,3 +22,11 @@ user_entity:
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-24 00:00:00"
     role_id: 100
+
+  - id: 103
+    email: "user103@user.ru"
+    is_enabled: "true"
+    last_redaction_date: "2021-11-24 00:00:00"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
+    persist_date: "2021-11-24 00:00:00"
+    role_id: 100

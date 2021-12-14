@@ -19,7 +19,7 @@ public class VoteAnswerDaoImpl extends ReadWriteDaoImpl<VoteAnswer, Long> implem
     private EntityManager entityManager;
 
     @Override
-    public Long getReputationCount(Long answerId) {
+    public Long getVoteCount(Long answerId) {
         return entityManager
                 .createQuery("SELECT count(*) from VoteAnswer v where v.answer.id=:answerId", Long.class)
                 .setParameter("answerId", answerId).getSingleResult();

@@ -6,11 +6,3 @@ reputation:
     answer_id: 100
     author_id: 101
     sender_id: 100
-
-  - id: 101
-    count: -5
-    persist_date: "2021-10-11 13:07:00.000000"
-    type: 2
-    answer_id: 101
-    author_id: 100
-    sender_id: 100
