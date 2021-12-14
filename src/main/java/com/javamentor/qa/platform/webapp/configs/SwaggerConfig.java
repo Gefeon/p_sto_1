@@ -35,6 +35,9 @@ public class SwaggerConfig {
                 .build()
                 .tags(
                         new Tag(USER_CONTROLLER,"These endpoints are used to manage the user details",1),
+                        new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
+                        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
+                        new Tag(QUESTION_CONTROLLER, "This endpoint is used to manage questions", 1),
                         new Tag(AUTHENTICATION_CONTROLLER, "These endpoints are used to authenticate the client", 1),
                         new Tag(ADMIN_RESOURCE_CONTROLLER, "These endpoints are used to admin actions", 1),
                         new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
