@@ -4,7 +4,7 @@
     margin: 10px 0 0 0;
     padding: 0;
     width: 100%;
-    border: 1px solid red;
+    border: 1px solid #ced4da;
     border-bottom: 0;
     min-height: 44px;
     overflow: hidden;
@@ -25,7 +25,7 @@
     flex-wrap: wrap;
     justify-content: flex-start;
     height: 44px;
-    border-bottom: 1px solid green;
+    border-bottom: 1px solid #ced4da;
 }
 
 .wmd-button {
@@ -46,6 +46,11 @@
     display: inline-block;
 }
 
+#description {
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
 #wmd-bold-button>span{
     background-image: url(../images/page_template/icons/bold-text-icon.svg);
 }
@@ -62,10 +67,20 @@
     background-image: url(../images/page_template/icons/code_brackets_icon.svg);
 }
 
-.code{
+.code {
     display: inline;
-    background-color: #FE8020;
-    box-shadow: -2px 0 0 #FE8020, 2px 0 0 #FE8020;
-    padding: 2px 0;
-    border-radius: 2px;
+    background-color: lightgrey;
+    box-shadow: -1px 0 0 lightgrey, 1px 0 0 lightgrey;
+    padding: 1px 1px;
+    margin: 1px 1px;
+    border-radius: 1px;
+}
+
+.block {
+    display: inline;
+    background-color: lightgrey;
+    box-shadow: -1px 0 0 lightgrey, 1px 0 0 lightgrey;
+    padding: 1px 1px;
+    margin: 2px 2px 2px 4px;
+    border-radius: 1px;
 }

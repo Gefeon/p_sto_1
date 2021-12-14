@@ -62,10 +62,11 @@
                                             <span></span>
                                         </li>
                                         <li class="wmd-button" id="wmd-quote-button" title="Цитата <blockquote> Ctrl+Q"
-                                            onclick="makeTransformation('\'')">
+                                            onclick="makeTransformation('~')">
                                             <span></span>
                                         </li>
-                                        <li class="wmd-button" id="wmd-code-button" title="Пример кода <pre><code> Ctrl+K">
+                                        <li class="wmd-button" id="wmd-code-button" title="Пример кода <pre><code> Ctrl+K"
+                                            onclick="makeTransformation('\'')">
                                             <span></span>
                                         </li>
                                         <li class="wmd-button" id="wmd-olist-button" title="Нумерованный список <ol> Ctrl+O">
@@ -78,9 +79,8 @@
                                 </div>
                                 <textarea class="no-resize form-control" rows="3" name="description"
                                           id="description"></textarea>
-                                <div id="displayField"></div>
+                                <div id="displayField" class="mt-2"></div>
                                 <div class="errorField" id="descriptionError"></div>
-
                             </div>
 
                             <div class='form-group mb-0'>

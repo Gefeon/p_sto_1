@@ -155,19 +155,23 @@ $(document).ready(function() {
 
 
 let descriptionField = $("#description")[0];
-let displayField = $("#displayField")[0];
+let displayField = $("#displayField");
 let patternBold = new RegExp(/[*]([^*]+)[*]/g);
 let patternItalic = new RegExp(/[$]([^$]+)[$]/g);
 let patternCode = new RegExp(/[']([^']+)[']/g);
+let patternBlockQuote = new RegExp(/[~]([^~]+)[~]/g);
 descriptionField.addEventListener("keyup", updateDisplayField, false);
 
 function makeTransformation(sign) {
     if (descriptionField.selectionStart === descriptionField.selectionEnd) {
         let signText;
+        let text;
         if(sign === "$") signText = "курсивом";
         if(sign === "*") signText = "жирным шрифтом";
         if(sign === "\'") signText = "кодом";
-        descriptionField.setRangeText(sign + `текст, выделенный ` + signText + sign);
+        signText = `${sign}текст, выделенный ${signText}${sign}`;
+        if(sign === "~") signText = `${sign}Цитата${sign}`;
+        descriptionField.setRangeText(signText);
         updateDisplayField();
         return;
     }
@@ -190,8 +194,9 @@ function spliceString(str, start, count, stringToInsert) {
 }
 
 function updateDisplayField(){
-    displayField.textContent = descriptionField.value
+    displayField.html(descriptionField.value
         .replace(patternBold,'<b>$1</b>')
         .replace(patternItalic, '<i>$1</i>')
         .replace(patternCode, '<span class="code">$1</span>')
+        .replace(patternBlockQuote, '<br></p><span class="block">$1</span>'));
 }
