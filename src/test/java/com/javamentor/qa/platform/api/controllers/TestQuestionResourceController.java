@@ -18,8 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.iterableWithSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -229,6 +228,21 @@ public class TestQuestionResourceController extends AbstractTestApi {
         TokenResponseDto token = objectMapper.readValue(mvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-        mvc.perform(MockMvcRequestBuilders.get(url1).header(AUTH_HEADER, PREFIX + token.getToken())).andExpect(status().isOk());
+        mvc.perform(MockMvcRequestBuilders.get(url1).header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(100)))
+                .andExpect(jsonPath("$.title", is("lazyEx")))
+                .andExpect(jsonPath("$.authorId", is(100)))
+                .andExpect(jsonPath("$.authorReputation", is(1)))
+                .andExpect(jsonPath("$.authorName", is("ИВАНОВ ИВАН ИВАНОВИЧ")))
+                .andExpect(jsonPath("$.authorImage", is("test.ru")))
+                .andExpect(jsonPath("$.description", is("fix lazyInitialization Exception")))
+                .andExpect(jsonPath("$.viewCount", is(0)))
+                .andExpect(jsonPath("$.countAnswer", is(1)))
+                .andExpect(jsonPath("$.countValuable", is(1)))
+                .andExpect(jsonPath("$.listTagDto.[*].id", containsInAnyOrder(100)))
+                .andExpect(jsonPath("$.listTagDto.[*].name", containsInAnyOrder("db_architecture")))
+                .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture")));
     }
 }

@@ -2,10 +2,9 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.QuestionGetDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
-import com.javamentor.qa.platform.service.abstracts.dto.QuestionGetDtoService;
+import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
@@ -19,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -27,11 +27,11 @@ public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
 
-    private final QuestionGetDtoService questionGetDtoService;
+    private final QuestionDtoService questionGetDtoService;
 
     private final QuestionService questionService;
 
-    public QuestionResourceController(QuestionMapper questionMapper, QuestionGetDtoService questionGetDtoService, QuestionService questionService) {
+    public QuestionResourceController(QuestionMapper questionMapper, QuestionDtoService questionGetDtoService, QuestionService questionService) {
         this.questionMapper = questionMapper;
         this.questionGetDtoService = questionGetDtoService;
         this.questionService = questionService;
@@ -58,8 +58,8 @@ public class QuestionResourceController {
     })
 
     @GetMapping("/question/{id}")
-    public ResponseEntity<QuestionGetDto> getUserById(@PathVariable long id) {
-        QuestionGetDto questionGetDto = questionGetDtoService.getQuestionDtoById(id);
-        return new ResponseEntity<>(questionGetDto, HttpStatus.OK);
+    public ResponseEntity<Object> getUserById(@PathVariable long id) {
+        Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
+        return new ResponseEntity<>(questionDto, HttpStatus.OK);
     }
 }

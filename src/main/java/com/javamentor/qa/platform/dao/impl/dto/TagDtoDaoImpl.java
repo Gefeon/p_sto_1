@@ -16,11 +16,8 @@ public class TagDtoDaoImpl implements TagDtoDao {
 
     @Override
     public List<TagDto> getTagDtoList() {
-        List<TagDto> tagDto = null;
-        tagDto = entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto" +
+        return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto" +
                 "(tag.id, tag.name, tag.description )" +
                 "FROM Tag tag", TagDto.class).getResultList();
-
-        return tagDto;
     }
 }
