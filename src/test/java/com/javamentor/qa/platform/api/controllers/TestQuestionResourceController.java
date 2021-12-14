@@ -43,6 +43,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
+    private static final String ANOTHER_TAG_ENTITY = "dataset/QuestionResourceController/AnotherTag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
@@ -249,7 +250,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
             QUESTION_ENTITY,
             QUESTION_VIEWED_ENTITY,
             REPUTATION_ENTITY,
-            TAG_ENTITY,
+            ANOTHER_TAG_ENTITY,
             VOTE_QUESTION_ENTITY}, disableConstraints = true)
     public void getQuestionDtoById() throws Exception {
         mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
