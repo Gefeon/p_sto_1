@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -76,7 +77,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
         }
         questionCreateDto.setTags(tags);
 
-        ResultActions response = mvc.perform(post(url).header(AUTH_HEADER, PREFIX + token.getToken())
+        ResultActions response = mvc.perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
                 .content(objectMapper.writeValueAsString(questionCreateDto))
                 .contentType(MediaType.APPLICATION_JSON));
         response.andDo(print())
@@ -251,11 +252,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
             TAG_ENTITY,
             VOTE_QUESTION_ENTITY}, disableConstraints = true)
     public void getQuestionDtoById() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-        mvc.perform(MockMvcRequestBuilders.get(url1).header(AUTH_HEADER, PREFIX + token.getToken()))
+        mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(100)))

@@ -31,7 +31,7 @@ public class QuestionDtoDaoImpl implements QuestionDtoDao {
                                 "(Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) -" +
                                 "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id), " +
                                 "q.persistDateTime, " +
-                                "q.lastUpdateDateTime ) " +
+                                "q.lastUpdateDateTime) " +
                                 "FROM Question q " +
                                 "LEFT JOIN Reputation r ON q.user.id = r.author.id " +
                                 "LEFT JOIN Answer answer ON q.user.id = answer.user.id " +
