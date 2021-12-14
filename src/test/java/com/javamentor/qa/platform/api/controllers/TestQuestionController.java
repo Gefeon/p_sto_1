@@ -14,31 +14,25 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class TestQuestionController extends AbstractTestApi {
     private final String URL= "/api/user/question/count";
     private static final String QUESTION = "dataset/QuestionController/Question.yml";
-    private static final String AUTH_URI = "/api/auth/token";
+    private static final String USER_ENTITY = "dataset/QuestionController/user.yml";
+    private static final String ROLE_ENTITY = "dataset/QuestionController/role.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
     @Test
-    @DataSet(value = {QUESTION}, disableConstraints = true)
-    public void countShouldBePositive() throws Exception {
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-        ResultActions response = mvc.perform(get(URL).header(AUTH_HEADER, PREFIX + token.getToken()));
-               // .content(objectMapper.writeValueAsString(questionCreateDto))
-                //.contentType(MediaType.APPLICATION_JSON));
+    @DataSet(value = {QUESTION, USER_ENTITY,ROLE_ENTITY}, disableConstraints = true)
+    public void countShouldBeThree() throws Exception {
 
-        mvc.perform(get(URL)).andDo(print())
-                .andExpect(content().json("16"))
-                .andExpect(status().isOk());
+        ResultActions response = mvc.perform(get(URL).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("3"));
 
     }
 

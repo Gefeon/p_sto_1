@@ -36,21 +36,21 @@ question:
     user_id: 100
   - id: 105
     description: "c"
-    is_deleted: true
+    is_deleted: false
     last_redaction_date: "2021-11-29 00:00:00"
     persist_date: "2021-11-29 00:00:00"
     title: "c"
     user_id: 100
   - id: 106
     description: "d"
-    is_deleted: true
+    is_deleted: false
     last_redaction_date: "2021-11-29 00:00:00"
     persist_date: "2021-11-29 00:00:00"
     title: "d"
     user_id: 100
   - id: 107
     description: "d"
-    is_deleted: true
+    is_deleted: false
     last_redaction_date: "2021-11-29 00:00:00"
     persist_date: "2021-11-29 00:00:00"
     title: "d"
