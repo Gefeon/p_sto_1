@@ -23,12 +23,16 @@ public class PageDtoServiceImpl<T> implements PageDtoService<T> {
     @Override
     @SuppressWarnings("unchecked")
     public PageDto<T> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
+
         PageDtoDao<T> pageDtoDao = (PageDtoDao<T>) pageDtoDaoMap.get((String) map.get("class"));
+
         map.put("currentPageNumber", currentPageNumber);
         map.put("itemsOnPage", itemsOnPage);
 
         long totalResultCount = pageDtoDao.getTotalResultCount(map);
+
         int totalPageCount = (int) Math.ceil((double) totalResultCount / itemsOnPage);
+
         return new PageDto<>(currentPageNumber, totalPageCount,
                 itemsOnPage, totalResultCount, pageDtoDao.getItems(map));
     }
