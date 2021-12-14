@@ -34,15 +34,5 @@ public class AnswerDtoDaoImpl implements AnswerDtoDao {
                         AnswerDto.class)
                 .setParameter("id", id)
                 .getResultList();
-
-//, answ.user.imageLink, answ.user.nickname
-
-//        return entityManager.unwrap(Session.class).createQuery("SELECT answ.id, answ.user.id, SUM(r.count), answ.question.id, answ.htmlBody, answ.dateAcceptTime," +
-//                "(SELECT count (up.vote) FROM VoteAnswer up WHERE up.vote = 'UP_VOTE' AND up.user.id = answ.user.id) - (SELECT count (down.vote) FROM VoteAnswer down WHERE down.vote = 'DOWN_VOTE' AND down.user.id = answ.user.id)," +
-//                "u.imageLink, u.nickname)" +
-//                "FROM Answer answ LEFT JOIN Reputation r ON answ.user.id = r.author.id" +
-//                "LEFT JOIN User u ON answ.user.id = u.id" +
-//                "WHERE answ.question.id = :id" +
-//                "GROUP BY answ.id, answ.user.imageLink, answ.user.nickname").setParameter("id", id).setResultTransformer(Transformers.aliasToBean(AnswerDto.class)).list();
     }
 }
