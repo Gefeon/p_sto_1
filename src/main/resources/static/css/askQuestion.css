@@ -61,3 +61,11 @@
 #wmd-code-button>span{
     background-image: url(../images/page_template/icons/code_brackets_icon.svg);
 }
+
+.code{
+    display: inline;
+    background-color: #FE8020;
+    box-shadow: -2px 0 0 #FE8020, 2px 0 0 #FE8020;
+    padding: 2px 0;
+    border-radius: 2px;
+}

@@ -154,4 +154,44 @@ $(document).ready(function() {
 });
 
 
+let descriptionField = $("#description")[0];
+let displayField = $("#displayField")[0];
+let patternBold = new RegExp(/[*]([^*]+)[*]/g);
+let patternItalic = new RegExp(/[$]([^$]+)[$]/g);
+let patternCode = new RegExp(/[']([^']+)[']/g);
+descriptionField.addEventListener("keyup", updateDisplayField, false);
 
+function makeTransformation(sign) {
+    if (descriptionField.selectionStart === descriptionField.selectionEnd) {
+        let signText;
+        if(sign === "$") signText = "курсивом";
+        if(sign === "*") signText = "жирным шрифтом";
+        if(sign === "\'") signText = "кодом";
+        descriptionField.setRangeText(sign + `текст, выделенный ` + signText + sign);
+        updateDisplayField();
+        return;
+    }
+    let text = descriptionField.value;
+    let startSymbPos = descriptionField.selectionStart;
+    let endSymbPos = descriptionField.selectionEnd;
+    if(text.charAt(startSymbPos - 1) === sign && text.charAt(endSymbPos) === sign){
+        descriptionField.value = spliceString(text, startSymbPos - 1, 1, "");
+        descriptionField.value = spliceString(descriptionField.value, endSymbPos - 1, 1, "");
+        updateDisplayField();
+    } else {
+        let selected = descriptionField.value.slice(startSymbPos, endSymbPos);
+        descriptionField.setRangeText(`${sign}${selected}${sign}`);
+        updateDisplayField();
+    }
+}
+
+function spliceString(str, start, count, stringToInsert) {
+    return str.slice(0, start) + stringToInsert + str.slice(start + count);
+}
+
+function updateDisplayField(){
+    displayField.textContent = descriptionField.value
+        .replace(patternBold,'<b>$1</b>')
+        .replace(patternItalic, '<i>$1</i>')
+        .replace(patternCode, '<span class="code">$1</span>')
+}

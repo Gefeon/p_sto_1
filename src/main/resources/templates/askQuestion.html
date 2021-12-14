@@ -47,20 +47,22 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="description " class="w-100">
+                                <label for="description" class="w-100">
                                     <h5>Основная часть</h5>
                                     <p>Добавьте всю информацию, которая может понадобиться для ответа на ваш вопрос</p>
                                 </label>
                                 <div id="wmd-button-bar" class="wmd-button-bar btr-sm mt-0">
                                     <ul id="wmd-button-row" class="wmd-button-row">
-                                        <li class="wmd-button" id="wmd-bold-button"
-                                            title="Полужирный шрифт <strong> Ctrl+B" style="margin-top: 0;">
+                                        <li class="wmd-button mt-0" id="wmd-bold-button"
+                                            title="Полужирный шрифт <strong> Ctrl+B" onclick="makeTransformation('*')">
                                             <span></span>
                                         </li>
-                                        <li class="wmd-button" id="wmd-italic-button" title="Курсив <em> Ctrl+I">
-                                            <span ></span>
+                                        <li class="wmd-button" id="wmd-italic-button" title="Курсив <em> Ctrl+I"
+                                            onclick="makeTransformation('$')">
+                                            <span></span>
                                         </li>
-                                        <li class="wmd-button" id="wmd-quote-button" title="Цитата <blockquote> Ctrl+Q">
+                                        <li class="wmd-button" id="wmd-quote-button" title="Цитата <blockquote> Ctrl+Q"
+                                            onclick="makeTransformation('\'')">
                                             <span></span>
                                         </li>
                                         <li class="wmd-button" id="wmd-code-button" title="Пример кода <pre><code> Ctrl+K">
@@ -75,9 +77,10 @@
                                     </ul>
                                 </div>
                                 <textarea class="no-resize form-control" rows="3" name="description"
-                                          id="description "></textarea>
-                                <div class="errorField" id="descriptionError">
-                                </div>
+                                          id="description"></textarea>
+                                <div id="displayField"></div>
+                                <div class="errorField" id="descriptionError"></div>
+
                             </div>
 
                             <div class='form-group mb-0'>
