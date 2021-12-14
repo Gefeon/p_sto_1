@@ -2,7 +2,7 @@ user_entity:
   - id: 100
     about: "first user"
     city: "Irkutsk"
-    email: "one@come"
+    email: "user100@user.ru"
     full_name: "Ivan"
     image_link: "link.com"
     is_deleted: "false"
@@ -12,13 +12,13 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "Iv"
-    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 100
   - id: 101
     about: "second user"
     city: "Smolensk"
-    email: "two@come"
+    email: "user101@user.ru"
     full_name: "Olga"
     image_link: "link.com"
     is_deleted: "false"
@@ -28,13 +28,13 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "Ol"
-    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 101
   - id: 102
     about: "third user"
     city: "Voronej"
-    email: "three@come"
+    email: "user102@user.ru"
     full_name: "Elena"
     image_link: "link.com"
     is_deleted: "false"
@@ -44,7 +44,7 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "El"
-    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 102
   - id: 103
@@ -60,6 +60,6 @@ user_entity:
     link_site: "link.com"
     link_vk: "link.com"
     nickname: "Rn"
-    password: "$2a$12$0dQnD6ibToWg/2so6bBrIOYad6q9gXsckBwa5OuGT.GpKy/E7xrcq"
+    password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-29 00:00:00"
     role_id: 103
