@@ -15,10 +15,10 @@ public class TestAnswerResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question/100/answer/100";
 
-    private static final String USER_ENTITY = "dataset/answerResourceController/user.yml";
-    private static final String ROLE_ENTITY = "dataset/answerResourceController/role.yml";
-    private static final String ANSWER_ENTITY = "dataset/answerResourceController/answer.yml";
-    private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/anotherAnswer.yml";
+    private static final String USER_ENTITY = "dataset/AnswerResourceController/user.yml";
+    private static final String ROLE_ENTITY = "dataset/AnswerResourceController/role.yml";
+    private static final String ANSWER_ENTITY = "dataset/AnswerResourceController/answer.yml";
+    private static final String ANOTHER_ANSWER_ENTITY = "dataset/AnswerResourceController/anotherAnswer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
