@@ -25,6 +25,7 @@ public class SwaggerConfig {
     public static final String ADMIN_RESOURCE_CONTROLLER = "Admin";
     public static final String ANSWER_CONTROLLER = "Answer";
     public static final String RESOURCE_TAG_CONTROLLER = "Tag";
+    public static final String INVITE_CONTROLLER = "Invite user";
 
     @Bean
     public Docket api() {
@@ -42,7 +43,8 @@ public class SwaggerConfig {
                         new Tag(ADMIN_RESOURCE_CONTROLLER, "These endpoints are used to admin actions", 1),
                         new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
                         new Tag(QUESTION_CONTROLLER,"These endpoints are used to manage the user questions",1),
-                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags", 1))
+                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags", 1),
+                        new Tag(INVITE_CONTROLLER, "This endpoint is used to invite user by email", 1))
                 .apiInfo(apiInfo());
     }
 
