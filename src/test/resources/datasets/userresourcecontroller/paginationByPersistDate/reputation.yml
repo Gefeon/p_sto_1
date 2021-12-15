@@ -1,130 +1,52 @@
 reputation:
-  - id: 100
-    count: 7
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 103
-    question_id:
-    sender_id: 100
+
   - id: 101
     count: 10
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 100
-    question_id:
-    sender_id: 100
   - id: 102
     count: 11
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 101
-    question_id:
-    sender_id: 100
-  - id: 103
-    count: 1
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 103
-    question_id:
-    sender_id: 100
+
   - id: 104
     count: 22
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 102
-    question_id:
-    sender_id: 100
-  - id: 105
-    count: 33
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 103
-    question_id:
-    sender_id: 100
   - id: 106
     count: 33
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 104
-    question_id:
-    sender_id: 100
-  - id: 107
-    count: 33
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 105
-    question_id:
-    sender_id: 100
+
   - id: 108
     count: 33
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 106
-    question_id:
-    sender_id: 100
   - id: 109
     count: 33
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 107
-    question_id:
-    sender_id: 100
   - id: 110
     count: 33
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 108
-    question_id:
-    sender_id: 100
   - id: 111
     count: 33
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 109
-    question_id:
-    sender_id: 100
   - id: 112
     count: 33
-    persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 110
-    question_id:
-    sender_id: 100
-  - id: 113
-    count: 33
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 111
-    question_id:
-    sender_id: 100
-  - id: 114
-    count: 33
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 112
-    question_id:
-    sender_id: 100
-  - id: 115
-    count: 33
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 113
-    question_id:
-    sender_id: 100
+
+
 

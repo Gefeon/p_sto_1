@@ -5,6 +5,5 @@ import com.javamentor.qa.platform.models.dto.TagDto;
 import java.util.List;
 
 public interface TagDtoDao {
-
-    List<TagDto> getTagDtoList();
+    List<TagDto> getTagsByLetters(String letters);
 }
