@@ -7,15 +7,18 @@ import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
@@ -47,14 +50,14 @@ public class AnswerResourceController {
 
     @Operation(summary = "Get list of answers by question id", responses = {
             @ApiResponse(description = "Got list of answers", responseCode = "200",
-                    content = @Content(schema = @Schema(implementation = AnswerDto.class))),
+                        content = @Content(array = @ArraySchema(schema = @Schema(implementation = AnswerDto.class)))),
             @ApiResponse(description = "No answers with such question id - return empty list", responseCode = "200"),
             @ApiResponse(description = "No question id", responseCode = "404"),
             @ApiResponse(description = "Wrong type of question id", responseCode = "400")
     })
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<?> getAnswerByQuestionId(@PathVariable Long questionId) {
-        return  ResponseEntity.ok(answerDtoService.getAnswers(questionId));
+        return  ResponseEntity.ok(answerDtoService.getAnswerById(questionId));
     }
 }
 

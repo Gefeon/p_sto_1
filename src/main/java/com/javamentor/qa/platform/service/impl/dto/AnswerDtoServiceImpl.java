@@ -5,7 +5,6 @@ import com.javamentor.qa.platform.models.dto.AnswerDto;
 import com.javamentor.qa.platform.service.abstracts.dto.AnswerDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,8 +19,7 @@ public class AnswerDtoServiceImpl implements AnswerDtoService {
     }
 
     @Override
-    @Transactional
-    public List<AnswerDto> getAnswers(Long id) {
-        return answerDtoDao.getAnswers(id);
+    public List<AnswerDto> getAnswerById(Long id) {
+        return answerDtoDao.getAnswerById(id);
     }
 }

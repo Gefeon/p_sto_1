@@ -5,5 +5,5 @@ import com.javamentor.qa.platform.models.dto.AnswerDto;
 import java.util.List;
 
 public interface AnswerDtoDao {
-    List<AnswerDto> getAnswers(Long id);
+    List<AnswerDto> getAnswerById(Long id);
 }
