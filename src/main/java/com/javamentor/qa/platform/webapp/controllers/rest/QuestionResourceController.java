@@ -18,11 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -89,5 +85,16 @@ public class QuestionResourceController {
                     questionId, VoteType.DOWN_VOTE, user));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vote for this question already exists");
+    }
+
+    @Operation(summary = "counts all questions", responses = {
+            @ApiResponse(description = "Question was counted", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Question.class)))
+    })
+    @GetMapping("question/count")
+    public ResponseEntity<Long> count() {
+        Long count = questionService.countQuestions();
+        return ResponseEntity.ok(count);
+
     }
 }
