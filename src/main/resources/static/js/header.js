@@ -18,12 +18,10 @@ class Header extends HTMLElement {
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-primary">Login</button>
-          <button type="button" class="btn btn-primary">Sign-up</button> 
-            <button type="button" class="btn btn-primary" onclick="deleteAllCookies()">Logout</input>
+          <button type="button" class="btn btn-primary" onclick="deleteAllCookies()">Logout</input>
         </div>
       </div>
-                      
+                
         `
     }
 
