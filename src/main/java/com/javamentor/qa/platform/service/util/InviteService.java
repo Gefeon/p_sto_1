@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.service.util;
 
+import com.javamentor.qa.platform.exception.InviteUserException;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
@@ -26,7 +27,7 @@ public class InviteService {
     private final MailService mailService;
 
     @Transactional
-    public boolean invite(String email) {
+    public void invite(String email) {
         if (userService.findByEmail(email).isEmpty()) {
             Optional<Role> roleOpt = roleService.findRoleByName("ROLE_USER");
             User user = new User();
@@ -42,12 +43,12 @@ public class InviteService {
                             "логин: " + email + "\n" +
                             "пароль: " + password + "\n" +
                             "Осталось только пройти по ссылке <ссылка>, ввести свои регистрационные данные и начать пользоваться сайтом!");
-            return true;
+        } else {
+            throw new InviteUserException("User with this email is already exist");
         }
-        return false;
     }
 
-    private String generatePassword() {
+     public String generatePassword() {
         final String signs = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXYZ0123456789/][?><:}{~!@#$%^&*()_+=-";
         return Arrays.stream(signs.split(""))
                 .map(s -> signs.charAt(current().nextInt(signs.length() - 1)))
