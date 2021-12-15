@@ -27,9 +27,11 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<User> findById(Long id) {
-        String hql = "FROM User u WHERE u.id = :id";
-        TypedQuery<User> query = (TypedQuery<User>) entityManager.createQuery(hql).setParameter("id", id);
-        return SingleResultUtil.getSingleResultOrNull(query);
+    public void changePassword(Long id, String password) {
+        String hql = "update User set password = :passwordParam where id = :idParam";
+        entityManager.createQuery(hql)
+                .setParameter("passwordParam", password)
+                .setParameter("idParam", id)
+                .executeUpdate();
     }
 }

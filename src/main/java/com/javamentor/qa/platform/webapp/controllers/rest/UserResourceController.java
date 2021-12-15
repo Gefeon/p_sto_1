@@ -4,6 +4,7 @@ import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
+import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -13,12 +14,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,9 +30,11 @@ import java.util.Optional;
 public class UserResourceController {
 
     private UserDtoService userDtoService;
+    private UserService userService;
 
-    public UserResourceController(UserDtoService userDtoService) {
+    public UserResourceController(UserDtoService userDtoService, UserService userService) {
         this.userDtoService = userDtoService;
+        this.userService = userService;
     }
 
     @GetMapping(path = "/api/user/{userId}")
@@ -74,7 +76,33 @@ public class UserResourceController {
     public ResponseEntity<?> getReputation(@RequestParam int currPage, @RequestParam(required = false, defaultValue = "10") int items) {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "UserReputation");
-        return  ResponseEntity.ok(userDtoService.getPage(currPage,items, map));
+        return ResponseEntity.ok(userDtoService.getPage(currPage, items, map));
+    }
+
+    @Operation(summary = "change user password", responses = {
+            @ApiResponse(description = "Password was changed", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @ApiResponse(description = "Password not changed", responseCode = "400")
+    })
+    @PutMapping("api/user/changePassword")
+    public ResponseEntity<?> changePassword(
+            @ApiParam(value = "Password of the user to be changed", required = true)
+            @NotBlank(message = "Password cannot be empty") @RequestBody final String password,
+            Authentication authentication) {
+
+        boolean onlyLatinAlphabet = password.matches("^[a-zA-Z0-9!@#$%^&*()-=+|\\\\|,.:;~_<>?\\{\\}\\[\\]\"\']+$");
+
+        if (password.length() < 6 || password.length() > 12) {
+            return new ResponseEntity<>("Length of password from 6 to 12 symbols", HttpStatus.BAD_REQUEST);
+        }
+
+        if (!onlyLatinAlphabet) {
+            return new ResponseEntity<>("Use only latin alphabet and numbers", HttpStatus.BAD_REQUEST);
+        }
+
+        Long id = ((User) authentication.getPrincipal()).getId();
+        userService.changePasswordById(id, password);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 //ToDo используется как заглушка для тестов
