@@ -3,6 +3,7 @@ package com.javamentor.qa.platform.service.impl.model.question;
 import com.javamentor.qa.platform.dao.abstracts.model.question.AnswerDao;
 import com.javamentor.qa.platform.dao.abstracts.model.question.VoteAnswerDao;
 import com.javamentor.qa.platform.dao.abstracts.model.user.ReputationDao;
+import com.javamentor.qa.platform.exception.AnswerException;
 import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteAnswer;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
@@ -39,7 +40,6 @@ public class VoteAnswerServiceImpl extends ReadWriteServiceImpl<VoteAnswer, Long
     }
 
     @Override
-    @Transactional
     public boolean isUserNonVoted(Long answerId, Long userId) {
         return voteAnswerDao.findByAnswerAndUser(answerId, userId).isEmpty();
     }
@@ -64,7 +64,7 @@ public class VoteAnswerServiceImpl extends ReadWriteServiceImpl<VoteAnswer, Long
 
             return voteAnswerDao.getVoteCount(answer.getId());
         }
-        return null;
+        throw new AnswerException("Answer with this id does not exist");
     }
 
     private Integer getReputationCount(VoteType voteType) {

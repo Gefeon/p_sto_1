@@ -54,8 +54,7 @@ public class AnswerResourceController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (voteAnswerService.isUserNonVoted(answerId, user.getId())) {
             Long totalCount = voteAnswerService.vote(answerId, user, UP_VOTE);
-            return Objects.nonNull(totalCount) ? ResponseEntity.ok(totalCount) :
-                    ResponseEntity.badRequest().body("Answer with this id does not exist");
+            return ResponseEntity.ok(totalCount) ;
         }
         return ResponseEntity.badRequest().body("User is already voted");
     }
@@ -69,8 +68,7 @@ public class AnswerResourceController {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (voteAnswerService.isUserNonVoted(answerId, user.getId())) {
             Long totalCount = voteAnswerService.vote(answerId, user, DOWN_VOTE);
-            return Objects.nonNull(totalCount) ? ResponseEntity.ok(totalCount) :
-                    ResponseEntity.badRequest().body("Answer with this id does not exist");
+            return ResponseEntity.ok(totalCount);
         }
         return ResponseEntity.badRequest().body("User is already voted");
     }
