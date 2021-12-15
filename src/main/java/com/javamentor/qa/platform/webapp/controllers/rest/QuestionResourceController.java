@@ -3,13 +3,13 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.models.entity.question.IgnoredTag;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.TrackedTag;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
+import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
@@ -36,17 +36,17 @@ import java.util.Map;
 public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
-
     private final QuestionService questionService;
-
     private final VoteQuestionService voteQuestionService;
+    private final QuestionDtoService questionDtoService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
                                       QuestionService questionService,
-                                      VoteQuestionService voteQuestionService) {
+                                      VoteQuestionService voteQuestionService, QuestionDtoService questionDtoService) {
         this.questionMapper = questionMapper;
         this.questionService = questionService;
         this.voteQuestionService = voteQuestionService;
+        this.questionDtoService = questionDtoService;
     }
 
     @Operation(summary = "add new question", responses = {
@@ -113,7 +113,7 @@ public class QuestionResourceController {
             @RequestParam(required = false) List<IgnoredTag> ignoredTags) {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "AllQuestions");
-        PageDto<QuestionDto> page = userDtoService.getPage(currPage, items, map);
+        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 }

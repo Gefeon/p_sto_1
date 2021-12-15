@@ -21,6 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.iterableWithSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -41,6 +42,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
+    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/answer.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
@@ -231,5 +233,14 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DataSet(value = {QUESTION_ENTITY, USER_ENTITY, ROLE_ENTITY, ANSWER_ENTITY,TAG_ENTITY, QUESTION_HAS_TAG_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDto_getOk() throws Exception {
+
+        mvc.perform(get(url + "?currPage=1").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk());
     }
 }
