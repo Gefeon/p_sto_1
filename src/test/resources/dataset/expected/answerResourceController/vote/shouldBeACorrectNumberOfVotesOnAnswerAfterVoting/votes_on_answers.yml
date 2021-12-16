@@ -1,0 +1,24 @@
+votes_on_answers:
+  - id: "regex:^(\\d+)"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    vote: "UP_VOTE"
+    answer_id: 100
+    user_id: 100
+
+  - id: "regex:^(\\d+)"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    vote: "DOWN_VOTE"
+    answer_id: 100
+    user_id: 101
+
+  - id: "regex:^(\\d+)"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    vote: "DOWN_VOTE"
+    answer_id: 100
+    user_id: 102
+
+  - id: "regex:^(\\d+)"
+    persist_date: "regex:^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.\\d{1,6}"
+    vote: "UP_VOTE"
+    answer_id: 100
+    user_id: 103
