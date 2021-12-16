@@ -25,7 +25,6 @@ public class SwaggerConfig {
     public static final String ADMIN_RESOURCE_CONTROLLER = "Admin";
     public static final String ANSWER_CONTROLLER = "Answer";
     public static final String RESOURCE_TAG_CONTROLLER = "Tag";
-    public static final String CHANGE_PASSWORD_CONTROLLER = "Change password";
 
     @Bean
     public Docket api() {
@@ -39,13 +38,12 @@ public class SwaggerConfig {
                         new Tag(AUTHENTICATION_CONTROLLER, "This endpoint is used to authenticate the client", 1),
                         new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
                         new Tag(QUESTION_CONTROLLER, "This endpoint is used to manage questions", 1),
-                        new Tag(AUTHENTICATION_CONTROLLER, "These endpoints are used to authenticate the client", 2),
-                        new Tag(ADMIN_RESOURCE_CONTROLLER, "These endpoints are used to admin actions", 3),
-                        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",4),
-                        new Tag(QUESTION_CONTROLLER,"These endpoints are used to manage the user questions",5),
-                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage related tags", 6),
-                        new Tag(CHANGE_PASSWORD_CONTROLLER, "This endpoint is used to change password by user", 7))
-                        .apiInfo(apiInfo());
+                        new Tag(AUTHENTICATION_CONTROLLER, "These endpoints are used to authenticate the client", 1),
+                        new Tag(ADMIN_RESOURCE_CONTROLLER, "These endpoints are used to admin actions", 1),
+                        new Tag(ANSWER_CONTROLLER,"These endpoints are used to manage the user answers",1),
+                        new Tag(QUESTION_CONTROLLER,"These endpoints are used to manage the user questions",1),
+                        new Tag(RESOURCE_TAG_CONTROLLER, "This endpoint is used to manage tags", 1))
+                .apiInfo(apiInfo());
     }
 
     public ApiInfo apiInfo() {
