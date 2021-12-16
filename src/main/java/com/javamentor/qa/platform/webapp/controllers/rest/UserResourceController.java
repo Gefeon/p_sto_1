@@ -80,8 +80,7 @@ public class UserResourceController {
     }
 
     @Operation(summary = "change user password", responses = {
-            @ApiResponse(description = "Password was changed", responseCode = "200",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @ApiResponse(description = "Password was changed", responseCode = "200"),
             @ApiResponse(description = "Password not changed", responseCode = "400")
     })
     @PutMapping("api/user/changePassword")
@@ -97,7 +96,7 @@ public class UserResourceController {
         }
 
         if (!onlyLatinAlphabet) {
-            return new ResponseEntity<>("Use only latin alphabet and numbers", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Use only latin alphabet, numbers and special chars", HttpStatus.BAD_REQUEST);
         }
 
         Long id = ((User) authentication.getPrincipal()).getId();

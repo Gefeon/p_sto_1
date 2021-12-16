@@ -12,8 +12,7 @@ import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class TestUserResourceController extends AbstractTestApi {
 
@@ -256,16 +255,20 @@ public class TestUserResourceController extends AbstractTestApi {
         authHeader = PREFIX + getToken("user100@user.ru", CORRECT_PASS);
 
         response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(TOO_SHORT_PASS));
-        response.andExpect(status().isBadRequest());
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("Length of password from 6 to 12 symbols"));
 
         response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(TOO_LONG_PASS));
-        response.andExpect(status().isBadRequest());
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("Length of password from 6 to 12 symbols"));
 
         response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(BLANC_PASS));
-        response.andExpect(status().isBadRequest());
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("changePassword.password: Password cannot be empty"));
 
         response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(WRONG_CHARSET_PASS));
-        response.andExpect(status().isBadRequest());
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("Use only latin alphabet, numbers and special chars"));
     }
 
 }
