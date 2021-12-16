@@ -1,31 +1,24 @@
 package com.javamentor.qa.platform.models.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
-@ToString
-@AllArgsConstructor
 public class QuestionDto implements Serializable {
     private Long id;
     private String title;
     private Long authorId;
-    private Long authorReputation;
     private String authorName;
     private String authorImage;
     private String description;
-    private int viewCount;
-    private long viewCountLong;
-    private int countAnswer;
-    private long countAnswerLong;
-    private int countValuable;
-    private long countValuableLong;
+    private Long viewCount;
+    private Long countAnswer;
+    private Long countValuable;
+    private Long authorReputation;
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto;
@@ -40,12 +33,9 @@ public class QuestionDto implements Serializable {
         this.authorName = authorName;
         this.authorImage = authorImage;
         this.description = description;
-        this.viewCountLong = viewCountLong;
-        this.viewCount = (int)viewCountLong;
-        this.countAnswerLong = countAnswerLong;
-        this.countAnswer = (int) countAnswerLong;
-        this.countValuableLong = countValuableLong;
-        this.countValuable = (int) countValuableLong;
+        this.viewCount = viewCountLong;
+        this.countAnswer = countAnswerLong;
+        this.countValuable = countValuableLong;
         this.persistDateTime = persistDateTime;
         this.lastUpdateDateTime = lastUpdateDateTime;
     }

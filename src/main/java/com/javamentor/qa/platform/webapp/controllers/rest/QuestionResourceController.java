@@ -38,7 +38,7 @@ public class QuestionResourceController {
     private final VoteQuestionService voteQuestionService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
-                                      QuestionDtoService questionGetDtoService, QuestionService questionService,
+                                      QuestionService questionService,
                                       VoteQuestionService voteQuestionService) {
         this.questionMapper = questionMapper;
         this.questionGetDtoService = questionGetDtoService;
@@ -102,5 +102,15 @@ public class QuestionResourceController {
                     questionId, VoteType.DOWN_VOTE, user));
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vote for this question already exists");
+    }
+
+    @Operation(summary = "counts all questions", responses = {
+            @ApiResponse(description = "Question was counted", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
+    })
+    @GetMapping("question/count")
+    public ResponseEntity<Long> count() {
+        Long count = questionService.countQuestions();
+        return ResponseEntity.ok(count);
     }
 }

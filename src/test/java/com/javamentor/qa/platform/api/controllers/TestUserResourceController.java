@@ -9,11 +9,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.hamcrest.Matchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class TestUserResourceController extends AbstractTestApi {
 
@@ -91,7 +90,7 @@ public class TestUserResourceController extends AbstractTestApi {
      * Тест пагинации userDto по reputation
      * */
     @Test
-    @DataSet(value={USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getReputation() throws Exception {
 
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
@@ -237,6 +236,39 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.itemsOnPage", is(100)))
                 .andExpect(jsonPath("$.totalResultCount", is(14)))
                 .andExpect(jsonPath("$.items").value(hasSize(14)));
+    }
+
+    @Test
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    public void changePassword() throws Exception {
+        final String url = "/api/user/changePassword";
+        final String CORRECT_PASS = "12345q!@#$%";
+        final String TOO_SHORT_PASS = "12345";
+        final String TOO_LONG_PASS = "12345qwertyui";
+        final String BLANC_PASS = "      ";
+        final String WRONG_CHARSET_PASS = "12345вася";
+        String authHeader = PREFIX + getToken("user100@user.ru", "user");
+
+        ResultActions response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(CORRECT_PASS));
+        response.andExpect(status().isOk());
+
+        authHeader = PREFIX + getToken("user100@user.ru", CORRECT_PASS);
+
+        response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(TOO_SHORT_PASS));
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("Length of password from 6 to 12 symbols"));
+
+        response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(TOO_LONG_PASS));
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("Length of password from 6 to 12 symbols"));
+
+        response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(BLANC_PASS));
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("changePassword.password: Password cannot be empty"));
+
+        response = mvc.perform(put(url).header(AUTH_HEADER, authHeader).content(WRONG_CHARSET_PASS));
+        response.andExpect(status().isBadRequest()).andExpect(content()
+                .string("Use only latin alphabet, numbers and special chars"));
     }
 
 }
