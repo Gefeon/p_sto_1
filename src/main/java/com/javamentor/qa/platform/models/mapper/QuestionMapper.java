@@ -13,8 +13,8 @@ public abstract class QuestionMapper {
 
     @Mapping(source = "question.tags", target = "listTagDto")
     @Mapping(source = "question.id", target = "id")
-//    @Mapping(source = "question.persistDateTime", target = "persistDateTime")
-//    @Mapping(source = "question.lastUpdateDateTime", target = "lastUpdateDateTime")
+    @Mapping(source = "question.persistDateTime", target = "persistDateTime")
+    @Mapping(source = "question.lastUpdateDateTime", target = "lastUpdateDateTime")
     @Mapping(target = "countAnswer", constant = "0L")
     @Mapping(target = "countValuable", constant = "0L")
     @Mapping(target = "viewCount", constant = "0L")
