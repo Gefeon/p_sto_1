@@ -43,9 +43,9 @@ public class InviteService {
                             "логин: " + email + "\n" +
                             "пароль: " + password + "\n" +
                             "Осталось только пройти по ссылке <ссылка>, ввести свои регистрационные данные и начать пользоваться сайтом!");
-        } else {
-            throw new InviteUserException("User with this email is already exist");
+            return;
         }
+        throw new InviteUserException("User with this email is already exist");
     }
 
      public String generatePassword() {
