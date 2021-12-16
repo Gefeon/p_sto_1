@@ -9,10 +9,9 @@ new autoComplete({
         let letters = {
             letters: term,
         }
-        $.post({
-            url: "/api/user/tag/letters",
+        $.get({
+            url: "/api/user/tag/letters?letters=" + term,
             contentType: 'application/json',
-            data: JSON.stringify(letters),
             beforeSend: function (request) {
                 let token = $.cookie("jwt_token");
                 if (token != null) {
