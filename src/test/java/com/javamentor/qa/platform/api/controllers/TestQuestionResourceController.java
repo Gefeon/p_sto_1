@@ -21,6 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.iterableWithSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -231,5 +232,19 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DataSet(value = {"dataset/QuestionResourceController/countShouldBeThree/Question.yml",
+            "dataset/QuestionResourceController/countShouldBeThree/user.yml",
+            "dataset/QuestionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
+    public void countShouldBeThree() throws Exception {
+
+        ResultActions response = mvc.perform(get(url + "/count").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("3"));
+
     }
 }

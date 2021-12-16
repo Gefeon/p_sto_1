@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface UserService extends ReadWriteService<User, Long> {
     Optional<User> findByEmail(String email);
+
+    void changePasswordById(Long id, String password);
 }
