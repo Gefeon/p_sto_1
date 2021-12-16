@@ -28,7 +28,7 @@ public class QuestionDto {
     public QuestionDto() {
     }
 
-    public QuestionDto(Long id, String title, Long authorId, String authorName, String authorImage, String description, int viewCount, int countAnswer, int countValuable) {
+    public QuestionDto(Long id, String title, Long authorId, String authorName, String authorImage, String description, Long viewCount, Long countAnswer, Long countValuable) {
         this.id = id;
         this.title = title;
         this.authorId = authorId;
@@ -47,9 +47,9 @@ public class QuestionDto {
         this.authorName = tuples[aliasToIndexMap.get(NAME_ALIAS)].toString();
         this.authorImage = tuples[aliasToIndexMap.get(IMAGE_ALIAS)].toString();
         this.description = tuples[aliasToIndexMap.get(DESCRIPTION_ALIAS)].toString();
-        this.viewCount = ((Number) tuples[aliasToIndexMap.get(VIEW_COUNT_ALIAS)]).intValue();
-        this.countAnswer = ((Number) tuples[aliasToIndexMap.get(COUNT_ANSWER_ALIAS)]).intValue();
-        this.countValuable = ((Number) tuples[aliasToIndexMap.get(COUNT_VALUABLE_ALIAS)]).intValue();
+        this.viewCount = ((Number) tuples[aliasToIndexMap.get(VIEW_COUNT_ALIAS)]).longValue();
+        this.countAnswer = ((Number) tuples[aliasToIndexMap.get(COUNT_ANSWER_ALIAS)]).longValue();
+        this.countValuable = ((Number) tuples[aliasToIndexMap.get(COUNT_VALUABLE_ALIAS)]).longValue();
 //        this.persistDateTime = ((LocalDateTime) tuples[aliasToIndexMap.get(PERSIST_DATE_ALIAS)]);
 //        this.lastUpdateDateTime = ((LocalDateTime) tuples[aliasToIndexMap.get(LAST_UPDATE_DATE_ALIAS)]);
     }
@@ -60,9 +60,9 @@ public class QuestionDto {
     private String authorName;
     private String authorImage;
     private String description;
-    private int viewCount;
-    private int countAnswer;
-    private int countValuable;
+    private Long viewCount;
+    private Long countAnswer;
+    private Long countValuable;
     //    private LocalDateTime persistDateTime;
 //    private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();

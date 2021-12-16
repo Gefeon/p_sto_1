@@ -21,9 +21,9 @@ public class QuestionDtoResultTransformer implements ResultTransformer {
         String authorName = (String) tupleMap.get(QuestionDto.NAME_ALIAS);
         String authorImage = (String) tupleMap.get(QuestionDto.IMAGE_ALIAS);
         String description = (String) tupleMap.get(QuestionDto.DESCRIPTION_ALIAS);
-        int viewCount = (int) tupleMap.get(QuestionDto.VIEW_COUNT_ALIAS);
-        int countAnswer = (int) tupleMap.get(QuestionDto.COUNT_ANSWER_ALIAS);
-        int countValuable = (int) tupleMap.get(QuestionDto.COUNT_VALUABLE_ALIAS);
+        Long viewCount = (Long) tupleMap.get(QuestionDto.VIEW_COUNT_ALIAS);
+        Long countAnswer = (Long) tupleMap.get(QuestionDto.COUNT_ANSWER_ALIAS);
+        Long countValuable = (Long) tupleMap.get(QuestionDto.COUNT_VALUABLE_ALIAS);
         QuestionDto questionDto = questionDtoMap.computeIfAbsent(
                 questionId,
                 id -> new QuestionDto(questionId, title, authorId, authorName, authorImage, description, viewCount,countAnswer,countValuable)

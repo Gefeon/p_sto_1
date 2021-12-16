@@ -3,8 +3,6 @@ package com.javamentor.qa.platform.api.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
-import com.javamentor.qa.platform.models.dto.CityDto;
-import com.javamentor.qa.platform.models.dto.CityDtoResultTransformer;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
