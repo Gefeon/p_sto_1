@@ -95,6 +95,16 @@ public class QuestionResourceController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Vote for this question already exists");
     }
 
+    @Operation(summary = "counts all questions", responses = {
+            @ApiResponse(description = "Question was counted", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
+    })
+    @GetMapping("question/count")
+    public ResponseEntity<Long> count() {
+        Long count = questionService.countQuestions();
+        return ResponseEntity.ok(count);
+    }
+
 
     @Operation(summary = "Get page with pagination by users' persist datetime", responses = {
             @ApiResponse(description = " success", responseCode = "200",

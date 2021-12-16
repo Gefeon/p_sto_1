@@ -36,6 +36,7 @@ public class QuestionDto {
     private Long viewCount;
     private Long countAnswer;
     private Long countValuable;
+    private Long authorReputation;
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();

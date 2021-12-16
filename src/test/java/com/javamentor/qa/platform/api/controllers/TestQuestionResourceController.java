@@ -244,4 +244,18 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk());
     }
 
+
+    @Test
+    @DataSet(value = {"dataset/QuestionResourceController/countShouldBeThree/Question.yml",
+            "dataset/QuestionResourceController/countShouldBeThree/user.yml",
+            "dataset/QuestionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
+    public void countShouldBeThree() throws Exception {
+
+        ResultActions response = mvc.perform(get(url + "/count").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").value("3"));
+
+    }
 }

@@ -3,53 +3,36 @@ user_entity:
     email: "user100@user.ru"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-24 00:00:00"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 101
     email: "user100@user.ru1"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-24 00:00:00"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 102
     email: "user100@user.ru2"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-24 00:15:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 103
     email: "user100@user.ru3"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 104
     email: "user100@user.ru4"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-11-25 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 101
   - id: 105
     email: "user100@user.ru5"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2021-12-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
     city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
@@ -57,71 +40,47 @@ user_entity:
     email: "user100@user.ru6"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2022-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 107
     email: "user100@user.ru7"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2020-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 108
     email: "user100@user.ru8"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2023-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 109
     email: "user100@user.ru9"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2024-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 110
     email: "user100@user.ru10"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2025-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 111
     email: "user100@user.ru11"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2026-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 112
     email: "user100@user.ru12"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2027-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
   - id: 113
     email: "user100@user.ru13"
     password: "$2a$04$OGxezO.zrMJRrGW8Xwj22u8u2PfKeJcVVlFP2M.qiBDsaSD474qYq"
     persist_date: "2028-11-24 10:00:12"
-    full_name: "ИВАНОВ ИВАН ИВАНОВИЧ"
-    image_link: "test.ru"
-    city: "Санкт-Петербург"
     is_enabled: "true"
     role_id: 100
