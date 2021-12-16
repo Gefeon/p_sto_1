@@ -2,6 +2,7 @@ package com.javamentor.qa.platform.dao.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
+import com.javamentor.qa.platform.models.dto.QuestionDtoResultTransformer;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -16,14 +17,18 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
     private EntityManager entityManager;
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public List<QuestionDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
-        return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.QuestionDto" +
-                        "(q.id, q.title, q.user.id, q.user.fullName, q.user.image, q.description, SUM(0), COUNT(answer.id)," +
-                        " (Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - (Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id)," +
-                        " q.persistDateTime, q.lastUpdateTime, (SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description) FROM Tag tag)) " +
-                        "FROM Question q LEFT JOIN Answer answer ON q.user.id = answer.user.id GROUP BY q.id, q.user.fullName", QuestionDto.class)
+        return entityManager.createQuery("SELECT " +
+                        "q.id as question_id, q.title as question_title, q.user.id as question_author_id, q.user.fullName as question_author_name, q.user.imageLink as question_author_image, q.description as question_description, SUM(0) as question_view_count, SUM(0) as question_count_answer, " +
+                        " SUM(0) as question_count_valuable," +
+//                        " q.persistDateTime as question_persist_date, q.lastUpdateDateTime as question_last_update_date," +
+                        " t.id as tag_id, t.name as tag_name, t.description as tag_description " +
+                        "FROM Question q LEFT JOIN q.tags t order by q.id")
+                .unwrap(org.hibernate.query.Query.class)
+                .setResultTransformer(new QuestionDtoResultTransformer())
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
     }
