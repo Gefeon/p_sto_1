@@ -239,7 +239,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     @DataSet(value = {QUESTION_ENTITY, USER_ENTITY, ROLE_ENTITY, ANSWER_ENTITY,TAG_ENTITY, QUESTION_HAS_TAG_ENTITY}, disableConstraints = true)
     public void getAllQuestionDto_getOk() throws Exception {
 
-        mvc.perform(get(url + "?currPage=1").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+        mvc.perform(get(url + "?currPage=1&trackedId=1&trackedId=2").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -250,7 +250,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
             "dataset/QuestionResourceController/countShouldBeThree/user.yml",
             "dataset/QuestionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
     public void countShouldBeThree() throws Exception {
-
         ResultActions response = mvc.perform(get(url + "/count").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
 
         response.andDo(print())

@@ -118,11 +118,13 @@ public class QuestionResourceController {
             @ApiParam(value = "positive number representing number of items to show on page")
             @RequestParam(required = false, defaultValue = "10") @Positive(message = "items must be positive number") int items,
             @ApiParam(value = "list of tracked tags attached to question")
-            @RequestParam(required = false) List<TrackedTag> trackedTags,
+            @RequestParam(required = false) List<Long> trackedId,
             @ApiParam(value = "list of ignored tags attached to question")
-            @RequestParam(required = false) List<IgnoredTag> ignoredTags) {
+            @RequestParam(required = false) List<Long> ignoredId) {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "AllQuestions");
+        map.put("trackedIds", trackedId);
+        map.put("ignoredIds", ignoredId);
         PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }

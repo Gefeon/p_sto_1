@@ -3,12 +3,11 @@ package com.javamentor.qa.platform.dao.impl.dto;
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
+import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
-import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,48 +19,38 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
 
     @PersistenceContext
     private EntityManager entityManager;
+    private final TagService tagService;
+
+    public AllQuestionDtoDaoImpl(TagService tagService) {
+        this.tagService = tagService;
+    }
 
     @Override
     public List<QuestionDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
-        Stream<Tuple> resultStream = entityManager.createQuery(
-"SELECT q.id as question_id, q.title as question_title, q.user.id as question_author_id, q.user.fullName as question_author_name, q.user.imageLink as question_author_image, q.description as question_description, q.persistDateTime as question_persist_date, q.lastUpdateDateTime as question_last_update_date, SUM(0) as question_view_count, SUM(0) as question_count_answer, SUM(0) as question_count_valuable, t.id as tag_id, t.name as tag_name, t.description as tag_description FROM Question q LEFT JOIN q.tags t group by question_id, q.user.fullName, q.user.imageLink, t.id order by q.id", Tuple.class)
+        List<Long> trackedIds = ((List<Long>) param.get("trackedIds"));
+        Stream<QuestionDto> resultStream = entityManager.createQuery(
+                        "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
+                                " q.user.fullName, q.user.imageLink, q.description, q.persistDateTime," +
+                                " q.lastUpdateDateTime, SUM(0), COUNT(answer.id),SUM(0))" +
+                                " FROM Question q LEFT JOIN q.tags t LEFT JOIN Answer answer ON q.user.id = answer.user.id" +
+                                " LEFT JOIN TrackedTag tr ON tr.trackedTag.id = t.id" +
+                                " WHERE tr.id IN :trackedIds" +
+                                " GROUP BY q.id, q.user.fullName, q.user.imageLink ORDER BY q.id", QuestionDto.class)
+                .setParameter("trackedIds", trackedIds)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultStream();
 
-        Map<Long, QuestionDto> questionDtoMap = new LinkedHashMap<>();
-
         List<QuestionDto> questionDtos = resultStream
-                .map(tuple -> {
-                    QuestionDto questionDto = questionDtoMap
-                            .computeIfAbsent(tuple
-                                            .get("question_id", Long.class),
-                            id -> new QuestionDto(
-                                    tuple.get("question_id", Long.class),
-                                    tuple.get("question_title", String.class),
-                                    tuple.get("question_author_id", Long.class),
-                                    tuple.get("question_author_name", String.class),
-                                    tuple.get("question_author_image", String.class),
-                                    tuple.get("question_description", String.class),
-                                    tuple.get("question_persist_date", LocalDateTime.class),
-                                    tuple.get("question_last_update_date", LocalDateTime.class),
-                                    tuple.get("question_view_count", Long.class),
-                                    tuple.get("question_count_answer", Long.class),
-                                    tuple.get("question_count_valuable", Long.class)
-                            )
-                    );
-                    if (tuple.get("tag_id") != null) {
-                        TagDto tagDto = new TagDto(
-                                tuple.get("tag_id", Long.class),
-                                tuple.get("tag_name", String.class),
-                                tuple.get("tag_description", String.class));
-                        if (!questionDto.getListTagDto().contains(tagDto))
-                            questionDto.getListTagDto().add(tagDto);
-                    }
+                .map(questionDto -> {
+                    List<TagDto> tags = entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto" +
+                            "(tag.id, tag.name, tag.description) FROM Question q JOIN Tag tag " +
+                            "WHERE q.id = :questionId", TagDto.class)
+                            .setParameter("questionId", questionDto.getId()).getResultList();
+                    questionDto.setListTagDto(tags);
                     return questionDto;
                 })
-                .distinct()
                 .collect(Collectors.toList());
         return questionDtos;
     }
@@ -71,3 +60,6 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
         return (Long) entityManager.createQuery("SELECT count (id) FROM Question").getSingleResult();
     }
 }
+
+//((Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - " +
+//        "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id))
