@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script type="text/javascript" src="/static/js/jquery.cookie.js" th:src="@{/js/jquery.cookie.js}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.cookie.js" thgit:src="@{/js/jquery.cookie.js}"></script>
     <script src="/static/js/authorization_check.js" th:src="@{/js/authorization_check.js}"></script>
 </head>
 
@@ -16,13 +17,13 @@
     <jm-header></jm-header>
 </header>
 <div class="d-flex">
-    <aside class="p-3 bg-light" style="width: 200px;position: sticky; top: 20%; height: 100%">
+    <aside>
         <jm-sidebar></jm-sidebar>
     </aside>
     <main>
-        <div class="page-wrapper" style="width: 90vw; height: 100%; min-height: 100%;">
-            <div class="container">
-                <div class="col-md-12">
+        <div class="d-flex" style="width: 90vw; height: 100%; min-height: 100%;">
+            <div class="d-flex r0">
+                <div class="col-md-10">
                     <div class="info-comment d-flex justify-content-between align-items-center">
                         <div class="info" style="flex-basis: 75%;">
                             <h1 class="title h3">

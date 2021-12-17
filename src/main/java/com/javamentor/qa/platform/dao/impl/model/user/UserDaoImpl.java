@@ -24,4 +24,14 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
         TypedQuery<User> query = (TypedQuery<User>) entityManager.createQuery(hql).setParameter("email", email);
         return SingleResultUtil.getSingleResultOrNull(query);
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void changePassword(Long id, String password) {
+        String hql = "update User set password = :passwordParam where id = :idParam";
+        entityManager.createQuery(hql)
+                .setParameter("passwordParam", password)
+                .setParameter("idParam", id)
+                .executeUpdate();
+    }
 }

@@ -15,9 +15,10 @@ public class QuestionDto {
     private String authorName;
     private String authorImage;
     private String description;
-    private int viewCount;
-    private int countAnswer;
-    private int countValuable;
+    private Long viewCount;
+    private Long countAnswer;
+    private Long countValuable;
+    private Long authorReputation;
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto;
