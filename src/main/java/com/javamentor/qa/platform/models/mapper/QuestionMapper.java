@@ -21,6 +21,7 @@ public abstract class QuestionMapper {
     @Mapping(source = "question.user.id", target = "authorId")
     @Mapping(source = "question.user.fullName", target = "authorName")
     @Mapping(source = "question.user.imageLink", target = "authorImage")
+    @Mapping(target = "authorReputation", constant = "0L")
     public abstract QuestionDto persistConvertToDto(Question question);
 
     public abstract Question toModel(QuestionCreateDto questionCreateDto);

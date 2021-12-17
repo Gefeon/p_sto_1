@@ -33,12 +33,12 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
         List<Long> trackedIds = ((List<Long>) param.get("trackedIds"));
         Stream<QuestionDto> resultStream = entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
-                                " q.user.fullName, q.user.imageLink, q.description, q.persistDateTime," +
+                                " q.user.fullName, q.user.imageLink, count(r.count), q.description, q.persistDateTime," +
                                 " q.lastUpdateDateTime, SUM(0), COUNT(answer.id)," +
                                 "((Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - " +
                                 "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id)))" +
                                 " FROM Question q LEFT JOIN q.tags t LEFT JOIN Answer answer ON q.user.id = answer.user.id" +
-                                " LEFT JOIN TrackedTag tr ON tr.trackedTag.id = t.id" +
+                                " LEFT JOIN TrackedTag tr ON tr.trackedTag.id = t.id LEFT JOIN Reputation r ON q.user.id = r.author.id" +
                                 " WHERE tr.id IN :trackedIds" +
                                 " GROUP BY q.id, q.user.fullName, q.user.imageLink ORDER BY q.id", QuestionDto.class)
                 .setParameter("trackedIds", trackedIds)

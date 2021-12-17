@@ -14,7 +14,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class QuestionDto {
     public QuestionDto(Long id, String title, Long authorId,
-                       String authorName, String authorImage,
+                       String authorName, String authorImage, Long authorReputation,
                        String description, LocalDateTime persistDateTime,
                        LocalDateTime lastUpdateDateTime, Long viewCount,
                        Long countAnswer, Long countValuable) {
@@ -23,6 +23,7 @@ public class QuestionDto {
         this.authorId = authorId;
         this.authorName = authorName;
         this.authorImage = authorImage;
+        this.authorReputation = authorReputation;
         this.description = description;
         this.persistDateTime = persistDateTime;
         this.lastUpdateDateTime = lastUpdateDateTime;
@@ -36,11 +37,11 @@ public class QuestionDto {
     private Long authorId;
     private String authorName;
     private String authorImage;
+    private Long authorReputation;
     private String description;
     private Long viewCount;
     private Long countAnswer;
     private Long countValuable;
-    private Long authorReputation;
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();
