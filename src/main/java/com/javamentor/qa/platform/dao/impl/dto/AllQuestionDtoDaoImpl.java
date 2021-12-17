@@ -26,6 +26,7 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<QuestionDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
@@ -33,7 +34,9 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
         Stream<QuestionDto> resultStream = entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
                                 " q.user.fullName, q.user.imageLink, q.description, q.persistDateTime," +
-                                " q.lastUpdateDateTime, SUM(0), COUNT(answer.id),SUM(0))" +
+                                " q.lastUpdateDateTime, SUM(0), COUNT(answer.id)," +
+                                "((Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - " +
+                                "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id)))" +
                                 " FROM Question q LEFT JOIN q.tags t LEFT JOIN Answer answer ON q.user.id = answer.user.id" +
                                 " LEFT JOIN TrackedTag tr ON tr.trackedTag.id = t.id" +
                                 " WHERE tr.id IN :trackedIds" +
@@ -61,5 +64,3 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
     }
 }
 
-//((Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - " +
-//        "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id))

@@ -13,7 +13,11 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuestionDto {
-    public QuestionDto(Long id, String title, Long authorId, String authorName, String authorImage, String description, LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime, Long viewCount, Long countAnswer, Long countValuable) {
+    public QuestionDto(Long id, String title, Long authorId,
+                       String authorName, String authorImage,
+                       String description, LocalDateTime persistDateTime,
+                       LocalDateTime lastUpdateDateTime, Long viewCount,
+                       Long countAnswer, Long countValuable) {
         this.id = id;
         this.title = title;
         this.authorId = authorId;
