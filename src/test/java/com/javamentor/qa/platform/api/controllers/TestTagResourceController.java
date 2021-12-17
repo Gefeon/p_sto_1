@@ -49,7 +49,7 @@ public class TestTagResourceController extends AbstractTestApi {
 
 
     @Test
-    @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getAllIgnoredTags_returnStatusOkAndCorrectTags() throws Exception {
         ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
@@ -60,12 +60,13 @@ public class TestTagResourceController extends AbstractTestApi {
 
 
     @Test
-    @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoUserRelated_returnEmptyArray() throws Exception {
         ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
+
 
 
     @Test
@@ -100,7 +101,7 @@ public class TestTagResourceController extends AbstractTestApi {
                 .content("{\"letters\": \"en\"}")
                 .contentType(MediaType.APPLICATION_JSON));
         response.andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].name", containsInAnyOrder("seven", "ten", "eleven", "thirteen")));
+                .andExpect(jsonPath("$[*].name", containsInAnyOrder("seven","ten","eleven","thirteen")));
     }
 
     @Test
