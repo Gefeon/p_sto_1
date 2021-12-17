@@ -6,6 +6,7 @@ import com.javamentor.qa.platform.models.dto.TagDto;
 import java.util.List;
 
 public interface TagDtoService {
+    List<TagDto> getTagsByLetters(String letters);
 
     List<TagDto> getTrackedTagsByUserId(Long id);
 

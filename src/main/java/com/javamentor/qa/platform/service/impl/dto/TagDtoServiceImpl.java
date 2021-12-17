@@ -35,5 +35,11 @@ public class TagDtoServiceImpl implements TagDtoService {
     public List<RelatedTagsDto> getRelatedTagsDto() {
         return tagDao.getRelatedTagsDto();
     }
+
+    @Override
+    public List<TagDto> getTagsByLetters(String letters) {
+        return tagDao.getTagsByLetters(letters);
+    }
+
 }
 

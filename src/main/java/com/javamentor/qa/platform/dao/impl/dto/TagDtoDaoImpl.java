@@ -3,6 +3,7 @@ package com.javamentor.qa.platform.dao.impl.dto;
 import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.RelatedTagsDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
+import org.hibernate.criterion.MatchMode;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -38,6 +39,15 @@ public class TagDtoDaoImpl implements TagDtoDao {
                                 "group by t.id " +
                                 "order by sum(t.questions.size) desc", RelatedTagsDto.class)
                 .setMaxResults(10).getResultList();
+    }
+
+    @Override
+    public List<TagDto> getTagsByLetters(String letters) {
+        return em
+                .createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
+                        "FROM Tag tag WHERE tag.name LIKE :letters", TagDto.class)
+                .setParameter("letters", MatchMode.ANYWHERE.toMatchString(letters))
+                .setMaxResults(6).getResultList();
     }
 }
 
