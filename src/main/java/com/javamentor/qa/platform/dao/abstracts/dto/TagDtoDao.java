@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TagDtoDao {
     List<TagDto> getTagsByLetters(String letters);
+    List<TagDto> getTagDtoList(Long id);
 }

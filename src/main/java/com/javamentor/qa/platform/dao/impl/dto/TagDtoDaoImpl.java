@@ -23,5 +23,12 @@ public class TagDtoDaoImpl implements TagDtoDao {
                 .setParameter("letters", MatchMode.ANYWHERE.toMatchString(letters))
                 .setMaxResults(6).getResultList();
     }
+
+    @Override
+    public List<TagDto> getTagDtoList(Long id) {
+        return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto" +
+                "(tag.id, tag.name, tag.description)" +
+                "FROM Tag tag where :id IN (select tt.id from tag.questions tt)", TagDto.class).setParameter("id", id).getResultList();
+    }
 }
 

@@ -1,8 +1,0 @@
-question:
-  - id: 100
-    description: "fix lazyInitialization Exception"
-    is_deleted: false
-    last_redaction_date: "2021-11-30 00:29:29.623810"
-    persist_date: "2021-11-30 00:29:29.623810"
-    title: "lazyEx"
-    user_id: 100

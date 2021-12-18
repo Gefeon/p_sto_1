@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
@@ -25,7 +24,6 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.iterableWithSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +36,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String urlUpVote = "/api/user/question/100/upVote";
     private final String urlDownVote = "/api/user/question/100/downVote";
-
 
     private static final String USER_ENTITY = "dataset/QuestionResourceController/user.yml";
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
@@ -252,7 +249,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
             QUESTION_VIEWED_ENTITY,
             REPUTATION_ENTITY,
             ANOTHER_TAG_ENTITY,
-            VOTE_QUESTION_ENTITY}, disableConstraints = true)
+            VOTE_QUESTION_ENTITY,
+            QUESTION_HAS_TAG_ENTITY}, disableConstraints = true)
     public void getQuestionDtoById() throws Exception {
         mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())

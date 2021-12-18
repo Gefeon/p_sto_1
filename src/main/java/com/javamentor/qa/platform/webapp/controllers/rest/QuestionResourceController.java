@@ -1,28 +1,23 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
-import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
-import com.javamentor.qa.platform.models.dto.QuestionDto;
+import com.javamentor.qa.platform.models.dto.*;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
-import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
-import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
+import com.javamentor.qa.platform.service.abstracts.model.question.*;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.annotations.*;
+import io.swagger.v3.oas.annotations.*;
+import io.swagger.v3.oas.annotations.media.*;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
-import java.util.Optional;
+
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -38,7 +33,7 @@ public class QuestionResourceController {
     private final VoteQuestionService voteQuestionService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
-                                      QuestionService questionService,
+                                      QuestionDtoService questionGetDtoService, QuestionService questionService,
                                       VoteQuestionService voteQuestionService) {
         this.questionMapper = questionMapper;
         this.questionGetDtoService = questionGetDtoService;
@@ -67,8 +62,8 @@ public class QuestionResourceController {
     })
 
     @GetMapping("/question/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable long id) {
-        Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
+    public ResponseEntity<QuestionDto> getQuestionDtoById(@PathVariable long id) {
+        QuestionDto questionDto = questionGetDtoService.getQuestionDtoById(id);
         return new ResponseEntity<>(questionDto, HttpStatus.OK);
     }
 
