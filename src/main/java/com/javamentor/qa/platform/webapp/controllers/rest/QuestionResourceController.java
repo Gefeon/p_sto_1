@@ -99,7 +99,7 @@ public class QuestionResourceController {
             @ApiResponse(description = "Question was counted", responseCode = "200",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = Long.class)))
     })
-    @GetMapping("question/count")
+    @GetMapping("count")
     public ResponseEntity<Long> count() {
         Long count = questionService.countQuestions();
         return ResponseEntity.ok(count);
@@ -112,7 +112,7 @@ public class QuestionResourceController {
             @ApiResponse(description = "there isn`t curPage parameter in url or parameters in url are not positives numbers", responseCode = "400")
     })
     @GetMapping()
-    public ResponseEntity<?> getAllQuestionDto(
+    public ResponseEntity<?> getAllQuestionDtos(
             @ApiParam(value = "positive number representing number of current page", required = true)
             @RequestParam @Positive(message = "current page must be positive number") int currPage,
             @ApiParam(value = "positive number representing number of items to show on page")
