@@ -28,6 +28,8 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String USER_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/user_entity.yml";
     private static final String ROLE_ENTITY = "datasets/userresourcecontroller/Role.yml";
     private static final String REPUTATION_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/reputation.yml";
+    private static final String USER_BY_VOTE_ANSWER = "datasets/userresourcecontroller/VoteAnswer.yml";
+    private static final String USER_BY_VOTE_QUESTION = "datasets/userresourcecontroller/VoteQuestion.yml";
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
@@ -271,4 +273,30 @@ public class TestUserResourceController extends AbstractTestApi {
                 .string("Use only latin alphabet, numbers and special chars"));
     }
 
+    /*
+     * Тест пагинации userDto по голосам
+     * */
+    @Test
+    @DataSet(value = {USER_ENTITY, REPUTATION_ENTITY, USER_BY_VOTE_ANSWER, USER_BY_VOTE_QUESTION}, disableConstraints = true)
+    public void getPaginationByVote() throws Exception {
+
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+
+        // стандартный запрос
+        mvc.perform(get("/api/user/vote?currPage=2&items=3").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(3)))
+                .andExpect(jsonPath("$.totalResultCount", is(4)))
+                .andExpect(jsonPath("$.items").isNotEmpty());
+    }
 }

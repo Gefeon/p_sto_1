@@ -19,12 +19,15 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
     public List<UserDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
+
+
         List<UserDto> resultList = entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
                         "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(r.count )) " +
                         "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +
-                        "GROUP BY u.id " +
-                        "ORDER BY (SELECT count(vq.vote) FROM VoteQuestion vq where u.id = vq.user_id)+" +
-                        "(SELECT count(va.vote) FROM VoteAnswer va where u.id = va.user_id) desc", UserDto.class)
+                        "LEFT JOIN VoteQuestion vq on u.id = vq.user.id" +
+                        "LEFT JOIN VoteAnswer va on u.id = va.user.id" +
+                        "GROUP BY u.id, va.vote, vq.vote" +
+                        "ORDER BY cast(vq.vote as integer)+cast(va.vote as integer) desc", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
         return resultList;
