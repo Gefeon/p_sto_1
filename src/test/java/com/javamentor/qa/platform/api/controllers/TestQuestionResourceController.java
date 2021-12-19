@@ -39,6 +39,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
+    private static final String IGNORED_TAG_ENTITY = "dataset/QuestionResourceController/ignoredTag.yml";
+    private static final String TRACKED_TAG_ENTITY = "dataset/QuestionResourceController/trackedTag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
@@ -236,10 +238,9 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {QUESTION_ENTITY, USER_ENTITY, ROLE_ENTITY, ANSWER_ENTITY,TAG_ENTITY, QUESTION_HAS_TAG_ENTITY}, disableConstraints = true)
+    @DataSet(value = {QUESTION_ENTITY, USER_ENTITY, ROLE_ENTITY, ANSWER_ENTITY,TAG_ENTITY, QUESTION_HAS_TAG_ENTITY, IGNORED_TAG_ENTITY}, disableConstraints = true)
     public void getAllQuestionDto_getOk() throws Exception {
-
-        mvc.perform(get(url + "?currPage=1&trackedId=1&trackedId=2").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+        mvc.perform(get(url + "?currPage=1&trackedId=1").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
