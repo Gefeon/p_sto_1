@@ -29,182 +29,361 @@
         <jm-sidebar></jm-sidebar>
     </aside>
     <main class="container">
-        <div class="d-flex">
-            <div id="mainbar-full">
-                <br>
-                <h1 class="fs-headline1 mb16">
-                    Теги
-                </h1>
+        <div id="mainbar-full">
+            <br>
+            <h1 class="fs-headline1 mb16">
+                Теги
+            </h1>
 
-                <p class="fs-body2 wmx6 mb16">
-                    Тег - это ключевое слово или метка, которая объединяет ваш вопрос с другими похожими вопросами. Если
-                    вы
-                    используете
-                    теги правильно, другие пользователи быстрее найдут ваш вопрос и ответят на него.
-                </p>
+            <p class="fs-body2 wmx6 mb16">
+                Тег - это ключевое слово или метка, которая объединяет ваш вопрос с другими похожими вопросами. Если
+                вы
+                используете
+                теги правильно, другие пользователи быстрее найдут ваш вопрос и ответят на него.
+            </p>
 
-                <div class="d-flex fw-wrap gs4 mb24 ai-center">
-
-                    <a class="flex--item s-link fs-body1" href="/*">Показать все синонимы тегов</a>
-                </div>
-
-                <div class="d-flex fw-wrap">
-                    <div class="flex--item ps-relative mb12">
-                        <input id="tagfilter" class="s-input s-input__search h100" autocomplete="off" name="tagfilter"
-                               type="text" maxlength="35" placeholder="Фильтр по тегу" autofocus>
-                        <svg aria-hidden="true" class="s-input-icon s-input-icon__search svg-icon iconSearch" width="18"
-                             height="18" viewBox="0 0 18 18">
-                            <path d="m18 16.5-5.14-5.18h-.35a7 7 0 10-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 112 7a5 5 0 0110 0Z"/>
-                        </svg>
-                    </div>
-
-                    <div class="flex--item ml-auto mb12 d-flex s-btn-group js-filter-btn">
-                        <a class="youarehere is-selected flex--item s-btn s-btn__muted s-btn__outlined" href="/*"
-                           data-nav-xhref="" title="most popular tags" data-value="popular" data-shortcut="">
-                            Популярные</a>
-                        <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="/*" data-nav-xhref=""
-                           title="tags in alphabetical order" data-value="name" data-shortcut="">
-                            Имя</a>
-                        <a class="flex--item s-btn s-btn__muted s-btn__outlined" href="/*" data-nav-xhref=""
-                           title="recently created tags" data-value="new" data-shortcut="">
-                            Новые</a>
-                    </div>
-
-
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">java</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">javascript</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">python</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">php</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">java</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">javascript</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">python</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">php</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">java</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">javascript</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">python</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <a href="#" class="btn btn-primary">php</a>
-                                <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
-                                <div class="flex--item">100 вопросов</div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-<br>
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end">
-                        <li class="page-item disabled">
-                            <a class="page-link" href="#" tabindex="-1">Пред</a>
-                        </li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item">
-                            <a class="page-link" href="#">След</a>
-                        </li>
-                    </ul>
-                </nav>
+            <div>
+                <a href="#">Показать все синонимы тегов</a>
             </div>
+            <br>
+
+            <nav class="navbar navbar-white bg-white">
+                <div class="nav-item">
+                    <form class="d-flex">
+                        <input class="form-control me-2" type="search" placeholder="Фильтр по имени тэга"
+                               aria-label="Search" autofocus>
+                    </form>
+                </div>
+                <div class="nav-item">
+                    <div class="container-fluid justify-content-end">
+                        <div class="btn-group">
+                        <a href="#" class="btn btn-sm btn-outline-secondary active" aria-current="page">Популярные</a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary" type="button">Имя</a>
+                        <a href="#" class="btn btn-sm btn-outline-secondary" type="button">Новые</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <br>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">java</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">1000 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">100 сегодня,</a>
+                            <a href="#" class="card-link right">440 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">javascript</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">50 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">1 сегодня,</a>
+                            <a href="#" class="card-link right">7 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">python</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">670 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">56 сегодня,</a>
+                            <a href="#" class="card-link right">234 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">php</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">230 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">15 сегодня,</a>
+                            <a href="#" class="card-link right">87 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">java</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">1000 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">100 сегодня,</a>
+                            <a href="#" class="card-link right">440 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">javascript</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">50 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">1 сегодня,</a>
+                            <a href="#" class="card-link right">7 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">python</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">670 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">56 сегодня,</a>
+                            <a href="#" class="card-link right">234 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">php</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">230 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">15 сегодня,</a>
+                            <a href="#" class="card-link right">87 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">java</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">1000 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">100 сегодня,</a>
+                            <a href="#" class="card-link right">440 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">javascript</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">50 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">1 сегодня,</a>
+                            <a href="#" class="card-link right">7 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">python</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">670 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">56 сегодня,</a>
+                            <a href="#" class="card-link right">234 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">php</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">230 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">15 сегодня,</a>
+                            <a href="#" class="card-link right">87 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>            <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">java</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по java.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">1000 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">100 сегодня,</a>
+                            <a href="#" class="card-link right">440 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">javascript</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по js.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">50 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">1 сегодня,</a>
+                            <a href="#" class="card-link right">7 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">python</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по python.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">670 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">56 сегодня,</a>
+                            <a href="#" class="card-link right">234 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div><div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h1>
+                            <a href="#" class="btn btn-sm btn-outline-secondary">php</a>
+                            </h1>
+                            <p class="card-text">Используйте этот тэг для поиска вопросов по php.</p>
+                            <small>
+                                <p class = "text-start">
+                            <a href="#" class="card-link">230 вопросов всего</a>
+                                </p>
+                                <p class="text-end">
+                            <a href="#" class="card-link">15 сегодня,</a>
+                            <a href="#" class="card-link right">87 за неделю</a>
+                                </p>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <br>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-end">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Пред</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">След</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </main>
 </div>
