@@ -7,3 +7,55 @@ tag:
     description: "Room Android best practises"
     name: "Room"
     persist_date: "2021-11-30 00:29:29.586848"
+  - id: 102
+    description: "Hibernate best practises"
+    name: "Hibernate"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 103
+    description: "MySql best practises"
+    name: "MySql"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 104
+    description: "Docker best practises"
+    name: "Docker"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 105
+    description: "Jenkins best practises"
+    name: "Jenkins"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 106
+    description: "Kafka best practises"
+    name: "Kafka"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 107
+    description: "RabbitMQ best practises"
+    name: "RabbitMQ"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 108
+    description: "Git best practises"
+    name: "Git"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 109
+    description: "Matlab best practises"
+    name: "Matlab"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 110
+    description: "Spring best practises"
+    name: "Spring"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 111
+    description: "Here I waste an hour"
+    name: "Be careful with it"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 112
+    description: "Kotlin best practises"
+    name: "Kotlin"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 113
+    description: "RXJava best practises"
+    name: "RXJava"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 114
+    description: "Coroutines best practises"
+    name: "Coroutines"
+    persist_date: "2021-11-30 00:29:29.586848"

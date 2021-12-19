@@ -30,12 +30,13 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
         List<Long> ignoredIds = ((List<Long>) param.get("ignoredIds"));
         List<QuestionDto> questionDtos = entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
-                                " q.user.fullName, q.user.imageLink, count(r.count), q.description, q.persistDateTime," +
+                                " q.user.fullName, q.user.imageLink, SUM(r.count), q.description, q.persistDateTime," +
                                 " q.lastUpdateDateTime, SUM(0), COUNT(answer.id)," +
                                 "SUM(0))" +
                                 " FROM Question q JOIN q.tags t LEFT JOIN Answer answer ON q.user.id = answer.user.id" +
                                 " LEFT JOIN Reputation r ON q.user.id = r.author.id" +
-                                " WHERE t.id IN :trackedIds AND t.id NOT IN :ignoredIds" +
+                                " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE t.id IN :trackedIds)" +
+                                " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags t WHERE t.id IN :ignoredIds)" +
                                 " GROUP BY q.id, q.user.fullName, q.user.imageLink ORDER BY q.id", QuestionDto.class)
                 .setParameter("trackedIds", trackedIds)
                 .setParameter("ignoredIds", ignoredIds)
@@ -47,7 +48,7 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
 
         Stream<Tuple> tags = entityManager.createQuery(
                         "SELECT t.id as tag_id, t.name as tag_name, t.description as tag_description," +
-                                " q.id as question_id From Tag t JOIN t.questions q WHERE q.id in :ids order by q.id", Tuple.class)
+                                " q.id as question_id From Tag t JOIN t.questions q WHERE q.id in :ids", Tuple.class)
                 .setParameter("ids", questionIds)
                 .getResultStream();
 

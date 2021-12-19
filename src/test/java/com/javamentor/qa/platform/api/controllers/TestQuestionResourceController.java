@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.iterableWithSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -34,17 +33,20 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private final String urlUpVote = "/api/user/question/100/upVote";
     private final String urlDownVote = "/api/user/question/100/downVote";
 
-
     private static final String USER_ENTITY = "dataset/QuestionResourceController/user.yml";
+    private static final String USER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/user.yml";
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
+    private static final String QUESTION_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
-    private static final String IGNORED_TAG_ENTITY = "dataset/QuestionResourceController/allQuestuionDtos/ignoredTag.yml";
-    private static final String TRACKED_TAG_ENTITY = "dataset/QuestionResourceController/allQuestuionDtos/trackedTag.yml";
+    private static final String TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/tag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/questionHasTag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
     private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/answer.yml";
+    private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
+    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
@@ -237,14 +239,39 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isBadRequest());
     }
 
+    //проверка что находятся все вопросы, в которых есть тэг хотя бы один из TrackedTags, без дубликатов.
+    // TagDto для каждого вопроса достаются именно те, которые связаны с этим вопросом
+    // IgnoredTag выбраны из несуществующих в БД id
     @Test
-    @DataSet(value = {QUESTION_ENTITY, USER_ENTITY, ROLE_ENTITY, ANSWER_ENTITY,TAG_ENTITY, QUESTION_HAS_TAG_ENTITY, IGNORED_TAG_ENTITY}, disableConstraints = true)
-    public void getAllQuestionDto_getOk() throws Exception {
-        mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101&ignoredId=100").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoExistentTrackedTagsNonexistentIgnoredTags_expectedCorrectData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=101&trackedId=100&ignoredId=200&ignoredId=201").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(5)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(100, 101, 103, 106, 112)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(5),hasSize(1),hasSize(5),hasSize(2),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,101,102,103,104,100,100,101,102,103,104,106,100,100,105,109)));
     }
 
+    //проверка что находятся все вопросы, с которыми нет ни одного связанного тэга из TrackedTags, без дубликатов.
+    // TagDto для каждого вопроса достаются именно те, которые связаны с этим вопросом
+    // TrackedTag - все в БД id
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoNonexistentTrackedTagsExistentIgnoredTags_expectedCorrectData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101" +
+                        "&trackedId=101&trackedId=102&trackedId=103&trackedId=104" +
+                        "&trackedId=105&trackedId=106&trackedId=107&trackedId=108" +
+                        "&trackedId=109&trackedId=110&trackedId=111&trackedId=112" +
+                        "&trackedId=113&trackedId=114&ignoredId=100&ignoredId=101&ignoredId=103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(9)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(102, 104, 105, 107, 108, 109, 110, 111, 113)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(2),hasSize(2),hasSize(1),hasSize(4),hasSize(1),hasSize(1),hasSize(2),hasSize(1),hasSize(1))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(106,107,111,114,114,111,112,113,114,105,114,109,108,113,111)));
+    }
 
     @Test
     @DataSet(value = {"dataset/QuestionResourceController/countShouldBeThree/Question.yml",
