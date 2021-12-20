@@ -1,11 +1,14 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
+import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
+import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
+import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
@@ -18,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +30,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -38,12 +44,16 @@ public class QuestionResourceController {
 
     private final VoteQuestionService voteQuestionService;
 
+    private final QuestionDtoService questionDtoService;
+
     public QuestionResourceController(QuestionMapper questionMapper,
                                       QuestionService questionService,
-                                      VoteQuestionService voteQuestionService) {
+                                      VoteQuestionService voteQuestionService,
+                                      QuestionDtoService questionDtoService) {
         this.questionMapper = questionMapper;
         this.questionService = questionService;
         this.voteQuestionService = voteQuestionService;
+        this.questionDtoService = questionDtoService;
     }
 
     @Operation(summary = "add new question", responses = {
@@ -101,4 +111,22 @@ public class QuestionResourceController {
         Long count = questionService.countQuestions();
         return ResponseEntity.ok(count);
     }
+
+
+    @GetMapping("/question/noAnswer")
+    @Operation(summary = "Get page pagination questions with no answer", responses = {
+            @ApiResponse(description = "Get page dto of question dto success", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = PageDto.class))),
+            @ApiResponse(description = "Wrong parameters current page or items", responseCode = "400", content = @Content)
+    })
+    public ResponseEntity<?>noAnswerQuestion (@RequestParam int currPage,
+                                              @RequestParam(required = false, defaultValue = "10") int items) {
+
+        Map<Object, Object> map = new HashMap<>();
+        map.put("class", "QuestionNoAnswer");
+        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        return ResponseEntity.ok(page);
+    }
+
+
 }
