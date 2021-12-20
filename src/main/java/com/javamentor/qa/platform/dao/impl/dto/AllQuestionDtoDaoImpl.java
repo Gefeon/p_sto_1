@@ -28,7 +28,7 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
         List<Long> trackedIds = ((List<Long>) param.get("trackedIds"));
         List<Long> ignoredIds = ((List<Long>) param.get("ignoredIds"));
-        if(ignoredIds == null) {
+        if (ignoredIds == null) {
             ignoredIds = new ArrayList<>();
             ignoredIds.add(-1L);
         }
@@ -41,7 +41,7 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
                                 " LEFT JOIN Reputation r ON q.user.id = r.author.id" +
                                 " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE :trackedIds IS NULL OR t.id IN :trackedIds)" +
                                 " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags t WHERE t.id IN :ignoredIds)" +
-                                " GROUP BY q.id, q.user.fullName, q.user.imageLink ORDER BY q.id", QuestionDto.class)
+                                " GROUP BY q.id, q.user.fullName,q.user.imageLink ORDER BY q.id", QuestionDto.class)
                 .setParameter("trackedIds", trackedIds)
                 .setParameter("ignoredIds", ignoredIds)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
@@ -62,7 +62,7 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
                     .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class)));
         });
 
-        for (QuestionDto questionDto: questionDtos){
+        for (QuestionDto questionDto : questionDtos) {
             questionDto.setListTagDto(tagsMap.get(questionDto.getId()));
         }
 
@@ -70,8 +70,20 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public long getTotalResultCount(Map<Object, Object> param) {
-        return (Long) entityManager.createQuery("SELECT count (id) FROM Question").getSingleResult();
+        List<Long> trackedIds = ((List<Long>) param.get("trackedIds"));
+        List<Long> ignoredIds = ((List<Long>) param.get("ignoredIds"));
+        if (ignoredIds == null) {
+            ignoredIds = new ArrayList<>();
+            ignoredIds.add(-1L);
+        }
+        return (Long) entityManager.createQuery("SELECT COUNT(DISTINCT q.id) FROM Question q JOIN q.tags t" +
+                        " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE :trackedIds IS NULL OR t.id IN :trackedIds)" +
+                        " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags t WHERE t.id IN :ignoredIds)")
+                .setParameter("trackedIds", trackedIds)
+                .setParameter("ignoredIds", ignoredIds)
+                .getSingleResult();
     }
 }
 

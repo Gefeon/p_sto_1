@@ -260,11 +260,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
     public void getAllQuestionDtoNonexistentTrackedTagsExistentIgnoredTags_expectedCorrectData() throws Exception {
-        mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101" +
-                        "&trackedId=102&trackedId=103&trackedId=104" +
-                        "&trackedId=105&trackedId=106&trackedId=107&trackedId=108" +
-                        "&trackedId=109&trackedId=110&trackedId=111&trackedId=112" +
-                        "&trackedId=113&trackedId=114&ignoredId=100&ignoredId=101&ignoredId=103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+        mvc.perform(get(url + "?currPage=1&ignoredId=100&ignoredId=101&ignoredId=103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(9)))
@@ -327,7 +323,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     //  передать в trackedTag отрицательное число
     @Test
     @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
-    public void getAllNegativeTrackedTags_expectedBadRequest() throws Exception {
+    public void getAllQuestionDtoNegativeTrackedTags_expectedBadRequest() throws Exception {
         mvc.perform(get(url + "?currPage=1&trackedId=103&trackedId=-103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -336,7 +332,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     //  передать в trackedTag и ignoredTag одинаковые числа, ожидать как было бы без дубликатов
     @Test
     @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
-    public void getRepetetiveTrackedAndIgnoredTags_expectedCorrectData() throws Exception {
+    public void getAllQuestionDtoRepetetiveTrackedAndIgnoredTags_expectedCorrectData() throws Exception {
         mvc.perform(get(url + "?currPage=1&trackedId=105&trackedId=105&ignoredId=111&ignoredId=111").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -344,6 +340,44 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(108, 112)))
                 .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(3))))
                 .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,100,105,109)));
+    }
+
+    //  передать в trackedTag тэг, с которым не связано ни одного вопроса и ожидать пустой список
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoNoSuchTrackedTagsInQuestions_expectedEmptyData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=110").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(0)));
+    }
+
+    //  передать в ignoredTag тэг, с которым не связано ни одного вопроса и ожидать все в БД
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoNoSuchIgnoredTagsInQuestions_expectedAllData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&ignoredId=110&items=100").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(20)));
+    }
+
+    // тест пагинации и корректности выводимых
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoPaginationCheck_expectedCorrectData() throws Exception {
+        mvc.perform(get(url + "?currPage=2&ignoredId=100&ignoredId=101&ignoredId=103&items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(4)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder( 108, 109, 110, 111)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(1),hasSize(2),hasSize(1))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,114,109,108,113)))
+                .andExpect(jsonPath("$.currentPageNumber").value(2))
+                .andExpect(jsonPath("$.itemsOnPage").value(4))
+                .andExpect(jsonPath("$.totalPageCount").value(3))
+                .andExpect(jsonPath("$.totalResultCount").value(9));
+
     }
 
     @Test
