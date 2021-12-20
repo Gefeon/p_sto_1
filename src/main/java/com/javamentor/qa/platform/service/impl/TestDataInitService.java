@@ -1,16 +1,16 @@
 package com.javamentor.qa.platform.service.impl;
 
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
+import com.javamentor.qa.platform.models.entity.question.IgnoredTag;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.Tag;
+import com.javamentor.qa.platform.models.entity.question.TrackedTag;
 import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.user.Role;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
 import com.javamentor.qa.platform.models.entity.user.reputation.ReputationType;
-import com.javamentor.qa.platform.service.abstracts.model.question.AnswerService;
-import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
-import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
+import com.javamentor.qa.platform.service.abstracts.model.question.*;
 import com.javamentor.qa.platform.service.abstracts.model.user.ReputationService;
 import com.javamentor.qa.platform.service.abstracts.model.user.RoleService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
@@ -31,7 +31,7 @@ public class TestDataInitService {
     private final static int rolesNum = 7;
     private final static int answersNum = 10;
     private final static int questionsNum = 10;
-    private final static int tagsNum = 4;
+    private final static int tagsNum = 10;
     private final static int reputationsNum = 10;
 
     private final List<AuthenticationRequestDto> permanentUserParameters = new ArrayList<>();
@@ -87,7 +87,8 @@ public class TestDataInitService {
 
     public TestDataInitService(BCryptPasswordEncoder passwordEncoder, UserService userService,
                                RoleService roleService, AnswerService answerService,
-                               QuestionService questionService, TagService tagService, ReputationService reputationService) {
+                               QuestionService questionService, TagService tagService, ReputationService reputationService,
+                               TrackedTagService trackedTagService, IgnoredTagService ignoredTagService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.roleService = roleService;
@@ -95,6 +96,8 @@ public class TestDataInitService {
         this.questionService = questionService;
         this.tagService = tagService;
         this.reputationService = reputationService;
+        this.trackedTagService = trackedTagService;
+        this.ignoredTagService = ignoredTagService;
     }
 
     private final UserService userService;
@@ -103,6 +106,8 @@ public class TestDataInitService {
     private final QuestionService questionService;
     private final TagService tagService;
     private final ReputationService reputationService;
+    private final TrackedTagService trackedTagService;
+    private final IgnoredTagService ignoredTagService;
 
 
     //fill related tables user_entity and role with test data
@@ -113,6 +118,8 @@ public class TestDataInitService {
         addRandomQuestions();
         addRandomAnswers();
         addRandomReputation();
+        addRandomTrackedTagsToUser();
+        addRandomIgnoredTagsToUser();
     }
 
     private void addRandomReputation() {
@@ -195,6 +202,34 @@ public class TestDataInitService {
             tags.add(new Tag(null, name, description.toString(), null, null));
         }
         tagService.persistAll(tags);
+    }
+
+    //генерируем TrackedTags для всех пользователей, кроме первого
+    private void addRandomTrackedTagsToUser(){
+        List<TrackedTag> trackedTags = new ArrayList<>();
+        List<User> userList = userService.getAll();
+        List<Tag> tagList = tagService.getAll();
+        for (int i = 1; i < usersNum; i++){
+            for(int j = 0; j < getRandInt(0,4); j++) {
+                trackedTags.add(new TrackedTag(tagList.get(getRandInt(0,9)),
+                        userList.get(i)));
+            }
+        }
+        trackedTagService.persistAll(trackedTags);
+    }
+
+    //генерируем IgnoredTags для всех пользователей, кроме первого
+    private void addRandomIgnoredTagsToUser(){
+        List<IgnoredTag> ignoredTags = new ArrayList<>();
+        List<User> userList = userService.getAll();
+        List<Tag> tagList = tagService.getAll();
+        for (int i = 1; i < usersNum; i++){
+            for(int j = 0; j < getRandInt(0,4); j++) {
+                ignoredTags.add(new IgnoredTag(tagList.get(getRandInt(0,9)),
+                        userList.get(i)));
+            }
+        }
+        ignoredTagService.persistAll(ignoredTags);
     }
 
     private void addRandomUsersPermanentEmailPassword() {
