@@ -22,6 +22,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,6 +34,7 @@ import java.util.Map;
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
 @RequestMapping("/api/user/question")
+@Validated
 public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
@@ -118,9 +120,9 @@ public class QuestionResourceController {
             @ApiParam(value = "positive number representing number of items to show on page")
             @RequestParam(required = false, defaultValue = "10") @Positive(message = "items must be positive number") int items,
             @ApiParam(value = "list of tracked tags attached to question")
-            @RequestParam(required = false) List<Long> trackedId,
+            @RequestParam(required = false)  List<@Positive(message = "ids of tracked tags must be positive numbers") Long> trackedId,
             @ApiParam(value = "list of ignored tags attached to question")
-            @RequestParam(required = false) List<Long> ignoredId) {
+            @RequestParam(required = false) List<@Positive(message = "ids of ignored tags must be positive numbers") Long> ignoredId) {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "AllQuestions");
         map.put("trackedIds", trackedId);

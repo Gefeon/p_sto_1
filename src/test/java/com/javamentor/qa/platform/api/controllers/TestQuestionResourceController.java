@@ -254,14 +254,14 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,101,102,103,104,100,100,101,102,103,104,106,100,100,105,109)));
     }
 
-    //проверка что находятся все вопросы, с которыми нет ни одного связанного тэга из TrackedTags, без дубликатов.
+    //проверка что находятся все вопросы, с которыми нет ни одного связанного тэга из IgnoredTags, без дубликатов.
     // TagDto для каждого вопроса достаются именно те, которые связаны с этим вопросом
-    // TrackedTag - все в БД id
+    // trackedTag - все в БД id
     @Test
     @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
     public void getAllQuestionDtoNonexistentTrackedTagsExistentIgnoredTags_expectedCorrectData() throws Exception {
         mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101" +
-                        "&trackedId=101&trackedId=102&trackedId=103&trackedId=104" +
+                        "&trackedId=102&trackedId=103&trackedId=104" +
                         "&trackedId=105&trackedId=106&trackedId=107&trackedId=108" +
                         "&trackedId=109&trackedId=110&trackedId=111&trackedId=112" +
                         "&trackedId=113&trackedId=114&ignoredId=100&ignoredId=101&ignoredId=103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
@@ -271,6 +271,79 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(102, 104, 105, 107, 108, 109, 110, 111, 113)))
                 .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(2),hasSize(2),hasSize(1),hasSize(4),hasSize(1),hasSize(1),hasSize(2),hasSize(1),hasSize(1))))
                 .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(106,107,111,114,114,111,112,113,114,105,114,109,108,113,111)));
+    }
+
+    //проверка что находятся все вопросы, в которых есть тэг хотя бы один из trackedTags И с которыми нет ни одного связанного тэга из ignoredTags, без дубликатов.
+    // TagDto для каждого вопроса достаются именно те, которые связаны с этим вопросом
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoIntersectTrackedTagsAndIgnoredTags_expectedCorrectData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101&trackedId=109&trackedId=114&ignoredId=102&ignoredId=106&ignoredId=108&ignoredId=111").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(4)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 105, 109, 112)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(1),hasSize(1),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,114,114,100,105,109)));
+    }
+
+    //проверка что находятся все вопросы, в которых есть тэг хотя бы один из trackedTags И с которыми нет ни одного связанного тэга из ignoredTags, без дубликатов.
+    //вопросы, содержащие тэги из trackedTags не пересекаются с вопросами, содержащими тэги из ignoredTags
+    // trackedTag и ignoredTag частично из тех, что есть в БД и из тех, которых нет в БД
+    // TagDto для каждого вопроса достаются именно те, которые связаны с этим вопросом
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoNonIntersectTrackedTagsAndIgnoredTags_expectedCorrectData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=105&trackedId=200&ignoredId=111&ignoredId=200").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(2)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(108, 112)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,100,105,109)));
+    }
+
+
+    // trackedTag не передавать, полагается что trackedTags - все записи в БД
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoWithoutTrackedTags_expectedAllTagsWithoutIgnored() throws Exception {
+        mvc.perform(get(url + "?currPage=1&ignoredId=100&ignoredId=102&ignoredId=103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(9)));
+    }
+
+    // ignoredTag не передавать, полагается что ничего не игнорируется
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllQuestionDtoWithoutIgnoredTags_expectedAllTrackedTags() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101&trackedId=102&trackedId=113").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(7)));
+    }
+
+    //  передать в trackedTag отрицательное число
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getAllNegativeTrackedTags_expectedBadRequest() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=103&trackedId=-103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    //  передать в trackedTag и ignoredTag одинаковые числа, ожидать как было бы без дубликатов
+    @Test
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    public void getRepetetiveTrackedAndIgnoredTags_expectedCorrectData() throws Exception {
+        mvc.perform(get(url + "?currPage=1&trackedId=105&trackedId=105&ignoredId=111&ignoredId=111").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items").value(hasSize(2)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(108, 112)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,100,105,109)));
     }
 
     @Test
