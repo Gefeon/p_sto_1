@@ -268,6 +268,14 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.listTagDto.[*].id", containsInAnyOrder(100)))
                 .andExpect(jsonPath("$.listTagDto.[*].name", containsInAnyOrder("db_architecture")))
                 .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture")));
+
+        /*
+         * Проверка на не существующий ID
+         * */
+        mvc.perform(get("/api/user/question/1000").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").value("Missing question or invalid id"));
     }
 
     @Test

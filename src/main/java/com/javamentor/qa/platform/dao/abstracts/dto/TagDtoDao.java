@@ -14,5 +14,5 @@ public interface TagDtoDao {
     List<RelatedTagsDto> getRelatedTagsDto();
 
     List<TagDto> getTagsByLetters(String letters);
-    List<TagDto> getTagDtoList(Long id);
+    List<TagDto> getTagDtoListByQuestionId(Long id);
 }

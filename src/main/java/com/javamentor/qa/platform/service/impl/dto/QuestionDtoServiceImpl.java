@@ -1,13 +1,12 @@
 package com.javamentor.qa.platform.service.impl.dto;
 
-import com.javamentor.qa.platform.dao.abstracts.dto.*;
+import com.javamentor.qa.platform.dao.abstracts.dto.QuestionDtoDao;
+import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class QuestionDtoServiceImpl implements QuestionDtoService {
@@ -23,13 +22,9 @@ public class QuestionDtoServiceImpl implements QuestionDtoService {
 
     @Override
     public QuestionDto getQuestionDtoById(long id) {
-        QuestionDto questionDto = null;
-        try {
-            questionDto = questionDao.getQuestionDtoById(id);
-            questionDto.setListTagDto(tagDtoDao.getTagDtoList(id));
-        } catch (NullPointerException e) {
-            System.out.println("Вопроса по id: " + id + " не существует");
-        }
+        QuestionDto questionDto = questionDao.getQuestionDtoById(id);
+        if(questionDto != null){
+            questionDto.setListTagDto(tagDtoDao.getTagDtoListByQuestionId(id));}
         return questionDto;
     }
 }

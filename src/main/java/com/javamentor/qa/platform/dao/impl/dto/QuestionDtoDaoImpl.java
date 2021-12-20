@@ -17,7 +17,8 @@ public class QuestionDtoDaoImpl implements QuestionDtoDao {
 
     @Override
     public QuestionDto getQuestionDtoById(long id) {
-        QuestionDto questionDto = entityManager.createQuery(
+        QuestionDto answer = null;
+        Optional<QuestionDto> sss = SingleResultUtil.getSingleResultOrNull(entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto" +
                                 "(q.id, " +
                                 "q.title, " +
@@ -38,7 +39,7 @@ public class QuestionDtoDaoImpl implements QuestionDtoDao {
                                 "WHERE q.id =:id " +
                                 "GROUP BY q.id, q.user.fullName, q.user.imageLink",
                         QuestionDto.class)
-                .setParameter("id", id).getSingleResult();
-        return  questionDto;
+                .setParameter("id", id));
+        return  sss.isEmpty()? answer : sss.get();
     }
 }
