@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.greaterThan;
-import static org.hamcrest.Matchers.iterableWithSize;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -50,6 +49,18 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String TWO_UNIQUE_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/twoQuestionHasTagsAdded.yml";
     private static final String TWO_EXISTENT_TAGS_ADDED = "dataset/expected/resourceQuestionController/twoExistentIdTagsAdded.yml";
     private static final String TWO_EXISTENT_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/twoExistentIdQuestionHasTagAdded.yml";
+
+    private static final String ANSWER_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/answer.yml";
+    private static final String QUESTION_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/question.yml";
+    private static final String QUESTION_TAG_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/question_has_tag.yml";
+    private static final String REPUTATION_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/reputation.yml";
+    private static final String TAG_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/tag.yml";
+    private static final String ROLE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/role.yml";
+    private static final String USER_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/user.yml";
+    private static final String VOTE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/vote.yml";
+    private static final String IGNORE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/ignored.yml";
+    private static final String TRACK_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/tracked.yml";
+
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -246,5 +257,94 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("3"));
 
+    }
+
+    /*
+    * Пагинация вопросов по дате, сначала свежие
+    * */
+    @Test
+    @DataSet(value = {ANSWER_BY_DATE, QUESTION_BY_DATE, QUESTION_TAG_BY_DATE, REPUTATION_BY_DATE, TAG_BY_DATE,
+            ROLE_BY_DATE, USER_BY_DATE, VOTE_BY_DATE, IGNORE_BY_DATE, TRACK_BY_DATE}, disableConstraints = true)
+    public void getQuestionsByPersistDate() throws Exception {
+
+        String token = getToken("user100@user.ru", "user");
+
+        // стандартный запрос
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX +  token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 112, 110, 108,106, 104, 102, 100)))
+                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is( 105)))
+                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is( 100)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")));
+
+        // нет обязательного параметра - текущей страницы
+        mvc.perform(get("/api/user/question/new?items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
+                        .header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        // запрос на большее кол-во данных чем есть
+        mvc.perform(get("/api/user/question/new?currPage=2&items=300&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
+                        .header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // текущая страница велика
+        mvc.perform(get("/api/user/question/new?currPage=200&items=3&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
+                        .header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // нет ignoredTags параметров или не существует ignoredTag с заданным Id
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX +  token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 113, 112, 110, 109, 108, 106, 104, 102, 101, 100)))
+                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is(105)))
+                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is(104)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-27T00:00:00")));
+
+        // нет trackedTags параметров
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109").header(AUTH_HEADER, PREFIX +  token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 112, 110, 108,106, 104, 102, 100)))
+                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is( 105)))
+                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is( 100)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")));
+
+        // нет необязательных параметров, вывод 10 значений по умолчанию
+        mvc.perform(get("/api/user/question/new?currPage=1").header(AUTH_HEADER, PREFIX +  token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(115, 114, 113, 112, 111, 110, 109, 108, 107, 106)))
+                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is(109)))
+                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is(105)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-29T00:00:00")))
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-28T00:00:00")));
+
+        // произвольные параметры
+        mvc.perform(get("/api/user/question/new?currPage=1&items=4&ignoredTags=101&trackedTags=103").header(AUTH_HEADER, PREFIX +  token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder( 109, 108)))
+                .andExpect(jsonPath("$.items[0].listTagDto[*].id").value(containsInAnyOrder(100, 103, 108)))
+                .andExpect(jsonPath("$.items[1].listTagDto[*].id").value(containsInAnyOrder(100, 103, 104)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-23T00:00:00")))
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-22T00:00:00")));
     }
 }
