@@ -36,7 +36,8 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
                                 " q.user.fullName, q.user.imageLink, SUM(r.count), q.description, q.persistDateTime," +
                                 " q.lastUpdateDateTime, SUM(0), COUNT(answer.id)," +
-                                "SUM(0))" +
+                                "(Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - " +
+                                "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id))" +
                                 " FROM Question q JOIN q.tags t LEFT JOIN Answer answer ON q.user.id = answer.user.id" +
                                 " LEFT JOIN Reputation r ON q.user.id = r.author.id" +
                                 " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE :trackedIds IS NULL OR t.id IN :trackedIds)" +
@@ -87,5 +88,3 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
     }
 }
 
-//((Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - " +
-//        "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id))
