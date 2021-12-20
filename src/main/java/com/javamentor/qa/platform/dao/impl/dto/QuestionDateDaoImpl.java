@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository(value = "QuestionByDate")
@@ -52,19 +52,16 @@ public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
                         .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                         .getResultList();
 
-       List<Long> questionsId = questionDtos.stream().map(QuestionDto::getId).collect(Collectors.toList());
-
-       List<Tuple> tags = entityManager.createQuery("SELECT tag.id as tagId, tag.name as name, tag.description as description," +
-                                " q.id as qId From Tag tag JOIN tag.questions q WHERE q.id in :id", Tuple.class)
-                .setParameter("id", questionsId)
-                .getResultList();
-
-        Map<Long, List<TagDto>> map = new HashMap<>();
-
-        tags.forEach(tuple -> { map.computeIfAbsent(tuple.get("qId", Long.class), id -> new ArrayList<>())
-                    .add(new TagDto(tuple.get("tagId", Long.class), tuple.get("name", String.class),
-                    tuple.get("description", String.class)));
-        });
+        Map<Long, List<TagDto>> map = questionDtos.stream().collect(Collectors.toMap(
+                q -> (Long) q.getId(),
+                q ->
+                        entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
+                                        "FROM Tag tag " +
+                                        "JOIN tag.questions q WHERE q.id IN (:qId)" +
+                                        "GROUP BY tag.id", TagDto.class)
+                                .setParameter("qId", q.getId())
+                                .getResultList()
+        ));
 
         questionDtos.forEach(q -> q.setListTagDto(map.get(q.getId())));
 
