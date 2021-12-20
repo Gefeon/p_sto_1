@@ -27,7 +27,10 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String EMPTY = "dataset/TagResourceController/ignoredTags/Empty.yml";
     private static final String IGNORED_TAG_ENTITY = "dataset/TagResourceController/ignoredTags/IgnoredTag.yml";
     private static final String OTHER_USER_IGNORED_TAG_ENTITY = "dataset/TagResourceController/ignoredTags/OtherUserIgnoredTag.yml";
+    private static final String TAG_ENTITY_TRACKED = "dataset/TagResourceController/trackedTags/Tag.yml";
+    private static final String TRACKED_TAG_ENTITY = "dataset/TagResourceController/trackedTags/TrackedTag.yml";
 
+    private static final String GET_TRACKED_TAGS = "/api/user/tag/tracked";
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";
     private static final String GET_IGNORED_TAGS = "/api/user/tag/ignored";
     private static final String GET_TAGS_BY_LETTERS = "/api/user/tag/letters";
@@ -44,6 +47,7 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(status().isOk());
     }
 
+
     @Test
     @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getAllIgnoredTags_returnStatusOkAndCorrectTags() throws Exception {
@@ -54,6 +58,7 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$[0].description", nullValue()));
     }
 
+
     @Test
     @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoUserRelated_returnEmptyArray() throws Exception {
@@ -62,12 +67,25 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 
+
+
     @Test
     @DataSet(value = {EMPTY, USER_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoTagsInBD_returnEmptyArray() throws Exception {
         ResultActions response = mvc.perform(get(GET_IGNORED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
+    }
+
+
+    @Test
+    @DataSet(value = {USER_ENTITY, TAG_ENTITY_TRACKED, TRACKED_TAG_ENTITY}, disableConstraints = true)
+    public void getAllTrackedTags() throws Exception {
+        mvc.perform(get(GET_TRACKED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[*]", hasSize(3)))
+                .andExpect(jsonPath("$[*].id", containsInAnyOrder(100, 101, 102)))
+                .andExpect(jsonPath("$[0].description", nullValue()));
     }
 
     @Test
