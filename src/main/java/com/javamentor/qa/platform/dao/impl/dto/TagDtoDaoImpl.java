@@ -8,11 +8,14 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
+@SuppressWarnings("unchecked")
 public class TagDtoDaoImpl implements TagDtoDao {
 
     @PersistenceContext
@@ -53,17 +56,19 @@ public class TagDtoDaoImpl implements TagDtoDao {
     }
 
     @Override
-    public  Map<Long, List<TagDto>> getMapTagsByQuestionId(List<Long> questionId) {
-        return questionId.stream().collect(Collectors.toMap(
-                q -> q,
-                q ->
-                        em.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
-                                        "FROM Tag tag " +
-                                        "JOIN tag.questions q WHERE q.id IN (:qId)" +
-                                        "GROUP BY tag.id", TagDto.class)
-                                .setParameter("qId", q)
-                                .getResultList()
-        ));
+    public  Map<Long, List<TagDto>> getMapTagsByQuestionIds(List<Long> questionIds) {
+        List<Tuple> tags = em.createQuery("SELECT tag.id as tagId, tag.name as name, tag.description as description," +
+                        " q.id as qId From Tag tag JOIN tag.questions q WHERE q.id IN :questionIds", Tuple.class)
+                .setParameter("questionIds", questionIds)
+                .getResultList();
+
+        Map<Long, List<TagDto>> tagsMap = new HashMap<>();
+
+        tags.forEach(tuple -> {
+            tagsMap.computeIfAbsent(tuple.get("qId", Long.class), key -> new ArrayList<>())
+                    .add(new TagDto(tuple.get("tagId", Long.class), tuple.get("name", String.class), tuple.get("description", String.class)));
+        });
+        return tagsMap;
     }
 }
 

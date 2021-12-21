@@ -2,14 +2,12 @@ package com.javamentor.qa.platform.dao.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.TagDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository(value = "QuestionByDate")
 public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
@@ -58,7 +56,7 @@ public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
         List<Long> ignoredTags = (List<Long>) param.get("ignoredTags");
         List<Long> trackedTags = (List<Long>) param.get("trackedTags");
 
-        return (Long) entityManager.createQuery("SELECT COUNT(DISTINCT q.persistDateTime) FROM Question q JOIN q.tags tgs" +
+        return (Long) entityManager.createQuery("SELECT COUNT(q.id) FROM Question q JOIN q.tags tgs" +
                         " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags tgs WHERE :tracked IS NULL OR tgs.id IN :tracked)" +
                         " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags tgs WHERE tgs.id IN :ignored)")
                 .setParameter("tracked", trackedTags)
