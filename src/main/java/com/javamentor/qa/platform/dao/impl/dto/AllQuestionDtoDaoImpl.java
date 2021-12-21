@@ -1,20 +1,14 @@
 package com.javamentor.qa.platform.dao.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
-import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.TagDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Repository(value = "AllQuestions")
 public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {

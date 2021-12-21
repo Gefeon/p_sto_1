@@ -3,9 +3,7 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.entity.question.IgnoredTag;
 import com.javamentor.qa.platform.models.entity.question.Question;
-import com.javamentor.qa.platform.models.entity.question.TrackedTag;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.models.mapper.QuestionMapper;
@@ -38,13 +36,16 @@ import java.util.Map;
 public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
+
     private final QuestionService questionService;
+
     private final VoteQuestionService voteQuestionService;
     private final QuestionDtoService questionDtoService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
                                       QuestionService questionService,
-                                      VoteQuestionService voteQuestionService, QuestionDtoService questionDtoService) {
+                                      VoteQuestionService voteQuestionService,
+                                      QuestionDtoService questionDtoService) {
         this.questionMapper = questionMapper;
         this.questionService = questionService;
         this.voteQuestionService = voteQuestionService;

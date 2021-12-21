@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @AllArgsConstructor
@@ -37,11 +36,11 @@ public class QuestionDto {
     private Long authorId;
     private String authorName;
     private String authorImage;
-    private Long authorReputation;
     private String description;
     private Long viewCount;
     private Long countAnswer;
     private Long countValuable;
+    private Long authorReputation;
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();

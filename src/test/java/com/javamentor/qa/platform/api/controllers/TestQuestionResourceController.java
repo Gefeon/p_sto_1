@@ -44,7 +44,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
-    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/answer.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
     private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
 
