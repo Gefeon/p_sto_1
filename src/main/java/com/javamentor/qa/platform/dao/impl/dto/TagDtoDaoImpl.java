@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 public class TagDtoDaoImpl implements TagDtoDao {
@@ -48,6 +50,20 @@ public class TagDtoDaoImpl implements TagDtoDao {
                         "FROM Tag tag WHERE tag.name LIKE :letters", TagDto.class)
                 .setParameter("letters", MatchMode.ANYWHERE.toMatchString(letters))
                 .setMaxResults(6).getResultList();
+    }
+
+    @Override
+    public  Map<Long, List<TagDto>> getMapTagsByQuestionId(List<Long> questionId) {
+        return questionId.stream().collect(Collectors.toMap(
+                q -> q,
+                q ->
+                        em.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
+                                        "FROM Tag tag " +
+                                        "JOIN tag.questions q WHERE q.id IN (:qId)" +
+                                        "GROUP BY tag.id", TagDto.class)
+                                .setParameter("qId", q)
+                                .getResultList()
+        ));
     }
 }
 

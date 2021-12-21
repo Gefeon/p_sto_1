@@ -26,7 +26,7 @@ public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
         List<Long> ignoredTags = (List<Long>) param.get("ignoredTags");
         List<Long> trackedTags = (List<Long>) param.get("trackedTags");
 
-        List<QuestionDto> questionDtos = entityManager.createQuery(
+        return entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto" +
                                 "(q.id, " +
                                 "q.title, " +
@@ -51,25 +51,18 @@ public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
                         .setParameter("tracked", trackedTags)
                         .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                         .getResultList();
-
-        Map<Long, List<TagDto>> map = questionDtos.stream().collect(Collectors.toMap(
-                q -> (Long) q.getId(),
-                q ->
-                        entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagDto(tag.id, tag.name, tag.description)" +
-                                        "FROM Tag tag " +
-                                        "JOIN tag.questions q WHERE q.id IN (:qId)" +
-                                        "GROUP BY tag.id", TagDto.class)
-                                .setParameter("qId", q.getId())
-                                .getResultList()
-        ));
-
-        questionDtos.forEach(q -> q.setListTagDto(map.get(q.getId())));
-
-        return questionDtos;
     }
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return (Long) entityManager.createQuery("SELECT count (id) FROM Question").getSingleResult();
+        List<Long> ignoredTags = (List<Long>) param.get("ignoredTags");
+        List<Long> trackedTags = (List<Long>) param.get("trackedTags");
+
+        return (Long) entityManager.createQuery("SELECT COUNT(DISTINCT q.persistDateTime) FROM Question q JOIN q.tags tgs" +
+                        " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags tgs WHERE :tracked IS NULL OR tgs.id IN :tracked)" +
+                        " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags tgs WHERE tgs.id IN :ignored)")
+                .setParameter("tracked", trackedTags)
+                .setParameter("ignored", ignoredTags)
+                .getSingleResult();
     }
 }
