@@ -46,6 +46,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
     private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
+    private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
@@ -361,9 +362,9 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items").value(hasSize(20)));
     }
 
-    // тест пагинации и корректности выводимых
+    // тест пагинации и корректности выводимых данных для репутации, голосования за вопрос, подсчёта ответов
     @Test
-    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY, VOTE_QUESTION_ENTITY}, disableConstraints = true)
     public void getAllQuestionDtoPaginationCheck_expectedCorrectData() throws Exception {
         mvc.perform(get(url + "?currPage=2&ignoredId=100&ignoredId=101&ignoredId=103&items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
@@ -375,7 +376,9 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.currentPageNumber").value(2))
                 .andExpect(jsonPath("$.itemsOnPage").value(4))
                 .andExpect(jsonPath("$.totalPageCount").value(3))
-                .andExpect(jsonPath("$.totalResultCount").value(9));
+                .andExpect(jsonPath("$.totalResultCount").value(9))
+                .andExpect(jsonPath("$.items[*].countAnswer").value(containsInRelativeOrder( 2, 1, 0, 0)))
+                .andExpect(jsonPath("$.items[*].authorReputation").value(containsInRelativeOrder( 30, 30, 30, -5)));
 
     }
 
