@@ -30,16 +30,8 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
     @SuppressWarnings("unchecked")
     public PageDto<QuestionDto> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 
-        PageDtoDao<QuestionDto> pageDtoDao = (PageDtoDao<QuestionDto>) pageDtoDaoMap.get((String) map.get("class"));
-
-        map.put("currentPageNumber", currentPageNumber);
-        map.put("itemsOnPage", itemsOnPage);
-
-        long totalResultCount = pageDtoDao.getTotalResultCount(map);
-
-        int totalPageCount = (int) Math.ceil((double) totalResultCount / itemsOnPage);
-
-        List<QuestionDto> questionDtos = pageDtoDao.getItems(map);
+        PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber,itemsOnPage,map);
+        List<QuestionDto> questionDtos = pageDto.getItems();
 
         List<Long> questionIds = questionDtos.stream()
                 .map(QuestionDto::getId)
@@ -57,7 +49,7 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
             questionDto.setListTagDto(tagsMap.get(questionDto.getId()));
         }
 
-        return new PageDto<>(currentPageNumber, totalPageCount,
-                itemsOnPage, totalResultCount, questionDtos);
+        pageDto.setItems(questionDtos);
+        return pageDto;
     }
 }
