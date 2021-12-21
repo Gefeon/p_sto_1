@@ -27,7 +27,7 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
                         "LEFT JOIN VoteQuestion vq on u.id = vq.user.id" +
                         "LEFT JOIN VoteAnswer va on u.id = va.user.id" +
                         "GROUP BY u.id, va.vote, vq.vote" +
-                        "ORDER BY cast(vq.vote as integer)+cast(va.vote as integer) desc", UserDto.class)
+                        "ORDER BY count(vq.vote)+count(va.vote) desc", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
         return resultList;
