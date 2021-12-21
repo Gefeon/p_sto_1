@@ -7,7 +7,6 @@ import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class QuestionDtoServiceImpl implements QuestionDtoService {
 
@@ -23,8 +22,9 @@ public class QuestionDtoServiceImpl implements QuestionDtoService {
     @Override
     public QuestionDto getQuestionDtoById(long id) {
         QuestionDto questionDto = questionDao.getQuestionDtoById(id);
-        if(questionDto != null){
-            questionDto.setListTagDto(tagDtoDao.getTagDtoListByQuestionId(id));}
+        if (questionDto != null) {
+            questionDto.setListTagDto(tagDtoDao.getTagDtoListByQuestionId(id));
+        }
         return questionDto;
     }
 }
