@@ -26,23 +26,23 @@ public class QuestionDto {
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto;
 
-    public QuestionDto(Long id, String title, String description,
-                        LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime, Long authorId,
-                       String authorName, String authorImage, Long authorReputation, Long countValuable,
-                       Long countAnswer
+    public QuestionDto(Long id, String title, Long authorId, String authorName, String authorImage, String description,
+                       Long viewCount,
+                       Long countAnswer, Long countValuable, Long authorReputation,
+                       LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime
                         ) {
         this.id = id;
         this.title = title;
-        this.description = description;
-        this.persistDateTime = persistDateTime;
-        this.lastUpdateDateTime = lastUpdateDateTime;
         this.authorId = authorId;
         this.authorName = authorName;
         this.authorImage = authorImage;
-        this.authorReputation = authorReputation;
-        this.countValuable = countValuable;
+        this.description = description;
+        this.viewCount = viewCount;
         this.countAnswer= countAnswer;
-
+        this.countValuable = countValuable;
+        this.authorReputation = authorReputation;
+        this.persistDateTime = persistDateTime;
+        this.lastUpdateDateTime = lastUpdateDateTime;
 
     }
 }
