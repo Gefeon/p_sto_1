@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.dao.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
+import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,8 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
             ignoredIds = new ArrayList<>();
             ignoredIds.add(-1L);
         }
-        List<QuestionDto> questionDtos = entityManager.createQuery(
+
+        return entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
                                 " q.user.fullName, q.user.imageLink, SUM(r.count), q.description, q.persistDateTime," +
                                 " q.lastUpdateDateTime, SUM(0), COUNT(answer.id)," +
@@ -47,27 +49,6 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
                 .setParameter("ignoredIds", ignoredIds)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
-        List<Long> questionIds = questionDtos.stream()
-                .map(QuestionDto::getId)
-                .collect(Collectors.toList());
-
-        Stream<Tuple> tags = entityManager.createQuery(
-                        "SELECT t.id as tag_id, t.name as tag_name, t.description as tag_description," +
-                                " q.id as question_id From Tag t JOIN t.questions q WHERE q.id in :ids", Tuple.class)
-                .setParameter("ids", questionIds)
-                .getResultStream();
-
-        Map<Long, List<TagDto>> tagsMap = new HashMap<>();
-        tags.forEach(tuple -> {
-            tagsMap.computeIfAbsent(tuple.get("question_id", Long.class), id -> new ArrayList<>())
-                    .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class)));
-        });
-
-        for (QuestionDto questionDto : questionDtos) {
-            questionDto.setListTagDto(tagsMap.get(questionDto.getId()));
-        }
-
-        return questionDtos;
     }
 
     @Override

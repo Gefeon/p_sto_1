@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import java.util.List;
 
 @Repository
@@ -48,6 +49,15 @@ public class TagDtoDaoImpl implements TagDtoDao {
                         "FROM Tag tag WHERE tag.name LIKE :letters", TagDto.class)
                 .setParameter("letters", MatchMode.ANYWHERE.toMatchString(letters))
                 .setMaxResults(6).getResultList();
+    }
+
+    @Override
+    public List<Tuple> getTagsTupleByQuestionIds(List<Long> questionIds){
+        return em.createQuery(
+                        "SELECT t.id as tag_id, t.name as tag_name, t.description as tag_description," +
+                                " q.id as question_id From Tag t JOIN t.questions q WHERE q.id in :ids", Tuple.class)
+                .setParameter("ids", questionIds)
+                .getResultList();
     }
 }
 
