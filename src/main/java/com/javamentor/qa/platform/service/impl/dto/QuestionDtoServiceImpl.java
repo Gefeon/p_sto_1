@@ -37,14 +37,7 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
                 .map(QuestionDto::getId)
                 .collect(Collectors.toList());
 
-        List<Tuple> tags = tagDtoDao.getTagsTupleByQuestionIds(questionIds);
-
-        Map<Long, List<TagDto>> tagsMap = new HashMap<>();
-        tags.forEach(tuple -> {
-            tagsMap.computeIfAbsent(tuple.get("question_id", Long.class), id -> new ArrayList<>())
-                    .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class)));
-        });
-
+        Map<Long, List<TagDto>> tagsMap = tagDtoDao.getMapTagsByQuestionIds(questionIds);
         for (QuestionDto questionDto : questionDtos) {
             questionDto.setListTagDto(tagsMap.get(questionDto.getId()));
         }

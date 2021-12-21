@@ -378,8 +378,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.totalPageCount").value(3))
                 .andExpect(jsonPath("$.totalResultCount").value(9))
                 .andExpect(jsonPath("$.items[*].countAnswer").value(containsInRelativeOrder( 2, 1, 0, 0)))
-                .andExpect(jsonPath("$.items[*].authorReputation").value(containsInRelativeOrder( 30, 30, 30, -5)));
-
+                .andExpect(jsonPath("$.items[*].authorReputation").value(containsInRelativeOrder( 30, 30, 30, -5)))
+                .andExpect(jsonPath("$.items[*].countValuable").value(containsInRelativeOrder( 2, -2, 1, -1)));
     }
 
     @Test

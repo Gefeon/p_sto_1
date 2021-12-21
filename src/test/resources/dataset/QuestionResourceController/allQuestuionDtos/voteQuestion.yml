@@ -42,10 +42,10 @@ votes_on_questions:
   - id: 108
     persist_date: "2021-10-11 13:07:00.000000"
     vote: "UP_VOTE"
-    question_id: 103
+    question_id: 110
     user_id: 101
   - id: 109
     persist_date: "2021-10-11 13:07:00.000000"
     vote: "DOWN_VOTE"
-    question_id: 104
+    question_id: 111
     user_id: 101

@@ -5,6 +5,7 @@ import com.javamentor.qa.platform.models.dto.TagDto;
 
 import javax.persistence.Tuple;
 import java.util.List;
+import java.util.Map;
 
 public interface TagDtoDao {
 
@@ -16,5 +17,5 @@ public interface TagDtoDao {
 
     List<TagDto> getTagsByLetters(String letters);
 
-    List<Tuple> getTagsTupleByQuestionIds(List<Long> ids);
+    Map<Long, List<TagDto>> getMapTagsByQuestionIds(List<Long> QuestionIds);
 }
