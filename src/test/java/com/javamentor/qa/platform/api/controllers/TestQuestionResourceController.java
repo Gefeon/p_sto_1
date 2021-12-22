@@ -278,7 +278,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].listTagDto[0].id", is( 105)))
                 .andExpect(jsonPath("$.items[1].listTagDto[0].id", is( 100)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
-                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")));
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")))
+                .andExpect(jsonPath("$.totalResultCount", is(8)));
 
         // нет обязательного параметра - текущей страницы
         mvc.perform(get("/api/user/question/new?items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
@@ -312,7 +313,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].listTagDto[0].id", is(105)))
                 .andExpect(jsonPath("$.items[1].listTagDto[0].id", is(104)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
-                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-27T00:00:00")));
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-27T00:00:00")))
+                .andExpect(jsonPath("$.totalResultCount", is(11)));
 
         // нет trackedTags параметров
         mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109").header(AUTH_HEADER, PREFIX +  token))
@@ -323,7 +325,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].listTagDto[0].id", is( 105)))
                 .andExpect(jsonPath("$.items[1].listTagDto[0].id", is( 100)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
-                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")));
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")))
+                .andExpect(jsonPath("$.totalResultCount", is(8)));
 
         // нет необязательных параметров, вывод 10 значений по умолчанию
         mvc.perform(get("/api/user/question/new?currPage=1").header(AUTH_HEADER, PREFIX +  token))
@@ -334,7 +337,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].listTagDto[0].id", is(109)))
                 .andExpect(jsonPath("$.items[1].listTagDto[0].id", is(105)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-29T00:00:00")))
-                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-28T00:00:00")));
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-28T00:00:00")))
+                .andExpect(jsonPath("$.totalResultCount", is(16)));
 
         // произвольные параметры
         mvc.perform(get("/api/user/question/new?currPage=1&items=4&ignoredTags=101&trackedTags=103").header(AUTH_HEADER, PREFIX +  token))
@@ -345,6 +349,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].listTagDto[*].id").value(containsInAnyOrder(100, 103, 108)))
                 .andExpect(jsonPath("$.items[1].listTagDto[*].id").value(containsInAnyOrder(100, 103, 104)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-23T00:00:00")))
-                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-22T00:00:00")));
+                .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-22T00:00:00")))
+                .andExpect(jsonPath("$.totalResultCount", is(2)));
     }
 }
