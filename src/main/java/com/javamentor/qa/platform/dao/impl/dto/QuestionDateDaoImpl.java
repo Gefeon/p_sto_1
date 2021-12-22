@@ -56,7 +56,7 @@ public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
         List<Long> ignoredTags = (List<Long>) param.get("ignoredTags");
         List<Long> trackedTags = (List<Long>) param.get("trackedTags");
 
-        return (Long) entityManager.createQuery("SELECT COUNT(q.id) FROM Question q JOIN q.tags tgs" +
+        return (Long) entityManager.createQuery("SELECT COUNT(DISTINCT q.id) FROM Question q JOIN q.tags tgs" +
                         " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags tgs WHERE :tracked IS NULL OR tgs.id IN :tracked)" +
                         " AND q.id NOT IN (SELECT q.id From Question q JOIN q.tags tgs WHERE tgs.id IN :ignored)")
                 .setParameter("tracked", trackedTags)
