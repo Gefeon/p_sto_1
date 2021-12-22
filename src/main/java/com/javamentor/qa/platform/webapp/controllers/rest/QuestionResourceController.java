@@ -14,20 +14,27 @@ import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.constraints.Positive;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -40,6 +47,7 @@ public class QuestionResourceController {
     private final QuestionService questionService;
 
     private final VoteQuestionService voteQuestionService;
+
     private final QuestionDtoService questionDtoService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
@@ -106,6 +114,25 @@ public class QuestionResourceController {
     public ResponseEntity<Long> count() {
         Long count = questionService.countQuestions();
         return ResponseEntity.ok(count);
+    }
+
+    @Operation(summary = "Get list of questions by date", responses = {
+            @ApiResponse(description = "Got list of questions", responseCode = "200",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionDto.class)))),
+            @ApiResponse(description = "Too much value of parameters currPage or items - return empty List<QuestionDto>",
+                    responseCode = "200"),
+            @ApiResponse(description = "Wrong parameters or absent current page", responseCode = "400", content = @Content)
+    })
+    @GetMapping("new")
+    public ResponseEntity<?> getQuestionByDate(@RequestParam int currPage,
+                                 @RequestParam(required = false, defaultValue = "10") int items,
+                                 @RequestParam(required = false, defaultValue = "0") List<Long> ignoredTags,
+                                 @RequestParam(required = false) List<Long> trackedTags) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("class", "QuestionByDate");
+        map.put("ignoredTags", ignoredTags);
+        map.put("trackedTags", trackedTags);
+        return ResponseEntity.ok(questionDtoService.getPage(currPage, items, map));
     }
 
 

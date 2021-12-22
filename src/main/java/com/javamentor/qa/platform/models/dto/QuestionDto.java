@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class QuestionDto {
     public QuestionDto(Long id, String title, Long authorId,
                        String authorName, String authorImage, Long authorReputation,
@@ -44,4 +44,21 @@ public class QuestionDto {
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();
+
+    public QuestionDto(Long id, String title, Long authorId, String authorName, String authorImage, String description,
+                       Long viewCount, Long countAnswer, Long countValuable, Long authorReputation,
+                       LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime) {
+        this.id = id;
+        this.title = title;
+        this.authorId = authorId;
+        this.authorName = authorName;
+        this.authorImage = authorImage;
+        this.description = description;
+        this.viewCount = viewCount;
+        this.countAnswer = countAnswer;
+        this.countValuable = countValuable;
+        this.authorReputation = authorReputation;
+        this.persistDateTime = persistDateTime;
+        this.lastUpdateDateTime = lastUpdateDateTime;
+    }
 }
