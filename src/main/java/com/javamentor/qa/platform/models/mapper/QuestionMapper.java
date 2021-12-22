@@ -18,11 +18,12 @@ public abstract class QuestionMapper {
     @Mapping(target = "countAnswer", constant = "0L")
     @Mapping(target = "countValuable", constant = "0L")
     @Mapping(target = "viewCount", constant = "0L")
-    @Mapping( source = "question.user.id", target = "authorId")
-    @Mapping( source = "question.user.fullName", target = "authorName")
-    @Mapping( source = "question.user.imageLink", target = "authorImage")
+    @Mapping(source = "question.user.id", target = "authorId")
+    @Mapping(source = "question.user.fullName", target = "authorName")
+    @Mapping(source = "question.user.imageLink", target = "authorImage")
+    @Mapping(target = "authorReputation", constant = "0L")
     public abstract QuestionDto persistConvertToDto(Question question);
 
     public abstract Question toModel(QuestionCreateDto questionCreateDto);
-
+    
 }
