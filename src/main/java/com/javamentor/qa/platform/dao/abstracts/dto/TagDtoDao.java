@@ -3,7 +3,9 @@ package com.javamentor.qa.platform.dao.abstracts.dto;
 import com.javamentor.qa.platform.models.dto.RelatedTagsDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
 
+import javax.persistence.Tuple;
 import java.util.List;
+import java.util.Map;
 
 public interface TagDtoDao {
 
@@ -14,4 +16,6 @@ public interface TagDtoDao {
     List<RelatedTagsDto> getRelatedTagsDto();
 
     List<TagDto> getTagsByLetters(String letters);
+
+    Map<Long, List<TagDto>> getMapTagsByQuestionIds(List<Long> QuestionIds);
 }
