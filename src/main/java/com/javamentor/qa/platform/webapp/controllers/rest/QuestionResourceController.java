@@ -21,10 +21,17 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -70,13 +77,10 @@ public class QuestionResourceController {
 
     @GetMapping("/question/{id}")
     public ResponseEntity<?> getQuestionDtoById(@PathVariable long id) {
-        QuestionDto test = questionGetDtoService.getQuestionDtoById(id);
-        if (test == null) {
-            return new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST);
-        } else {
-            QuestionDto questionDto = questionGetDtoService.getQuestionDtoById(id);
-            return new ResponseEntity<>(questionDto, HttpStatus.OK);
-        }
+        Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
+        return questionDto.isEmpty()
+                ? new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST)
+                : new ResponseEntity<>(questionDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Up Vote on this Question", responses = {
