@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@SuppressWarnings("unchecked")
 public class TagDtoDaoImpl implements TagDtoDao {
 
     @PersistenceContext
