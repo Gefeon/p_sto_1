@@ -30,7 +30,7 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
     @SuppressWarnings("unchecked")
     public PageDto<QuestionDto> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 
-        PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber,itemsOnPage,map);
+        PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber, itemsOnPage, map);
         List<QuestionDto> questionDtos = pageDto.getItems();
 
         List<Long> questionIds = questionDtos.stream()
@@ -47,6 +47,7 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
     }
 
     @Override
+    @Transactional
     public Optional<QuestionDto> getQuestionDtoById(long id) {
         Optional<QuestionDto> questionDto = questionDao.getQuestionDtoById(id);
         if (!questionDto.isEmpty()) {

@@ -20,7 +20,6 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -52,8 +51,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/Reputation.yml";
     private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/QuestionVote.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
-    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
-    private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
+//    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
+    private static final String VOTE_QUESTION_ENTITY1 = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
@@ -383,7 +382,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     // тест пагинации и корректности выводимых данных для репутации, голосования за вопрос, подсчёта ответов
     @Test
-    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY, VOTE_QUESTION_ENTITY}, disableConstraints = true)
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY, VOTE_QUESTION_ENTITY1}, disableConstraints = true)
     public void getAllQuestionDtoPaginationCheck_expectedCorrectData() throws Exception {
         mvc.perform(get(url + "?currPage=2&ignoredId=100&ignoredId=101&ignoredId=103&items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
@@ -524,7 +523,10 @@ public class TestQuestionResourceController extends AbstractTestApi {
             VOTE_QUESTION_ENTITY,
             QUESTION_HAS_TAG_ENTITY}, disableConstraints = true)
     public void getQuestionDtoById() throws Exception {
-        mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+
+        String token = getToken("user100@user.ru", "user");
+
+        mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(100)))
@@ -544,7 +546,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
         /*
          * Проверка на не существующий ID
          * */
-        mvc.perform(get("/api/user/question/1000").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+        mvc.perform(get("/api/user/question/1000").header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").value("Missing question or invalid id"));

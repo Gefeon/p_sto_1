@@ -26,22 +26,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-
 
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.validation.constraints.Positive;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
@@ -61,11 +55,10 @@ public class QuestionResourceController {
     private final QuestionDtoService questionDtoService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
-                                      QuestionService questionService,
+                                      QuestionDtoService questionGetDtoService, QuestionService questionService,
                                       VoteQuestionService voteQuestionService,
                                       QuestionDtoService questionDtoService) {
-                                      QuestionDtoService questionGetDtoService, QuestionService questionService,
-                                      VoteQuestionService voteQuestionService) {
+
         this.questionMapper = questionMapper;
         this.questionGetDtoService = questionGetDtoService;
         this.questionService = questionService;
@@ -93,8 +86,8 @@ public class QuestionResourceController {
             @ApiResponse(description = "Received if no question with such id exists in DB", responseCode = "400")
     })
 
-    @GetMapping("/question/{id}")
-    public ResponseEntity<?> getQuestionDtoById(@PathVariable long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getQuestionDtoById(@PathVariable("id") Long id) {
         Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
         return questionDto.isEmpty()
                 ? new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST)
