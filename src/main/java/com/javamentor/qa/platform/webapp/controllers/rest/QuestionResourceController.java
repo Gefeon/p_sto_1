@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,15 +26,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
+
 
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.validation.constraints.Positive;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
@@ -44,6 +46,8 @@ public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
 
+    private final QuestionDtoService questionGetDtoService;
+
     private final QuestionService questionService;
 
     private final VoteQuestionService voteQuestionService;
@@ -51,10 +55,12 @@ public class QuestionResourceController {
     private final QuestionDtoService questionDtoService;
 
     public QuestionResourceController(QuestionMapper questionMapper,
-                                      QuestionService questionService,
+                                      QuestionDtoService questionGetDtoService, QuestionService questionService,
                                       VoteQuestionService voteQuestionService,
                                       QuestionDtoService questionDtoService) {
+
         this.questionMapper = questionMapper;
+        this.questionGetDtoService = questionGetDtoService;
         this.questionService = questionService;
         this.voteQuestionService = voteQuestionService;
         this.questionDtoService = questionDtoService;
@@ -72,6 +78,20 @@ public class QuestionResourceController {
         Question question = questionMapper.toModel(questionCreateDto);
         questionService.persist(question);
         return ResponseEntity.status(HttpStatus.OK).body(questionMapper.persistConvertToDto(question));
+    }
+
+    @Operation(summary = "Getting dto by id", responses = {
+            @ApiResponse(description = "Successful receipt of dto questions on ID", responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = QuestionDto.class))),
+            @ApiResponse(description = "Received if no question with such id exists in DB", responseCode = "400")
+    })
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getQuestionDtoById(@PathVariable("id") Long id) {
+        Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
+        return questionDto.isEmpty()
+                ? new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST)
+                : new ResponseEntity<>(questionDto, HttpStatus.OK);
     }
 
     @Operation(summary = "Up Vote on this Question", responses = {
