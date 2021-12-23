@@ -1,14 +1,14 @@
 package com.javamentor.qa.platform.models.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDto {
@@ -58,6 +58,23 @@ public class QuestionDto {
         this.countAnswer = countAnswer;
         this.countValuable = countValuable;
         this.authorReputation = authorReputation;
+        this.persistDateTime = persistDateTime;
+        this.lastUpdateDateTime = lastUpdateDateTime;
+    }
+
+    public QuestionDto(Long id, String title, Long authorId, Long authorReputation, String authorName,
+                       String authorImage, String description, Long viewCount, Long countAnswer, Long countValuable,
+                       LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime) {
+        this.id = id;
+        this.title = title;
+        this.authorId = authorId;
+        this.authorReputation = authorReputation;
+        this.authorName = authorName;
+        this.authorImage = authorImage;
+        this.description = description;
+        this.viewCount = viewCount;
+        this.countAnswer = countAnswer;
+        this.countValuable = countValuable;
         this.persistDateTime = persistDateTime;
         this.lastUpdateDateTime = lastUpdateDateTime;
     }

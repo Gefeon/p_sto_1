@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.service.impl.dto;
 
+import com.javamentor.qa.platform.dao.abstracts.dto.QuestionDtoDao;
 import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
@@ -10,14 +11,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> implements QuestionDtoService {
 
+    private final QuestionDtoDao questionDao;
     private final TagDtoDao tagDtoDao;
 
-    public QuestionDtoServiceImpl(TagDtoDao tagDtoDao) {
+    public QuestionDtoServiceImpl(QuestionDtoDao questionDao, TagDtoDao tagDtoDao) {
+        this.questionDao = questionDao;
         this.tagDtoDao = tagDtoDao;
     }
 
@@ -26,7 +30,7 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
     @SuppressWarnings("unchecked")
     public PageDto<QuestionDto> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 
-        PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber,itemsOnPage,map);
+        PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber, itemsOnPage, map);
         List<QuestionDto> questionDtos = pageDto.getItems();
 
         List<Long> questionIds = questionDtos.stream()
@@ -40,5 +44,15 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
 
         pageDto.setItems(questionDtos);
         return pageDto;
+    }
+
+    @Override
+    @Transactional
+    public Optional<QuestionDto> getQuestionDtoById(long id) {
+        Optional<QuestionDto> questionDto = questionDao.getQuestionDtoById(id);
+        if (!questionDto.isEmpty()) {
+            questionDto.get().setListTagDto(tagDtoDao.getTagDtoListByQuestionId(id));
+        }
+        return questionDto;
     }
 }
