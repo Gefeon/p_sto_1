@@ -277,26 +277,17 @@ public class TestUserResourceController extends AbstractTestApi {
      * Тест пагинации userDto по голосам
      * */
     @Test
-    @DataSet(value = {USER_ENTITY, REPUTATION_ENTITY, USER_BY_VOTE_ANSWER, USER_BY_VOTE_QUESTION}, disableConstraints = true)
+    @DataSet(value = {USER_BY_PERSIST_DATE,REPUTATION_BY_PERSIST_DATE, USER_BY_VOTE_ANSWER,USER_BY_VOTE_QUESTION}, disableConstraints = true)
     public void getPaginationByVote() throws Exception {
 
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-
-        TokenResponseDto token = objectMapper.readValue(mvc
-                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+        ResultActions response = mvc.perform(get("/api/user/new?currPage=2&items=5").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        response.andDo(print())
                 .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
-
-        // стандартный запрос
-        mvc.perform(get("/api/user/vote?currPage=2&items=3").header(AUTH_HEADER, PREFIX + token.getToken()))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$").hasJsonPath())
                 .andExpect(jsonPath("$.currentPageNumber", is(2)))
-                .andExpect(jsonPath("$.totalPageCount", is(2)))
-                .andExpect(jsonPath("$.itemsOnPage", is(3)))
-                .andExpect(jsonPath("$.totalResultCount", is(4)))
-                .andExpect(jsonPath("$.items").isNotEmpty());
+                .andExpect(jsonPath("$.totalPageCount", is(3)))
+                .andExpect(jsonPath("$.itemsOnPage", is(5)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").value(hasSize(5)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(104, 105, 106, 108, 109)));
     }
 }

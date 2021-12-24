@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Map;
 
@@ -21,16 +22,20 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
 
 
-        List<UserDto> resultList = entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
-                        "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(r.count )) " +
-                        "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +
-                        "LEFT JOIN VoteQuestion vq on u.id = vq.user.id" +
-                        "LEFT JOIN VoteAnswer va on u.id = va.user.id" +
-                        "GROUP BY u.id, va.vote, vq.vote" +
-                        "ORDER BY count(vq.vote)+count(va.vote) desc", UserDto.class)
+        List<Tuple> resultList = entityManager.createQuery("SELECT " +
+                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(r.count )," +
+                        "((Select count(vq.vote) from VoteQuestion vq WHERE vq.user.id = u.id) +" +
+                        "(Select count(va.vote) from VoteAnswer va where va.user.id = u.id)) as sort " +
+                        " FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +
+                        " GROUP BY u.id" +
+                        " ORDER BY sort desc", Tuple.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
-        return resultList;
+        System.out.println(resultList);
+
+        return null;
+
+
     }
 
     @Override
