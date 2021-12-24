@@ -271,7 +271,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].authorImage", is("test.ru")))
                 .andExpect(jsonPath("$.items[0].description", is("fix lazyInitialization Exception")))
                 .andExpect(jsonPath("$.items[0].viewCount", is(0)))
-                .andExpect(jsonPath("$.items[0].countAnswer", is(1)))
+                .andExpect(jsonPath("$.items[0].countAnswer", is(0)))
                 .andExpect(jsonPath("$.items[0].countValuable", is(1)))
                 .andExpect(jsonPath("$.items[0].authorReputation", is(1)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-30T00:29:29.62381")))
