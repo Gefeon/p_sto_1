@@ -3,7 +3,6 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
@@ -24,14 +23,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.validation.constraints.Positive;
 
 @Api(tags = {SwaggerConfig.QUESTION_CONTROLLER})
 @RestController
@@ -40,8 +40,6 @@ import javax.validation.constraints.Positive;
 public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
-
-    private final QuestionDtoService questionGetDtoService;
 
     private final QuestionService questionService;
 
@@ -52,10 +50,8 @@ public class QuestionResourceController {
     public QuestionResourceController(QuestionMapper questionMapper,
                                       QuestionService questionService,
                                       QuestionDtoService questionDtoService,
-                                      QuestionDtoService questionGetDtoService,
                                       VoteQuestionService voteQuestionService) {
         this.questionMapper = questionMapper;
-        this.questionGetDtoService = questionGetDtoService;
         this.questionService = questionService;
         this.questionDtoService = questionDtoService;
         this.voteQuestionService = voteQuestionService;
@@ -83,7 +79,7 @@ public class QuestionResourceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getQuestionDtoById(@PathVariable("id") Long id) {
-        Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
+        Optional<QuestionDto> questionDto = questionDtoService.getQuestionDtoById(id);
         return questionDto.isEmpty()
                 ? new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST)
                 : new ResponseEntity<>(questionDto, HttpStatus.OK);
@@ -131,7 +127,7 @@ public class QuestionResourceController {
         return ResponseEntity.ok(count);
     }
 
-    @GetMapping(path = "question/tag/{id}")
+    @GetMapping(path = "tag/{id}")
     @Operation(summary = "Get page of questions with pagination selected by tag id", responses = {
             @ApiResponse(description = " success", responseCode = "200",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = QuestionDto.class)))),
