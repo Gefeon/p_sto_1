@@ -6,6 +6,7 @@ import com.javamentor.qa.platform.service.abstracts.dto.PageDtoService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -21,6 +22,7 @@ public class PageDtoServiceImpl<T> implements PageDtoService<T> {
     }
 
     @Override
+    @Transactional
     @SuppressWarnings("unchecked")
     public PageDto<T> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 

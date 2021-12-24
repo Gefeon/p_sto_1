@@ -1,43 +1,43 @@
 reputation:
   - id: 100
-    count: 7
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 103
-    question_id:
-    sender_id: 100
-  - id: 101
     count: 10
     persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 100
-    question_id:
-    sender_id: 100
+    question_id: 100
+    sender_id: 102
+  - id: 101
+    count: 20
+    persist_date: "2021-11-29 00:00:00"
+    type: 1
+    answer_id: 101
+    author_id: 100
+    question_id: 100
+    sender_id: 101
   - id: 102
-    count: 11
+    count: 7
+    persist_date: "2021-11-29 00:00:00"
+    type: 1
+    answer_id: 102
+    author_id: 101
+    question_id: 100
+    sender_id: 100
+  - id: 103
+    count: 20
     persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 101
-    question_id:
-    sender_id: 100
-  - id: 103
-    count: 1
-    persist_date: "2021-11-29 00:00:00"
-    type: 1
-    answer_id: 100
-    author_id: 103
-    question_id:
-    sender_id: 100
+    question_id: 100
+    sender_id: 103
   - id: 104
     count: 22
     persist_date: "2021-11-29 00:00:00"
     type: 1
     answer_id: 100
     author_id: 102
-    question_id:
+    question_id: 101
     sender_id: 100
   - id: 105
     count: 33
@@ -45,5 +45,5 @@ reputation:
     type: 1
     answer_id: 100
     author_id: 103
-    question_id:
-    sender_id: 100
+    question_id: 102
+    sender_id: 101
