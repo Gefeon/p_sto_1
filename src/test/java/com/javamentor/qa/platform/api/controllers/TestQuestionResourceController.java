@@ -279,5 +279,26 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].listTagDto.[0].id", is(100)))
                 .andExpect(jsonPath("$.items[0].listTagDto.[0].name", is("db_architecture")))
                 .andExpect(jsonPath("$.items[0].listTagDto.[0].description", is("my sql database architecture")));
+
+        response = mvc.perform(get("/api/user/question/tag/100?currPage=2&items=4").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(4)))
+                .andExpect(jsonPath("$.totalResultCount", is(8)));
+
+        response = mvc.perform(get("/api/user/question/tag/99?currPage=1&items=1").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(1)))
+                .andExpect(jsonPath("$.totalResultCount", is(0)));
+
     }
 }
