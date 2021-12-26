@@ -1,20 +1,14 @@
 package com.javamentor.qa.platform.dao.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
-import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
 import org.hibernate.EntityMode;
-import org.hibernate.transform.AliasToBeanResultTransformer;
 import org.hibernate.transform.ResultTransformer;
-import org.hibernate.transform.Transformers;
-import org.junit.jupiter.api.Assertions;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,8 +25,8 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
 
 
-        List<UserDto> resultList = entityManager.createQuery("SELECT " +
-                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(r.count)," +
+        List resultList = entityManager.createQuery("SELECT " +
+                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(case when r is null then 0 else r.count end)," +
                         "((Select count(vq.vote) from VoteQuestion vq WHERE vq.user.id = u.id) +" +
                         "(Select count(va.vote) from VoteAnswer va where va.user.id = u.id)) as sort " +
                         " FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +
@@ -47,7 +41,7 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
                         userDTO.setFullName((String) tuples[2]);
                         userDTO.setLinkImage((String) tuples[3]);
                         userDTO.setCity((String) tuples[4]);
-                //        userDTO.setReputation((int)tuples[5]);
+                        userDTO.setReputationLong((Long) tuples[5]);
                         return userDTO;
                     }
 
@@ -65,6 +59,7 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return 0;
+
+        return (Long) entityManager.createQuery("SELECT count (id) FROM User").getSingleResult();
     }
 }
