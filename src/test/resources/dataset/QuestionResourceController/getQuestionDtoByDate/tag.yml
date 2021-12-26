@@ -1,0 +1,41 @@
+tag:
+  - id: 100
+    description: "my sql database architecture"
+    name: "db_architecture"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 101
+    description: "Room Android best practises"
+    name: "Room"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 102
+    description: "my postgres database architecture"
+    name: "postgres_architecture"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 103
+    description: "Hibernate best practises"
+    name: "Hibernate"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 104
+    description: "Java best practises"
+    name: "Java"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 105
+    description: "Spring best practises"
+    name: "Spring"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 106
+    description: "Python best practises"
+    name: "Python"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 107
+    description: "C++ best practises"
+    name: "C++"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 108
+    description: "Basic best practises"
+    name: "Basic"
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 109
+    description: "Go best practises"
+    name: "Go"
+    persist_date: "2021-11-30 00:29:29.586848"
