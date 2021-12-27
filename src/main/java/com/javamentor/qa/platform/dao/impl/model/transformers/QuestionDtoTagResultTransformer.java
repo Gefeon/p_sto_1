@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.pagination;
+package com.javamentor.qa.platform.dao.impl.model.transformers;
 
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import org.hibernate.transform.ResultTransformer;
@@ -33,9 +33,10 @@ public class QuestionDtoTagResultTransformer implements ResultTransformer {
         LocalDateTime questionLastUpdateDate = (LocalDateTime) tupleMap.get("q_last_update_datetime");
 
         QuestionDto questionDto = questionDtoMap.computeIfAbsent(questionId, id ->
-                new QuestionDto(questionId, questionTitle, questionAuthorId,
-                        questionAuthorName, questionAuthorImage, questionDescription,
-                        questionViewCount, questionCountAnswer, questionCountValuable, questionAuthorReputation, questionPersistDateTime, questionLastUpdateDate));
+                QuestionDto.builder().id(questionId).title(questionTitle).authorId(questionAuthorId).authorName(questionAuthorName)
+                        .authorImage(questionAuthorImage).description(questionDescription).viewCount(questionViewCount)
+                        .countAnswer(questionCountAnswer).countValuable(questionCountValuable).authorReputation(questionAuthorReputation)
+                        .persistDateTime(questionPersistDateTime).lastUpdateDateTime(questionLastUpdateDate).build());
 
         return questionDto;
     }

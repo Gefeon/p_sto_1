@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
+import com.javamentor.qa.platform.dao.impl.model.transformers.QuestionDtoTagResultTransformer;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import org.springframework.stereotype.Repository;
 
