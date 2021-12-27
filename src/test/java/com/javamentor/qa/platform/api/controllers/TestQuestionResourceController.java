@@ -41,16 +41,17 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String USER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/user.yml";
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
+    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/answer.yml";
     private static final String QUESTION_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
+    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
+    private static final String VOTEQUESTION_ENTITY = "dataset/QuestionResourceController/voteQuestion.yml";
     private static final String TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/questionHasTag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
-    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/Answer.yml";
     private static final String QUESTION_VIEWED_ENTITY = "dataset/QuestionResourceController/QuestionViewed.yml";
-    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/Reputation.yml";
     private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/QuestionVote.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
     private static final String VOTE_QUESTION_ENTITY1 = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
@@ -271,8 +272,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(5)))
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(100, 101, 103, 106, 112)))
-                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(5), hasSize(1), hasSize(5), hasSize(2), hasSize(3))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100, 101, 102, 103, 104, 100, 100, 101, 102, 103, 104, 106, 100, 100, 105, 109)));
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(5),hasSize(1),hasSize(5),hasSize(2),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,101,102,103,104,100,100,101,102,103,104,106,100,100,105,109)));
     }
 
     //проверка что находятся все вопросы, с которыми нет ни одного связанного тэга из IgnoredTags, без дубликатов.
@@ -286,8 +287,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(9)))
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(102, 104, 105, 107, 108, 109, 110, 111, 113)))
-                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(2), hasSize(2), hasSize(1), hasSize(4), hasSize(1), hasSize(1), hasSize(2), hasSize(1), hasSize(1))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(106, 107, 111, 114, 114, 111, 112, 113, 114, 105, 114, 109, 108, 113, 111)));
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(2),hasSize(2),hasSize(1),hasSize(4),hasSize(1),hasSize(1),hasSize(2),hasSize(1),hasSize(1))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(106,107,111,114,114,111,112,113,114,105,114,109,108,113,111)));
     }
 
     //проверка что находятся все вопросы, в которых есть тэг хотя бы один из trackedTags И с которыми нет ни одного связанного тэга из ignoredTags, без дубликатов.
@@ -300,8 +301,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(4)))
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 105, 109, 112)))
-                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1), hasSize(1), hasSize(1), hasSize(3))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100, 114, 114, 100, 105, 109)));
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(1),hasSize(1),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,114,114,100,105,109)));
     }
 
     //проверка что находятся все вопросы, в которых есть тэг хотя бы один из trackedTags И с которыми нет ни одного связанного тэга из ignoredTags, без дубликатов.
@@ -316,8 +317,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(2)))
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(108, 112)))
-                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1), hasSize(3))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105, 100, 105, 109)));
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,100,105,109)));
     }
 
 
@@ -359,8 +360,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(2)))
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(108, 112)))
-                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1), hasSize(3))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105, 100, 105, 109)));
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(3))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,100,105,109)));
     }
 
     //  передать в trackedTag тэг, с которым не связано ни одного вопроса и ожидать пустой список
@@ -391,16 +392,16 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.items").value(hasSize(4)))
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(108, 109, 110, 111)))
-                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1), hasSize(1), hasSize(2), hasSize(1))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105, 114, 109, 108, 113)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder( 108, 109, 110, 111)))
+                .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(1),hasSize(1),hasSize(2),hasSize(1))))
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,114,109,108,113)))
                 .andExpect(jsonPath("$.currentPageNumber").value(2))
                 .andExpect(jsonPath("$.itemsOnPage").value(4))
                 .andExpect(jsonPath("$.totalPageCount").value(3))
                 .andExpect(jsonPath("$.totalResultCount").value(9))
-                .andExpect(jsonPath("$.items[*].countAnswer").value(containsInRelativeOrder(2, 1, 0, 0)))
-                .andExpect(jsonPath("$.items[*].authorReputation").value(containsInRelativeOrder(30, 30, 30, -5)))
-                .andExpect(jsonPath("$.items[*].countValuable").value(containsInRelativeOrder(2, -2, 1, -1)));
+                .andExpect(jsonPath("$.items[*].countAnswer").value(containsInRelativeOrder( 2, 1, 0, 0)))
+                .andExpect(jsonPath("$.items[*].authorReputation").value(containsInRelativeOrder( 30, 30, 30, -5)))
+                .andExpect(jsonPath("$.items[*].countValuable").value(containsInRelativeOrder( 2, -2, 1, -1)));
     }
 
     @Test
@@ -416,9 +417,60 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     }
 
+    @Test
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY, QUESTION_ENTITY, TAG_ENTITY, QUESTION_HAS_TAG_ENTITY, ANSWER_ENTITY, REPUTATION_ENTITY, VOTEQUESTION_ENTITY}, disableConstraints = true)
+    public void getQuestionDtoByTag() throws Exception {
+        String authToken = getToken("user100@user.ru", "user");
+        ResultActions response = mvc.perform(get("/api/user/question/tag/101?currPage=1&items=5").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(5)))
+                .andExpect(jsonPath("$.totalResultCount", is(6)))
+                .andExpect(jsonPath("$.items[0].id", is(100)))
+                .andExpect(jsonPath("$.items[0].title", is("lazyEx")))
+                .andExpect(jsonPath("$.items[0].authorId", is(100)))
+                .andExpect(jsonPath("$.items[0].authorName", is("user")))
+                .andExpect(jsonPath("$.items[0].authorImage", is("test.ru")))
+                .andExpect(jsonPath("$.items[0].description", is("fix lazyInitialization Exception")))
+                .andExpect(jsonPath("$.items[0].viewCount", is(0)))
+                .andExpect(jsonPath("$.items[0].countAnswer", is(0)))
+                .andExpect(jsonPath("$.items[0].countValuable", is(1)))
+                .andExpect(jsonPath("$.items[0].authorReputation", is(1)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-30T00:29:29.62381")))
+                .andExpect(jsonPath("$.items[0].lastUpdateDateTime", is("2021-11-30T00:29:29.62381")))
+                .andExpect(jsonPath("$.items[0].listTagDto.[0].id", is(100)))
+                .andExpect(jsonPath("$.items[0].listTagDto.[0].name", is("db_architecture")))
+                .andExpect(jsonPath("$.items[0].listTagDto.[0].description", is("my sql database architecture")));
+
+        response = mvc.perform(get("/api/user/question/tag/100?currPage=2&items=4").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(4)))
+                .andExpect(jsonPath("$.itemsOnPage", is(4)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)));
+
+        response = mvc.perform(get("/api/user/question/tag/99?currPage=1&items=1").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(1)))
+                .andExpect(jsonPath("$.totalResultCount", is(0)));
+
+    }
+
     /*
-     * Пагинация вопросов по дате, сначала свежие
-     * */
+    * Пагинация вопросов по дате, сначала свежие
+    * */
     @Test
     @DataSet(value = {ANSWER_BY_DATE, QUESTION_BY_DATE, QUESTION_TAG_BY_DATE, REPUTATION_BY_DATE, TAG_BY_DATE,
             ROLE_BY_DATE, USER_BY_DATE, VOTE_BY_DATE, IGNORE_BY_DATE, TRACK_BY_DATE}, disableConstraints = true)
@@ -427,13 +479,13 @@ public class TestQuestionResourceController extends AbstractTestApi {
         String token = getToken("user100@user.ru", "user");
 
         // стандартный запрос
-        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX + token))
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX +  token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 112, 110, 108, 106, 104, 102, 100)))
-                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is(105)))
-                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is(100)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 112, 110, 108,106, 104, 102, 100)))
+                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is( 105)))
+                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is( 100)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
                 .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")))
                 .andExpect(jsonPath("$.items.length()", is(8)))
@@ -463,7 +515,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items").isEmpty());
 
         // нет ignoredTags параметров или не существует ignoredTag с заданным Id
-        mvc.perform(get("/api/user/question/new?currPage=1&items=16&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX + token))
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX +  token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
@@ -476,20 +528,20 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.totalResultCount", is(11)));
 
         // нет trackedTags параметров
-        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109").header(AUTH_HEADER, PREFIX + token))
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109").header(AUTH_HEADER, PREFIX +  token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 112, 110, 108, 106, 104, 102, 100)))
-                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is(105)))
-                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is(100)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(114, 112, 110, 108,106, 104, 102, 100)))
+                .andExpect(jsonPath("$.items[0].listTagDto[0].id", is( 105)))
+                .andExpect(jsonPath("$.items[1].listTagDto[0].id", is( 100)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
                 .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")))
                 .andExpect(jsonPath("$.items.length()", is(8)))
                 .andExpect(jsonPath("$.totalResultCount", is(8)));
 
         // нет необязательных параметров, вывод 10 значений по умолчанию
-        mvc.perform(get("/api/user/question/new?currPage=1").header(AUTH_HEADER, PREFIX + token))
+        mvc.perform(get("/api/user/question/new?currPage=1").header(AUTH_HEADER, PREFIX +  token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
@@ -502,11 +554,11 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.totalResultCount", is(16)));
 
         // произвольные параметры
-        mvc.perform(get("/api/user/question/new?currPage=1&items=4&ignoredTags=101&trackedTags=103").header(AUTH_HEADER, PREFIX + token))
+        mvc.perform(get("/api/user/question/new?currPage=1&items=4&ignoredTags=101&trackedTags=103").header(AUTH_HEADER, PREFIX +  token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(109, 108)))
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder( 109, 108)))
                 .andExpect(jsonPath("$.items[0].listTagDto[*].id").value(containsInAnyOrder(100, 103, 108)))
                 .andExpect(jsonPath("$.items[1].listTagDto[*].id").value(containsInAnyOrder(100, 103, 104)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-23T00:00:00")))
