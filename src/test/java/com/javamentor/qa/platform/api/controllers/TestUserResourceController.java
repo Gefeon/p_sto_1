@@ -28,6 +28,8 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String USER_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/user_entity.yml";
     private static final String ROLE_ENTITY = "datasets/userresourcecontroller/Role.yml";
     private static final String REPUTATION_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/reputation.yml";
+    private static final String USER_BY_VOTE_ANSWER = "datasets/userresourcecontroller/VoteAnswer.yml";
+    private static final String USER_BY_VOTE_QUESTION = "datasets/userresourcecontroller/VoteQuestion.yml";
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
@@ -271,4 +273,61 @@ public class TestUserResourceController extends AbstractTestApi {
                 .string("Use only latin alphabet, numbers and special chars"));
     }
 
+    /*
+     * Тест пагинации userDto по голосам
+     * */
+    @Test
+    @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, USER_BY_VOTE_QUESTION, USER_BY_VOTE_ANSWER}, disableConstraints = true)
+    public void getPaginationByVote() throws Exception {
+
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+
+        // нет необязательного параметра - кол-во элементов на странице, по умолчанию 10
+        mvc.perform(get("/api/user/vote?currPage=1").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").value(hasSize(10)));
+
+
+        // стандартный запрос
+        mvc.perform(get("/api/user/vote?currPage=1&items=4").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(4)))
+                .andExpect(jsonPath("$.itemsOnPage", is(4)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").isNotEmpty())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 100, 102, 103)));
+
+        // запрос на большее кол-во данных чем есть
+        mvc.perform(get("/api/user/vote?currPage=2&items=30").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(30)))
+                .andExpect(jsonPath("$.totalResultCount", is(14)))
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // нет обязательного параметра - текущей страницы
+        mvc.perform(get("/api/user/reputation?items=4").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
+
+    }
 }
