@@ -32,10 +32,7 @@ public class QuestionDtoTagDaoImpl implements PageDtoDao<QuestionDto> {
                         "((select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - (select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id)) as q_count_valuable, " +
                         "(select count(r.count) from Reputation r where r.author.id = u.id) as q_author_reputation, " +
                         "q.persistDateTime as q_persist_date_time, " +
-                        "q.lastUpdateDateTime as q_last_update_datetime, " +
-                        "t.id as t_id, " +
-                        "t.name as t_name, " +
-                        "t.description as t_description " +
+                        "q.lastUpdateDateTime as q_last_update_datetime " +
                         "from Question q " +
                         "join User u on q.user.id = u.id " +
                         "join q.tags as t where t.id = :tagId " +

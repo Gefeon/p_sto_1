@@ -1,7 +1,6 @@
 package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.TagDto;
 import org.hibernate.transform.ResultTransformer;
 
 import java.time.LocalDateTime;
@@ -37,12 +36,7 @@ public class QuestionDtoTagResultTransformer implements ResultTransformer {
                 new QuestionDto(questionId, questionTitle, questionAuthorId,
                         questionAuthorName, questionAuthorImage, questionDescription,
                         questionViewCount, questionCountAnswer, questionCountValuable, questionAuthorReputation, questionPersistDateTime, questionLastUpdateDate));
-        if (tupleMap.get("t_id") != null) {
-            TagDto tagDto = new TagDto((Long) tupleMap.get("t_id"), (String) tupleMap.get("t_name"), (String) tupleMap.get("t_description"));
-            if (!questionDto.getListTagDto().contains(tagDto)) {
-                questionDto.getListTagDto().add(tagDto);
-            }
-        }
+
         return questionDto;
     }
 
