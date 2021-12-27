@@ -60,11 +60,12 @@ public class QuestionResourceController {
     public QuestionResourceController(QuestionMapper questionMapper,
                                       QuestionService questionService,
                                       QuestionDtoService questionDtoService,
-                                      VoteQuestionService voteQuestionService) {
+                                      VoteQuestionService voteQuestionService, QuestionCommentDtoService questionCommentDtoService) {
         this.questionMapper = questionMapper;
         this.questionService = questionService;
         this.questionDtoService = questionDtoService;
         this.voteQuestionService = voteQuestionService;
+        this.questionCommentDtoService = questionCommentDtoService;
     }
 
     @Operation(summary = "add new question", responses = {
