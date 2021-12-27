@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -31,6 +32,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question";
     private final String url1 = "/api/user/question/100";
+    private final String urlComment = "/api/user/question/100/comment";
 
     private final String urlUpVote = "/api/user/question/100/upVote";
     private final String urlDownVote = "/api/user/question/100/downVote";
@@ -52,6 +54,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/QuestionVote.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
     private static final String VOTE_QUESTION_ENTITY1 = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
+    private static final String COMMENT_ENTITY = "dataset/QuestionResourceController/Comment.yml";
+    private static final String REPUTATION_COMMENT_ENTITY = "dataset/QuestionResourceController/reputationComment.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
     private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
@@ -549,5 +553,29 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").value("Missing question or invalid id"));
+    }
+
+    @Test
+    @DataSet(value = {USER_ENTITY,
+            ROLE_ENTITY,
+            COMMENT_ENTITY,
+            QUESTION_ENTITY,
+            REPUTATION_COMMENT_ENTITY,
+    }, disableConstraints = true)
+    public void getQuestionCommentDtoById() throws Exception {
+
+        String token = getToken("user100@user.ru", "user");
+
+        mvc.perform(get(urlComment).header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.[*].id", containsInAnyOrder(100)))
+                .andExpect(jsonPath("$.[*].questionId", containsInAnyOrder(100)))
+                .andExpect(jsonPath("$.[*].lastRedactionDate", containsInAnyOrder("2021-11-30T00:29:29")))
+                .andExpect(jsonPath("$.[*].persistDate", containsInAnyOrder("2021-11-30T00:29:29")))
+                .andExpect(jsonPath("$.[*].text", containsInAnyOrder("fix lazyInitialization Exception")))
+                .andExpect(jsonPath("$.[*].userId", containsInAnyOrder(100)))
+                .andExpect(jsonPath("$.[*].imageLink", containsInAnyOrder("test.ru")))
+                .andExpect(jsonPath("$.[*].reputation", containsInAnyOrder(65)));
     }
 }

@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.dto.PageDto;
+import com.javamentor.qa.platform.models.dto.QuestionCommentDto;
 import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
@@ -46,24 +47,24 @@ public class QuestionResourceController {
 
     private final QuestionMapper questionMapper;
 
-    private final QuestionDtoService questionGetDtoService;
-
     private final QuestionService questionService;
 
     private final VoteQuestionService voteQuestionService;
 
     private final QuestionDtoService questionDtoService;
 
+    private final QuestionCommentDtoService questionCommentDtoService;
+
     public QuestionResourceController(QuestionMapper questionMapper,
-                                      QuestionDtoService questionGetDtoService, QuestionService questionService,
+                                      QuestionService questionService,
                                       VoteQuestionService voteQuestionService,
                                       QuestionDtoService questionDtoService, QuestionCommentDtoService questionCommentDtoService) {
 
         this.questionMapper = questionMapper;
-        this.questionGetDtoService = questionGetDtoService;
         this.questionService = questionService;
         this.voteQuestionService = voteQuestionService;
         this.questionDtoService = questionDtoService;
+        this.questionCommentDtoService = questionCommentDtoService;
     }
 
     @Operation(summary = "add new question", responses = {
@@ -88,7 +89,7 @@ public class QuestionResourceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getQuestionDtoById(@PathVariable("id") Long id) {
-        Optional<QuestionDto> questionDto = questionGetDtoService.getQuestionDtoById(id);
+        Optional<QuestionDto> questionDto = questionDtoService.getQuestionDtoById(id);
         return questionDto.isEmpty()
                 ? new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST)
                 : new ResponseEntity<>(questionDto, HttpStatus.OK);
@@ -177,5 +178,16 @@ public class QuestionResourceController {
         map.put("ignoredIds", ignoredId);
         PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
+    }
+
+    @Operation(summary = "Getting all comments on the ID of the question", responses = {
+            @ApiResponse(description = "Successfully retrieving a list of comments by question ID", responseCode = "200",
+                    content = @Content(schema = @Schema(implementation = QuestionCommentDto.class))),
+            @ApiResponse(description = "There is no comment on this ID question in the database", responseCode = "400")
+    })
+    @GetMapping("/{id}/comment")
+    public ResponseEntity<?> getQuestionCommentDtoById(@PathVariable("id") Long id) {
+        List<QuestionCommentDto> questionCommentDtoList = questionCommentDtoService.getQuestionCommentDtoById(id);
+        return new ResponseEntity<>(questionCommentDtoList, HttpStatus.OK);
     }
 }

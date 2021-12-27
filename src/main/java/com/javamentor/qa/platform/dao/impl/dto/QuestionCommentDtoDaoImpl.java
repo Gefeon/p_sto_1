@@ -24,7 +24,7 @@ public class QuestionCommentDtoDaoImpl implements QuestionCommentDtoDao {
                         "comq.text, " +
                         "comq.user.id, " +
                         "comq.user.imageLink, " +
-                        "count(r.count)) " +
+                        "SUM(r.count)) " +
                         "FROM Comment comq " +
                         "LEFT JOIN Question q ON q.id = comq.id " +
                         "LEFT JOIN Reputation r ON comq.user.id = r.author.id " +
