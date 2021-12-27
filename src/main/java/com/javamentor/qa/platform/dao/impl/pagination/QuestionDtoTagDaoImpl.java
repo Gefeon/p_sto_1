@@ -41,9 +41,9 @@ public class QuestionDtoTagDaoImpl implements PageDtoDao<QuestionDto> {
                         "join q.tags as t where t.id = :tagId " +
                         "order by q.id")
                 .setParameter("tagId", tagId)
-                .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .unwrap(org.hibernate.query.Query.class)
                 .setResultTransformer(new QuestionDtoTagResultTransformer())
+                .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
 
         return listQuestionDto;

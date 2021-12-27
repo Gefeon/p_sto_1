@@ -12,20 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionDto {
-    public static final String ID_ALIAS = "q_id";
-    public static final String TITLE_ALIAS = "q_title";
-    public static final String AUTHOR_ID_ALIAS = "q_author_id";
-    public static final String AUTHOR_NAME_ALIAS = "q_author_name";
-    public static final String AUTHOR_IMAGE_ALIAS = "q_author_image";
-    public static final String DESCRIPTION_ALIAS = "q_description";
-    public static final String VIEW_COUNT_ALIAS = "q_view_count";
-    public static final String COUNT_ANSWER_ALIAS = "q_count_answer";
-    public static final String COUNT_VALUABLE_ALIAS = "q_count_valuable";
-    public static final String AUTHOR_REPUTATION_ALIAS = "q_author_reputation";
-    public static final String PERSIST_DATE_TIME_ALIAS = "q_persist_date_time";
-    public static final String LAST_UPDATE_DATE_TIME_ALIAS = "q_last_update_datetime";
-    public static final String LIST_TAG_DTO_ALIAS = "q_tag_dto";
-
     private Long id;
     private String title;
     private Long authorId;
