@@ -417,15 +417,15 @@ public class TestQuestionResourceController extends AbstractTestApi {
     @DataSet(value = {USER_ENTITY, ROLE_ENTITY, QUESTION_ENTITY, TAG_ENTITY, QUESTION_HAS_TAG_ENTITY, ANSWER_ENTITY, REPUTATION_ENTITY, VOTEQUESTION_ENTITY}, disableConstraints = true)
     public void getQuestionDtoByTag() throws Exception {
         String authToken = getToken("user100@user.ru", "user");
-        ResultActions response = mvc.perform(get("/api/user/question/tag/100?currPage=1&items=5").header(AUTH_HEADER, PREFIX + authToken));
+        ResultActions response = mvc.perform(get("/api/user/question/tag/101?currPage=1&items=5").header(AUTH_HEADER, PREFIX + authToken));
         response.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$").hasJsonPath())
                 .andExpect(jsonPath("$.currentPageNumber", is(1)))
-                .andExpect(jsonPath("$.totalPageCount", is(3)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
                 .andExpect(jsonPath("$.itemsOnPage", is(5)))
-                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.totalResultCount", is(6)))
                 .andExpect(jsonPath("$.items[0].id", is(100)))
                 .andExpect(jsonPath("$.items[0].title", is("lazyEx")))
                 .andExpect(jsonPath("$.items[0].authorId", is(100)))

@@ -27,3 +27,13 @@ question_has_tag:
     tag_id: 100
   - question_id: 112
     tag_id: 100
+  - question_id: 109
+    tag_id: 101
+  - question_id: 110
+    tag_id: 101
+  - question_id: 111
+    tag_id: 101
+  - question_id: 112
+    tag_id: 101
+  - question_id: 108
+    tag_id: 101
