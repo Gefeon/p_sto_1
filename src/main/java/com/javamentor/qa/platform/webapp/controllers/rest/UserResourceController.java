@@ -104,6 +104,19 @@ public class UserResourceController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+
+    @GetMapping(path = "/api/user/vote")
+    @Operation(summary = "Get page pagination users dto by vote", responses = {
+            @ApiResponse(description = "success", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))),
+            @ApiResponse(description = "Wrong parameters current page or items", responseCode = "400", content = @Content)
+    })
+    public ResponseEntity<?> getPaginationByVote(@RequestParam int currPage, @RequestParam(required = false, defaultValue = "10") int items) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("class", "UserPaginationByVote");
+        return ResponseEntity.ok(userDtoService.getPage(currPage, items, map));
+    }
+
 //ToDo используется как заглушка для тестов
 
     @GetMapping("/api/user/stub")

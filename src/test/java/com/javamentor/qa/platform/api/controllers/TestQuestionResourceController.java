@@ -39,19 +39,19 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String USER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/user.yml";
     private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
     private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
+    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/answer.yml";
     private static final String QUESTION_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/question.yml";
     private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
+    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
+    private static final String VOTEQUESTION_ENTITY = "dataset/QuestionResourceController/voteQuestion.yml";
     private static final String TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/questionHasTag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
     private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
     private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
-    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/Answer.yml";
     private static final String QUESTION_VIEWED_ENTITY = "dataset/QuestionResourceController/QuestionViewed.yml";
-    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/Reputation.yml";
     private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/QuestionVote.yml";
     private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
-//    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
     private static final String VOTE_QUESTION_ENTITY1 = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
 
     private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
@@ -410,6 +410,57 @@ public class TestQuestionResourceController extends AbstractTestApi {
         response.andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").value("3"));
+
+    }
+
+    @Test
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY, QUESTION_ENTITY, TAG_ENTITY, QUESTION_HAS_TAG_ENTITY, ANSWER_ENTITY, REPUTATION_ENTITY, VOTEQUESTION_ENTITY}, disableConstraints = true)
+    public void getQuestionDtoByTag() throws Exception {
+        String authToken = getToken("user100@user.ru", "user");
+        ResultActions response = mvc.perform(get("/api/user/question/tag/101?currPage=1&items=5").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(5)))
+                .andExpect(jsonPath("$.totalResultCount", is(6)))
+                .andExpect(jsonPath("$.items[0].id", is(100)))
+                .andExpect(jsonPath("$.items[0].title", is("lazyEx")))
+                .andExpect(jsonPath("$.items[0].authorId", is(100)))
+                .andExpect(jsonPath("$.items[0].authorName", is("user")))
+                .andExpect(jsonPath("$.items[0].authorImage", is("test.ru")))
+                .andExpect(jsonPath("$.items[0].description", is("fix lazyInitialization Exception")))
+                .andExpect(jsonPath("$.items[0].viewCount", is(0)))
+                .andExpect(jsonPath("$.items[0].countAnswer", is(0)))
+                .andExpect(jsonPath("$.items[0].countValuable", is(1)))
+                .andExpect(jsonPath("$.items[0].authorReputation", is(1)))
+                .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-30T00:29:29.62381")))
+                .andExpect(jsonPath("$.items[0].lastUpdateDateTime", is("2021-11-30T00:29:29.62381")))
+                .andExpect(jsonPath("$.items[0].listTagDto.[0].id", is(100)))
+                .andExpect(jsonPath("$.items[0].listTagDto.[0].name", is("db_architecture")))
+                .andExpect(jsonPath("$.items[0].listTagDto.[0].description", is("my sql database architecture")));
+
+        response = mvc.perform(get("/api/user/question/tag/100?currPage=2&items=4").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(4)))
+                .andExpect(jsonPath("$.itemsOnPage", is(4)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)));
+
+        response = mvc.perform(get("/api/user/question/tag/99?currPage=1&items=1").header(AUTH_HEADER, PREFIX + authToken));
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(1)))
+                .andExpect(jsonPath("$.totalResultCount", is(0)));
 
     }
 
