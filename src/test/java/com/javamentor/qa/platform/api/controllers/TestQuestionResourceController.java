@@ -77,6 +77,17 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String IGNORE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/ignored.yml";
     private static final String TRACK_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/tracked.yml";
 
+    private static final String ANSWER_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/answer.yml";
+    private static final String IGNORED_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/ignored.yml";
+    private static final String QUESTION_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/question.yml";
+    private static final String QUESTION_TAG_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/question_has_tag.yml";
+    private static final String REPUTATION_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/reputation.yml";
+    private static final String ROLE_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/role.yml";
+    private static final String USER_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/user.yml";
+    private static final String TAG_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/tag.yml";
+    private static final String VOTE_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/vote.yml";
+    private static final String TRACK_NO_ANSWER = "dataset/QuestionResourceController/questionsNoAnswer/tracked.yml";
+
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -469,8 +480,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     /*
-    * Пагинация вопросов по дате, сначала свежие
-    * */
+     * Пагинация вопросов по дате, сначала свежие
+     * */
     @Test
     @DataSet(value = {ANSWER_BY_DATE, QUESTION_BY_DATE, QUESTION_TAG_BY_DATE, REPUTATION_BY_DATE, TAG_BY_DATE,
             ROLE_BY_DATE, USER_BY_DATE, VOTE_BY_DATE, IGNORE_BY_DATE, TRACK_BY_DATE}, disableConstraints = true)
@@ -479,7 +490,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
         String token = getToken("user100@user.ru", "user");
 
         // стандартный запрос
-        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX +  token))
+        mvc.perform(get("/api/user/question/new?currPage=1&items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
@@ -630,4 +641,83 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.[*].imageLink", containsInAnyOrder("test.ru")))
                 .andExpect(jsonPath("$.[*].reputation", containsInAnyOrder(65)));
     }
+
+
+    /*
+     * Пагинация вопросов без ответов
+     * */
+    @Test
+    @DataSet(value = {ANSWER_NO_ANSWER, IGNORED_NO_ANSWER, QUESTION_NO_ANSWER, QUESTION_TAG_NO_ANSWER, REPUTATION_NO_ANSWER,
+            ROLE_NO_ANSWER, USER_NO_ANSWER, TAG_NO_ANSWER, VOTE_NO_ANSWER, TRACK_NO_ANSWER}, disableConstraints = true)
+    public void getQuestionsDtoNoAnswer() throws Exception {
+
+        String token = getToken("user100@user.ru", "user");
+
+        // стандартный запрос
+        mvc.perform(get("/api/user/question/noAnswer?currPage=1&items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items.length()", is(6)))
+                .andExpect(jsonPath("$.totalResultCount", is(6)));
+
+
+        // нет обязательного параметра - текущей страницы
+        mvc.perform(get("/api/user/question/noAnswer?items=16&ignoredTags=101,106&trackedTags=100,102")
+                        .header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
+
+        // запрос на большее кол-во данных чем есть
+        mvc.perform(get("/api/user/question/noAnswer?currPage=2&items=300&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
+                        .header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // текущая страница велика
+        mvc.perform(get("/api/user/question/noAnswer?currPage=200&items=3&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
+                        .header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // нет ignoredTags параметров или не существует ignoredTag с заданным Id
+        mvc.perform(get("/api/user/question/noAnswer?currPage=1&items=16&trackedTags=100,102,103,104,105").header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items.length()", is(8)))
+                .andExpect(jsonPath("$.totalResultCount", is(8)));
+
+
+        // нет trackedTags параметров
+        mvc.perform(get("/api/user/question/noAnswer?currPage=1&items=16&ignoredTags=101,106,107,108,109").header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items.length()", is(6)))
+                .andExpect(jsonPath("$.totalResultCount", is(6)));
+
+
+        // нет необязательных параметров, вывод 10 значений по умолчанию
+        mvc.perform(get("/api/user/question/noAnswer?currPage=1").header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items.length()", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)));
+
+        // произвольные параметры
+        mvc.perform(get("/api/user/question/noAnswer?currPage=1&items=4&ignoredTags=101&trackedTags=103").header(AUTH_HEADER, PREFIX +  token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$.items.length()", is(2)))
+                .andExpect(jsonPath("$.totalResultCount", is(2)));
+    }
+
 }

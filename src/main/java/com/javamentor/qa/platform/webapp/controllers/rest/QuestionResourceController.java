@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
-
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -211,4 +211,26 @@ public class QuestionResourceController {
         List<QuestionCommentDto> questionCommentDtoList = questionCommentDtoService.getQuestionCommentDtoById(id);
         return new ResponseEntity<>(questionCommentDtoList, HttpStatus.OK);
     }
+
+
+    @GetMapping("/noAnswer")
+    @Operation(summary = "Get page pagination questions with no answer", responses = {
+            @ApiResponse(description = "Get page dto of question dto success", responseCode = "200",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = Question.class))),
+            @ApiResponse(description = "Wrong parameters current page or items", responseCode = "400", content = @Content)
+    })
+    public ResponseEntity<?>noAnswerQuestion (@RequestParam int currPage,
+                                              @RequestParam(required = false, defaultValue = "10") int items,
+                                              @RequestParam(required = false, defaultValue = "0") List<Long> ignoredTags,
+                                              @RequestParam(required = false) List<Long> trackedTags) {
+
+        Map<Object, Object> map = new HashMap<>();
+        map.put("class", "QuestionNoAnswer");
+        map.put("ignoredTags", ignoredTags);
+        map.put("trackedTags", trackedTags);
+        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        return ResponseEntity.ok(page);
+    }
+
+
 }

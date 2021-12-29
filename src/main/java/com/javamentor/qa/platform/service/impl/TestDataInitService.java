@@ -32,7 +32,7 @@ public class TestDataInitService {
     private final static int answersNum = 10;
     private final static int questionsNum = 10;
     private final static int tagsNum = 10;
-    private final static int reputationsNum = 10;
+    private final static int reputationsNum = 60;
 
     private final List<AuthenticationRequestDto> permanentUserParameters = new ArrayList<>();
 
@@ -123,23 +123,24 @@ public class TestDataInitService {
     }
 
     private void addRandomReputation() {
-        Set<Reputation> reputations = new HashSet<>();
+        //Set<Reputation> reputations = new HashSet<>();
         for (int i = 0; i < reputationsNum; i++) {
             int count = getRandInt(0, 1000);
             ReputationType type = ReputationType.values()[getRandInt(0,3)];
             Reputation reputation = new Reputation();
             reputation.setCount(count);
             reputation.setType(type);
-            reputation.setAuthor(userService.getById((long) getRandInt(1, usersNum)).orElse(null));
+            reputation.setAuthor(userService.getById(i + 1L).orElse(null));
             reputation.setSender(userService.getById((long) getRandInt(1, usersNum)).orElse(null));
             if ((type == ReputationType.Answer || type == ReputationType.VoteAnswer)) {
                 reputation.setAnswer(answerService.getById((long) getRandInt(1, answersNum)).orElse(null));
             } else {
                 reputation.setQuestion(questionService.getById((long) getRandInt(1, questionsNum)).orElse(null));
             }
-            reputations.add(reputation);
+            reputationService.persist(reputation);
+            //reputations.add(reputation);
         }
-        reputationService.persistAll(reputations);
+        //reputationService.persistAll(reputations);
     }
 
     private void addRandomAnswers() {
