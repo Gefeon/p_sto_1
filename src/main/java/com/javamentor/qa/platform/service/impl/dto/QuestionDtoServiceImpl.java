@@ -20,9 +20,9 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
     private final QuestionDtoDao questionDao;
     private final TagDtoDao tagDtoDao;
 
-    public QuestionDtoServiceImpl(QuestionDtoDao questionDao, TagDtoDao tagDtoDao) {
+    public QuestionDtoServiceImpl(QuestionDtoDao questionDao, TagDtoDao tagDtoDao1) {
         this.questionDao = questionDao;
-        this.tagDtoDao = tagDtoDao;
+        this.tagDtoDao = tagDtoDao1;
     }
 
     @Override
