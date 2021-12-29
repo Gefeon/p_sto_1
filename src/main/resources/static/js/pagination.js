@@ -51,11 +51,10 @@ async function displayList(wrapper, page) {
         let tr = document.createElement('tr');
 
         for (let item in items[note]) {
-        let td = document.createElement('td');
-        td.classList.add('item');
-        td.innerText = items[note][item];
-
-        wrapper.appendChild(td);
+            let td = document.createElement('td');
+            td.classList.add('item');
+            td.innerText = items[note][item];
+            tr.appendChild(td)
         }
         wrapper.appendChild(tr)
     }
