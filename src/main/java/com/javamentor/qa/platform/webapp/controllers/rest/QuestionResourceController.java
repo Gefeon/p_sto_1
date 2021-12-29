@@ -7,7 +7,6 @@ import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.models.mapper.QuestionMapper;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionCommentDtoService;
 import com.javamentor.qa.platform.webapp.converters.mapper.QuestionMapper;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
