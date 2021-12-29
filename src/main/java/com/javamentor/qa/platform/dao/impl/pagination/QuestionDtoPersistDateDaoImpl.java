@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.dto;
+package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository(value = "QuestionByDate")
-public class QuestionDateDaoImpl implements PageDtoDao<QuestionDto> {
+public class QuestionDtoPersistDateDaoImpl implements PageDtoDao<QuestionDto> {
 
     @PersistenceContext
     private EntityManager entityManager;

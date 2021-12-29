@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.dto;
+package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.UserDto;
@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Tuple;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +20,7 @@ public class UserDtoPersistDateDaoImpl implements PageDtoDao<UserDto> {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
         return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
-                        "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(case when r is null then 0 else r.count end)) " +
+                        "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(CASE WHEN r IS NULL THEN 0 ELSE r.count END)) " +
                         "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id " +
                         "ORDER BY u.persistDateTime", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
@@ -30,6 +29,6 @@ public class UserDtoPersistDateDaoImpl implements PageDtoDao<UserDto> {
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return (Long) entityManager.createQuery("SELECT count (id) FROM User").getSingleResult();
+        return (Long) entityManager.createQuery("SELECT COUNT (id) FROM User").getSingleResult();
     }
 }

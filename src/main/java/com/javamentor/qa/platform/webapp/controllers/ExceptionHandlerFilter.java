@@ -1,6 +1,7 @@
 package com.javamentor.qa.platform.webapp.controllers;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import lombok.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -15,7 +16,8 @@ import static javax.servlet.http.HttpServletResponse.SC_FORBIDDEN;
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
         } catch (JWTVerificationException e) {

@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.models.mapper;
+package com.javamentor.qa.platform.webapp.converters.mapper;
 
 import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.models.entity.question.Tag;

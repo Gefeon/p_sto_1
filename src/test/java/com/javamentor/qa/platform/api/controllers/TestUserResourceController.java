@@ -20,16 +20,16 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
-    private static final String USER_ENTITY = "datasets/userresourcecontroller/UserDto.yml";
-    private static final String ROLE_REP_ENTITY = "datasets/userresourcecontroller/RoleReputation.yml";
-    private static final String REPUTATION_ENTITY = "datasets/userresourcecontroller/Reputation.yml";
-    private static final String QUESTION_ENTITY = "datasets/userresourcecontroller/Question.yml";
-    private static final String ANSWER_ENTITY = "datasets/userresourcecontroller/Answer.yml";
-    private static final String USER_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/user_entity.yml";
-    private static final String ROLE_ENTITY = "datasets/userresourcecontroller/Role.yml";
-    private static final String REPUTATION_BY_PERSIST_DATE = "datasets/userresourcecontroller/paginationByPersistDate/reputation.yml";
-    private static final String USER_BY_VOTE_ANSWER = "datasets/userresourcecontroller/VoteAnswer.yml";
-    private static final String USER_BY_VOTE_QUESTION = "datasets/userresourcecontroller/VoteQuestion.yml";
+    private static final String USER_ENTITY = "dataset/userResourceController/user.yml";
+    private static final String ROLE_REP_ENTITY = "dataset/userResourceController/role_for_reputation.yml";
+    private static final String REPUTATION_ENTITY = "dataset/userResourceController/reputation.yml";
+    private static final String QUESTION_ENTITY = "dataset/userResourceController/question.yml";
+    private static final String ANSWER_ENTITY = "dataset/userResourceController/answer.yml";
+    private static final String USER_BY_PERSIST_DATE = "dataset/userResourceController/paginationByPersistDate/user_entity.yml";
+    private static final String ROLE_ENTITY = "dataset/userResourceController/role.yml";
+    private static final String REPUTATION_BY_PERSIST_DATE = "dataset/userResourceController/paginationByPersistDate/reputation.yml";
+    private static final String USER_BY_VOTE_ANSWER = "dataset/userResourceController/vote_answer.yml";
+    private static final String USER_BY_VOTE_QUESTION = "dataset/userResourceController/vote_question.yml";
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)

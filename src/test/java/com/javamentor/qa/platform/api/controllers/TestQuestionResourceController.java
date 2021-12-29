@@ -30,48 +30,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question";
-    private final String url1 = "/api/user/question/100";
 
     private final String urlUpVote = "/api/user/question/100/upVote";
     private final String urlDownVote = "/api/user/question/100/downVote";
 
-    private static final String USER_ENTITY = "dataset/QuestionResourceController/user.yml";
-    private static final String USER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/user.yml";
-    private static final String ROLE_ENTITY = "dataset/QuestionResourceController/role.yml";
-    private static final String QUESTION_ENTITY = "dataset/QuestionResourceController/question.yml";
-    private static final String ANSWER_ENTITY = "dataset/QuestionResourceController/answer.yml";
-    private static final String QUESTION_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/question.yml";
-    private static final String TAG_ENTITY = "dataset/QuestionResourceController/tag.yml";
-    private static final String REPUTATION_ENTITY = "dataset/QuestionResourceController/reputation.yml";
-    private static final String VOTEQUESTION_ENTITY = "dataset/QuestionResourceController/voteQuestion.yml";
-    private static final String TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/tag.yml";
-    private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/questionHasTag.yml";
-    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/QuestionResourceController/questionHasTag.yml";
-    private static final String USER_ADD = "dataset/QuestionResourceController/UserAdd.yml";
-    private static final String QUESTION_ADD = "dataset/QuestionResourceController/QuestionAdd.yml";
-    private static final String QUESTION_VIEWED_ENTITY = "dataset/QuestionResourceController/QuestionViewed.yml";
-    private static final String VOTE_QUESTION_ENTITY = "dataset/QuestionResourceController/QuestionVote.yml";
-    private static final String ANSWER_ENTITY_PAGINATION = "dataset/QuestionResourceController/allQuestuionDtos/answer.yml";
-    private static final String VOTE_QUESTION_ENTITY1 = "dataset/QuestionResourceController/allQuestuionDtos/voteQuestion.yml";
+    private static final String USER_ENTITY = "dataset/questionResourceController/user.yml";
+    private static final String USER_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/user.yml";
+    private static final String ROLE_ENTITY = "dataset/questionResourceController/role.yml";
+    private static final String QUESTION_ENTITY = "dataset/questionResourceController/question.yml";
+    private static final String ANSWER_ENTITY = "dataset/questionResourceController/answer.yml";
+    private static final String QUESTION_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/question.yml";
+    private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
+    private static final String REPUTATION_ENTITY = "dataset/questionResourceController/reputation.yml";
+    private static final String VOTEQUESTION_ENTITY = "dataset/questionResourceController/vote_question.yml";
+    private static final String TAG_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/tag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/question_has_tag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/question_has_tag.yml";
+    private static final String USER_ADD = "dataset/questionResourceController/user_add.yml";
+    private static final String QUESTION_ADD = "dataset/questionResourceController/question_add.yml";
+    private static final String QUESTION_VIEWED_ENTITY = "dataset/questionResourceController/question_viewed.yml";
+    private static final String VOTE_QUESTION_ENTITY = "dataset/questionResourceController/question_vote.yml";
+    private static final String ANSWER_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/answer.yml";
+    private static final String VOTE_QUESTION_ENTITY1 = "dataset/questionResourceController/allQuestuionDtos/vote_question.yml";
 
-    private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/newQuestionAdded.yml";
-    private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/threeTagsAdded.yml";
-    private static final String THREE_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/threeQuestionHasTagsAdded.yml";
-    private static final String TWO_UNIQUE_TAGS_ADDED = "dataset/expected/resourceQuestionController/twoUniqueIdTagsAdded.yml";
-    private static final String TWO_UNIQUE_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/twoQuestionHasTagsAdded.yml";
-    private static final String TWO_EXISTENT_TAGS_ADDED = "dataset/expected/resourceQuestionController/twoExistentIdTagsAdded.yml";
-    private static final String TWO_EXISTENT_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/twoExistentIdQuestionHasTagAdded.yml";
+    private static final String NEW_QUESTION_ADDED = "dataset/expected/resourceQuestionController/new_question_added.yml";
+    private static final String THREE_TAGS_ADDED = "dataset/expected/resourceQuestionController/three_tags_added.yml";
+    private static final String THREE_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/three_question_has_tags_added.yml";
+    private static final String TWO_UNIQUE_TAGS_ADDED = "dataset/expected/resourceQuestionController/two_unique_id_tags_added.yml";
+    private static final String TWO_UNIQUE_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/two_question_has_tags_added.yml";
+    private static final String TWO_EXISTENT_TAGS_ADDED = "dataset/expected/resourceQuestionController/two_existent_id_tags_added.yml";
+    private static final String TWO_EXISTENT_TAG_QUESTION_LINKS_ADDED = "dataset/expected/resourceQuestionController/two_existent_id_question_has_tag_added.yml";
 
-    private static final String ANSWER_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/answer.yml";
-    private static final String QUESTION_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/question.yml";
-    private static final String QUESTION_TAG_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/question_has_tag.yml";
-    private static final String REPUTATION_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/reputation.yml";
-    private static final String TAG_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/tag.yml";
-    private static final String ROLE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/role.yml";
-    private static final String USER_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/user.yml";
-    private static final String VOTE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/vote.yml";
-    private static final String IGNORE_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/ignored.yml";
-    private static final String TRACK_BY_DATE = "dataset/QuestionResourceController/getQuestionDtoByDate/tracked.yml";
+    private static final String ANSWER_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/answer.yml";
+    private static final String QUESTION_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/question.yml";
+    private static final String QUESTION_TAG_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/question_has_tag.yml";
+    private static final String REPUTATION_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/reputation.yml";
+    private static final String TAG_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/tag.yml";
+    private static final String ROLE_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/role.yml";
+    private static final String USER_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/user.yml";
+    private static final String VOTE_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/vote.yml";
+    private static final String IGNORE_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/ignored.yml";
+    private static final String TRACK_BY_DATE = "dataset/questionResourceController/getQuestionDtoByDate/tracked.yml";
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
@@ -124,7 +123,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest()).andReturn();
-        Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
     }
 
     @Test
@@ -141,7 +139,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest()).andReturn();
-        Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
     }
 
     @Test
@@ -156,7 +153,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isBadRequest()).andReturn();
-        Assertions.assertTrue(MethodArgumentNotValidException.class.isAssignableFrom(result.getResolvedException().getClass()));
 
     }
 
@@ -178,7 +174,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk());
-
     }
 
     @Test
@@ -401,9 +396,9 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {"dataset/QuestionResourceController/countShouldBeThree/Question.yml",
-            "dataset/QuestionResourceController/countShouldBeThree/user.yml",
-            "dataset/QuestionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
+    @DataSet(value = {"dataset/questionResourceController/countShouldBeThree/question.yml",
+            "dataset/questionResourceController/countShouldBeThree/user.yml",
+            "dataset/questionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
     public void countShouldBeThree() throws Exception {
         ResultActions response = mvc.perform(get(url + "/count").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
 
@@ -577,6 +572,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
         String token = getToken("user100@user.ru", "user");
 
+        String url1 = "/api/user/question/100";
         mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())

@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.dto;
+package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.UserDto;
@@ -22,15 +22,15 @@ public class UserDtoReputationDaoImpl implements PageDtoDao<UserDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
 
         return  entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
-                "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(case when r is null then 0 else r.count end))" +
+                "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(CASE r IS NULL THEN 0 ELSE r.count END))" +
                 "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id " +
-                "ORDER BY SUM(r.count) desc", UserDto.class)
+                "ORDER BY SUM(r.count) DESC", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
     }
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return (Long) entityManager.createQuery("SELECT count (id) FROM User").getSingleResult();
+        return (Long) entityManager.createQuery("SELECT COUNT (id) FROM User").getSingleResult();
     }
 }

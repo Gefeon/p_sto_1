@@ -20,16 +20,16 @@ public class VoteQuestionDaoImpl extends ReadWriteDaoImpl<VoteQuestion, Long> im
     @Override
     public Long getCountVoteQuestionByQuestionId(Long questionId) {
         return em.createQuery(
-                        "select count(v.id) from VoteQuestion v " +
-                                "where v.question.id=:ID", Long.class)
+                        "SELECT COUNT(v.id) FROM VoteQuestion v " +
+                                "WHERE v.question.id=:ID", Long.class)
                 .setParameter("ID", questionId).getSingleResult();
     }
 
     @Override
     public Question getQuestionByIdWithAuthor(Long questionId) {
-        return em.createQuery("select q from Question q " +
-                        "inner join User u on q.user.id = u.id " +
-                        "where q.id=:ID", Question.class)
+        return em.createQuery("SELECT q FROM Question q " +
+                        "JOIN User u ON q.user.id = u.id " +
+                        "WHERE q.id=:ID", Question.class)
                 .setParameter("ID", questionId)
                 .getSingleResult();
     }
@@ -37,8 +37,8 @@ public class VoteQuestionDaoImpl extends ReadWriteDaoImpl<VoteQuestion, Long> im
     @Override
     public Optional<VoteQuestion> getVoteQuestionByQuestionIdAndUserId(Long questionId, Long userId) {
         return SingleResultUtil.getSingleResultOrNull(em.createQuery(
-                        "select v from VoteQuestion v inner join Question q " +
-                                "on v.question.id=q.id where q.id=:qID and v.user.id=:vID", VoteQuestion.class)
+                        "SELECT v FROM VoteQuestion v JOIN Question q " +
+                                "ON v.question.id=q.id WHERE q.id=:qID AND v.user.id=:vID", VoteQuestion.class)
                 .setParameter("qID", questionId)
                 .setParameter("vID", userId));
     }

@@ -22,14 +22,14 @@ public class QuestionDtoDaoImpl implements QuestionDtoDao {
                                 "(q.id, " +
                                 "q.title, " +
                                 "q.user.id , " +
-                                "count(r.count), " +
                                 "q.user.fullName, " +
                                 "q.user.imageLink, " +
                                 "q.description, " +
                                 "SUM(0) , " +
                                 "COUNT(answer.id), " +
-                                "(Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) -" +
-                                "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id), " +
+                                "(SELECT COUNT(up.vote) FROM VoteQuestion up WHERE up.vote = 'UP_VOTE' AND up.user.id = q.user.id) -" +
+                                "(SELECT COUNT(down.vote) FROM VoteQuestion down WHERE down.vote = 'DOWN_VOTE' AND down.user.id = q.user.id), " +
+                                "COUNT(r.count), " +
                                 "q.persistDateTime, " +
                                 "q.lastUpdateDateTime) " +
                                 "FROM Question q " +

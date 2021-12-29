@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.dto;
+package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.UserDto;
@@ -17,19 +17,19 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<UserDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
 
-
-        List resultList = entityManager.createQuery("SELECT " +
-                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(case when r is null then 0 else r.count end)," +
-                        "((Select count(vq.vote) from VoteQuestion vq WHERE vq.user.id = u.id) +" +
-                        "(Select count(va.vote) from VoteAnswer va where va.user.id = u.id)) as sort " +
+        return entityManager.createQuery("SELECT " +
+                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(CASE WHEN r IS NULL THEN 0 ELSE r.count END)," +
+                        "((SELECT COUNT(vq.vote) FROM VoteQuestion vq WHERE vq.user.id = u.id) +" +
+                        "(SELECT COUNT(va.vote) FROM VoteAnswer va WHERE va.user.id = u.id)) AS sort " +
                         " FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +
                         " GROUP BY u.id" +
-                        " ORDER BY sort desc", Tuple.class).unwrap(org.hibernate.query.Query.class)
+                        " ORDER BY sort DESC", Tuple.class).unwrap(org.hibernate.query.Query.class)
                 .setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] tuples, String[] aliases) {
@@ -50,14 +50,11 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
                 }).setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
 
-        return resultList;
-
 
     }
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-
-        return (Long) entityManager.createQuery("SELECT count (id) FROM User").getSingleResult();
+        return (Long) entityManager.createQuery("SELECT COUNT(id) FROM User").getSingleResult();
     }
 }

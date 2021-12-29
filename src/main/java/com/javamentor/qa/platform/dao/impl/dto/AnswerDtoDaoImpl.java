@@ -30,7 +30,7 @@ public class AnswerDtoDaoImpl implements AnswerDtoDao {
                         "answ.user.imageLink," +
                         "answ.user.nickname)" +
                         "FROM Answer answ " +
-                        "LEFT JOIN Reputation r ON answ.user.id = r.author.id where answ.question.id = :id GROUP BY answ.id, answ.user.imageLink, answ.user.nickname",
+                        "LEFT JOIN Reputation r ON answ.user.id = r.author.id WHERE answ.question.id = :id GROUP BY answ.id, answ.user.imageLink, answ.user.nickname",
                         AnswerDto.class)
                 .setParameter("id", id)
                 .getResultList();

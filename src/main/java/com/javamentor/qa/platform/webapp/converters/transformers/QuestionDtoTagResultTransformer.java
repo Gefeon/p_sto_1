@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.model.transformers;
+package com.javamentor.qa.platform.webapp.converters.transformers;
 
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import org.hibernate.transform.ResultTransformer;
@@ -8,7 +8,7 @@ import java.util.*;
 
 public class QuestionDtoTagResultTransformer implements ResultTransformer {
 
-    private Map<Long, QuestionDto> questionDtoMap = new LinkedHashMap<>();
+    private final Map<Long, QuestionDto> questionDtoMap = new LinkedHashMap<>();
 
     @Override
     public Object transformTuple(Object[] tuples, String[] aliases) {
@@ -32,13 +32,11 @@ public class QuestionDtoTagResultTransformer implements ResultTransformer {
         LocalDateTime questionPersistDateTime = (LocalDateTime) tupleMap.get("q_persist_date_time");
         LocalDateTime questionLastUpdateDate = (LocalDateTime) tupleMap.get("q_last_update_datetime");
 
-        QuestionDto questionDto = questionDtoMap.computeIfAbsent(questionId, id ->
+        return questionDtoMap.computeIfAbsent(questionId, id ->
                 QuestionDto.builder().id(questionId).title(questionTitle).authorId(questionAuthorId).authorName(questionAuthorName)
                         .authorImage(questionAuthorImage).description(questionDescription).viewCount(questionViewCount)
                         .countAnswer(questionCountAnswer).countValuable(questionCountValuable).authorReputation(questionAuthorReputation)
                         .persistDateTime(questionPersistDateTime).lastUpdateDateTime(questionLastUpdateDate).build());
-
-        return questionDto;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
-import com.javamentor.qa.platform.dao.impl.model.transformers.QuestionDtoTagResultTransformer;
+import com.javamentor.qa.platform.webapp.converters.transformers.QuestionDtoTagResultTransformer;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import org.springframework.stereotype.Repository;
 
@@ -16,41 +16,42 @@ public class QuestionDtoTagDaoImpl implements PageDtoDao<QuestionDto> {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @SuppressWarnings("unchecked")
     @Override
     public List<QuestionDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
         Long tagId = (Long) param.get("tagId");
-        List listQuestionDto = entityManager
-                .createQuery("select q.id as q_id, " +
-                        "q.title as q_title, " +
-                        "u.id as q_author_id, " +
-                        "u.nickname as q_author_name, " +
-                        "u.imageLink as q_author_image, " +
-                        "q.description as q_description, " +
-                        "(0L) as q_view_count, " +
-                        "(select count(*) from Answer a where a.question.id = q.id) as q_count_answer, " +
-                        "((select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.user.id = q.user.id) - (select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.user.id = q.user.id)) as q_count_valuable, " +
-                        "(select count(r.count) from Reputation r where r.author.id = u.id) as q_author_reputation, " +
-                        "q.persistDateTime as q_persist_date_time, " +
-                        "q.lastUpdateDateTime as q_last_update_datetime " +
-                        "from Question q " +
-                        "join User u on q.user.id = u.id " +
-                        "join q.tags as t where t.id = :tagId " +
-                        "order by q.id")
+
+        return entityManager
+                .createQuery("SELECT q.id AS q_id, " +
+                        "q.title AS q_title, " +
+                        "u.id AS q_author_id, " +
+                        "u.nickname AS q_author_name, " +
+                        "u.imageLink AS q_author_image, " +
+                        "q.description AS q_description, " +
+                        "(0L) AS q_view_count, " +
+                        "(SELECT COUNT(*) FROM Answer a WHERE a.question.id = q.id) AS q_count_answer, " +
+                        "((SELECT COUNT(up.vote) FROM VoteQuestion up WHERE up.vote = 'UP_VOTE' AND up.user.id = q.user.id) -" +
+                        "(SELECT COUNT(down.vote) FROM VoteQuestion down WHERE down.vote = 'DOWN_VOTE' AND down.user.id = q.user.id)) AS q_count_valuable, " +
+                        "(SELECT COUNT(r.count) FROM Reputation r WHERE r.author.id = u.id) AS q_author_reputation, " +
+                        "q.persistDateTime AS q_persist_date_time, " +
+                        "q.lastUpdateDateTime AS q_last_update_datetime " +
+                        "FROM Question q " +
+                        "JOIN User u ON q.user.id = u.id " +
+                        "JOIN q.tags AS t WHERE t.id = :tagId " +
+                        "ORDER BY q.id")
                 .setParameter("tagId", tagId)
                 .unwrap(org.hibernate.query.Query.class)
                 .setResultTransformer(new QuestionDtoTagResultTransformer())
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
-
-        return listQuestionDto;
     }
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
         Long tagId = (Long) param.get("tagId");
-        return (Long) entityManager.createQuery("select count(q) from Question q join q.tags t where t.id = :tagId")
+        return (Long) entityManager.createQuery("SELECT COUNT(q) FROM Question q JOIN q.tags t WHERE t.id = :tagId")
                 .setParameter("tagId", tagId)
                 .getSingleResult();
     }

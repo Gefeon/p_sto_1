@@ -27,7 +27,6 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
 
     @Override
     @Transactional
-    @SuppressWarnings("unchecked")
     public PageDto<QuestionDto> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 
         PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber, itemsOnPage, map);
@@ -50,9 +49,7 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
     @Transactional
     public Optional<QuestionDto> getQuestionDtoById(long id) {
         Optional<QuestionDto> questionDto = questionDao.getQuestionDtoById(id);
-        if (!questionDto.isEmpty()) {
-            questionDto.get().setListTagDto(tagDtoDao.getTagDtoListByQuestionId(id));
-        }
+        questionDto.ifPresent(dto -> dto.setListTagDto(tagDtoDao.getTagDtoListByQuestionId(id)));
         return questionDto;
     }
 }

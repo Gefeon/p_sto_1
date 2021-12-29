@@ -17,8 +17,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TestAuthenticationResourceController extends AbstractTestApi {
-    private static final String USER_ENTITY = "authenticationresourcecontroller/user_entity.yml";
-    private static final String ROLE_ENTITY = "authenticationresourcecontroller/role.yml";
+    private static final String USER_ENTITY = "dataset/authenticationResourceController/user_entity.yml";
+    private static final String ROLE_ENTITY = "dataset/authenticationResourceController/role.yml";
 
     private static final String WITH_AUTH_URI = "/api/user/stub";
     private static final String WITH_NO_AUTH_URI = "/login";

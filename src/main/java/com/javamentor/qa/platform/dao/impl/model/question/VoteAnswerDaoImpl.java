@@ -1,11 +1,9 @@
 package com.javamentor.qa.platform.dao.impl.model.question;
 
+import com.javamentor.qa.platform.dao.abstracts.model.question.VoteAnswerDao;
 import com.javamentor.qa.platform.dao.impl.model.ReadWriteDaoImpl;
 import com.javamentor.qa.platform.dao.util.SingleResultUtil;
-import com.javamentor.qa.platform.models.entity.question.answer.Answer;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteAnswer;
-import com.javamentor.qa.platform.dao.abstracts.model.question.VoteAnswerDao;
-import com.javamentor.qa.platform.models.entity.user.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

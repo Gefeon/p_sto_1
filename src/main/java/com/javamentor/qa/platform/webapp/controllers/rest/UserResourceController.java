@@ -29,8 +29,8 @@ import java.util.Optional;
 @Validated
 public class UserResourceController {
 
-    private UserDtoService userDtoService;
-    private UserService userService;
+    private final UserDtoService userDtoService;
+    private final UserService userService;
 
     public UserResourceController(UserDtoService userDtoService, UserService userService) {
         this.userDtoService = userDtoService;
@@ -89,7 +89,7 @@ public class UserResourceController {
             @NotBlank(message = "Password cannot be empty") @RequestBody final String password,
             Authentication authentication) {
 
-        boolean onlyLatinAlphabet = password.matches("^[a-zA-Z0-9!@#$%^&*()-=+|\\\\|,.:;~_<>?\\{\\}\\[\\]\"\']+$");
+        boolean onlyLatinAlphabet = password.matches("^[a-zA-Z0-9!@#$%^&*()-=+|\\\\,.:;~_<>?{}\\[\\]\"']+$");
 
         if (password.length() < 6 || password.length() > 12) {
             return new ResponseEntity<>("Length of password from 6 to 12 symbols", HttpStatus.BAD_REQUEST);

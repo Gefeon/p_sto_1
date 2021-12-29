@@ -6,7 +6,7 @@ import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.models.mapper.QuestionMapper;
+import com.javamentor.qa.platform.webapp.converters.mapper.QuestionMapper;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
