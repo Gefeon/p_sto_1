@@ -1,0 +1,27 @@
+.fs-sm {
+    font-size: 0.75rem;
+}
+
+.fs-m {
+    font-size: 0.9rem;
+}
+
+.fs-m {
+    font-size: 0.9rem;
+}
+
+.btn-tag {
+    color: #fff;
+    background-color: #79a7c7;
+    border-color: #79a7c7;
+}
+
+.btn-filter {
+    color: #fff;
+    background-color: #79a7c7;
+    border-color: #4589ee;
+}
+
+.filter-link {
+    text-decoration: none;
+}
