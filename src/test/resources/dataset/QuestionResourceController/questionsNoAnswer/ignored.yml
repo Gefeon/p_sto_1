@@ -1,0 +1,41 @@
+tag_ignore:
+  - id: 106
+    ignored_tag_id: 101
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 107
+    ignored_tag_id: 106
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 108
+    ignored_tag_id: 107
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 109
+    ignored_tag_id: 108
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 110
+    ignored_tag_id: 109
+    user_id: 101
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 116
+    ignored_tag_id: 101
+    user_id: 103
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 117
+    ignored_tag_id: 106
+    user_id: 103
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 118
+    ignored_tag_id: 107
+    user_id: 103
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 119
+    ignored_tag_id: 108
+    user_id: 103
+    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 120
+    ignored_tag_id: 109
+    user_id: 103
+    persist_date: "2021-11-30 00:29:29.586848"
