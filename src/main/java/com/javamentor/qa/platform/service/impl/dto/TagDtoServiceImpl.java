@@ -4,7 +4,6 @@ import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.RelatedTagsDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.service.abstracts.dto.TagDtoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,7 +12,6 @@ import java.util.List;
 @Service
 public class TagDtoServiceImpl implements TagDtoService {
 
-    @Autowired
     private final TagDtoDao tagDao;
 
     public TagDtoServiceImpl(TagDtoDao tagDao) {

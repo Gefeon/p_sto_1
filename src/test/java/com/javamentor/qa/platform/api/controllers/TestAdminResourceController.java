@@ -11,8 +11,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class TestAdminResourceController extends AbstractTestApi {
-    private static final String USER_ENTITY = "adminresourcecontroller/user_entity.yml";
-    private static final String ROLE_ENTITY = "adminresourcecontroller/role.yml";
+    private static final String USER_ENTITY = "dataset/adminResourceController/user_entity.yml";
+    private static final String ROLE_ENTITY = "dataset/adminResourceController/role.yml";
 
     private static final String AUTH_URI = "/api/auth/token";
     private static final String DELETE_URI = "/api/admin/delete/";

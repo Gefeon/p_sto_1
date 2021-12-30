@@ -16,8 +16,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TestInviteController extends AbstractTestApi {
 
-    private static final String USER_ENTITY = "dataset/InviteController/user_entity.yml";
-    private static final String ROLE = "dataset/InviteController/role.yml";
+    private static final String USER_ENTITY = "dataset/inviteController/user_entity.yml";
+    private static final String ROLE = "dataset/inviteController/role.yml";
     private static final String INVITE_URL = "/api/invite/";
     private static final String TEST_URL = "/api/user/stub";
     private static final String AUTH_HEADER = "Authorization";
@@ -28,7 +28,7 @@ public class TestInviteController extends AbstractTestApi {
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE}, disableConstraints = true)
-    @ExpectedDataSet(value = {"dataset/expected/InviteController/user_entity.yml", ROLE})
+    @ExpectedDataSet(value = {"dataset/expected/inviteController/user_entity.yml", ROLE})
     public void shouldInviteUser() throws Exception {
         Mockito.doNothing().when(mailService).send(Mockito.anyString(), Mockito.anyString(), Mockito.anyString());
         Mockito.when(inviteService.generatePassword()).thenReturn("generated_password");

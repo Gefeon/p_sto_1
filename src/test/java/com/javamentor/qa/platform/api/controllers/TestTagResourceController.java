@@ -17,18 +17,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class TestTagResourceController extends AbstractTestApi {
 
-    private static final String QUESTION = "dataset/TagResourceController/relatedTags/Question.yml";
-    private static final String TAG = "dataset/TagResourceController/relatedTags/Tag.yml";
-    private static final String SPECIAL_LETTERS_TAG = "dataset/TagResourceController/tagsByLetters/SpecialLettersTag.yml";
-    private static final String QUESTION_HAS_TAG = "dataset/TagResourceController/relatedTags/QuestionHasTag.yml";
-    private static final String USER_ENTITY = "dataset/TagResourceController/relatedTags/User.yml";
-    private static final String ROLE_ENTITY = "dataset/TagResourceController/relatedTags/Role.yml";
-    private static final String TAG_ENTITY = "dataset/TagResourceController/ignoredTags/Tag.yml";
-    private static final String EMPTY = "dataset/TagResourceController/ignoredTags/Empty.yml";
-    private static final String IGNORED_TAG_ENTITY = "dataset/TagResourceController/ignoredTags/IgnoredTag.yml";
-    private static final String OTHER_USER_IGNORED_TAG_ENTITY = "dataset/TagResourceController/ignoredTags/OtherUserIgnoredTag.yml";
-    private static final String TAG_ENTITY_TRACKED = "dataset/TagResourceController/trackedTags/Tag.yml";
-    private static final String TRACKED_TAG_ENTITY = "dataset/TagResourceController/trackedTags/TrackedTag.yml";
+    private static final String QUESTION = "dataset/tagResourceController/relatedTags/question.yml";
+    private static final String TAG = "dataset/tagResourceController/relatedTags/tag.yml";
+    private static final String SPECIAL_LETTERS_TAG = "dataset/tagResourceController/tagsByLetters/special_letters_tag.yml";
+    private static final String QUESTION_HAS_TAG = "dataset/tagResourceController/relatedTags/question_has_tag.yml";
+    private static final String USER_ENTITY = "dataset/tagResourceController/relatedTags/user.yml";
+    private static final String ROLE_ENTITY = "dataset/tagResourceController/relatedTags/role.yml";
+    private static final String TAG_ENTITY = "dataset/tagResourceController/ignoredTags/tag.yml";
+    private static final String EMPTY = "dataset/tagResourceController/ignoredTags/empty.yml";
+    private static final String IGNORED_TAG_ENTITY = "dataset/tagResourceController/ignoredTags/ignored_tag.yml";
+    private static final String OTHER_USER_IGNORED_TAG_ENTITY = "dataset/tagResourceController/ignoredTags/other_user_ignored_tag.yml";
+    private static final String TAG_ENTITY_TRACKED = "dataset/tagResourceController/trackedTags/tag.yml";
+    private static final String TRACKED_TAG_ENTITY = "dataset/tagResourceController/trackedTags/tracked_tag.yml";
 
     private static final String GET_TRACKED_TAGS = "/api/user/tag/tracked";
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";

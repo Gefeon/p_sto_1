@@ -27,8 +27,8 @@ public class TestAnswerResourceController extends AbstractTestApi {
     private static final String ROLE_DTO = "dataset/answerResourceController/getAnswerByQuestionId/role.yml";
     private static final String QUESTION_DTO = "dataset/answerResourceController/getAnswerByQuestionId/question.yml";
     private static final String REPUTATION_DTO = "dataset/answerResourceController/getAnswerByQuestionId/reputation.yml";
-    private static final String VOTE_ANSWER_DTO = "dataset/answerResourceController/getAnswerByQuestionId/voteanswer.yml";
-    private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/anotherAnswer.yml";
+    private static final String VOTE_ANSWER_DTO = "dataset/answerResourceController/getAnswerByQuestionId/vote_answer.yml";
+    private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/another_answer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 

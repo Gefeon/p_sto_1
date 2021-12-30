@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.dto;
+package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository(value = "AllQuestions")
-public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
+public class QuestionDtoAllDataDaoImpl implements PageDtoDao<QuestionDto> {
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -30,10 +30,10 @@ public class AllQuestionDtoDaoImpl implements PageDtoDao<QuestionDto> {
 
         return entityManager.createQuery(
                         "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto(q.id, q.title, q.user.id," +
-                                " q.user.fullName, q.user.imageLink, SUM(r.count)/(COUNT(r.id) / nullif(COUNT(DISTINCT r.id),0)), q.description, q.persistDateTime," +
-                                " q.lastUpdateDateTime, SUM(0), COUNT(DISTINCT answer.id)," +
-                                "(Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.question.id = q.id) - " +
-                                "(Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.question.id = q.id))" +
+                                " q.user.fullName, q.user.imageLink, q.description, SUM(0), COUNT(DISTINCT answer.id)," +
+                                " ((Select count(up.vote) from VoteQuestion up where up.vote = 'UP_VOTE' and up.question.id = q.id) - " +
+                                " (Select count(down.vote) from VoteQuestion down where down.vote = 'DOWN_VOTE' and down.question.id = q.id))," +
+                                " SUM(r.count)/(COUNT(r.id) / nullif(COUNT(DISTINCT r.id),0)), q.persistDateTime, q.lastUpdateDateTime)" +
                                 " FROM Question q JOIN q.tags t LEFT JOIN Answer answer ON q.id = answer.question.id" +
                                 " LEFT JOIN Reputation r ON q.user.id = r.author.id" +
                                 " WHERE q.id IN (SELECT q.id From Question q JOIN q.tags t WHERE :trackedIds IS NULL OR t.id IN :trackedIds)" +

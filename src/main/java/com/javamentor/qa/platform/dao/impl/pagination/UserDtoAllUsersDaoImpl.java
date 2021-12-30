@@ -1,4 +1,4 @@
-package com.javamentor.qa.platform.dao.impl.dto;
+package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.UserDto;
@@ -25,6 +25,6 @@ public class UserDtoAllUsersDaoImpl implements PageDtoDao<UserDto> {
 
     @Override
     public long getTotalResultCount(Map<Object, Object> param) {
-        return (Long) entityManager.createQuery("SELECT count (id) FROM User").getSingleResult();
+        return (Long) entityManager.createQuery("SELECT COUNT (id) FROM User").getSingleResult();
     }
 }

@@ -37,11 +37,11 @@ public class TagDtoDaoImpl implements TagDtoDao {
     @Override
     public List<RelatedTagsDto> getRelatedTagsDto() {
         return em.createQuery
-                        ("select new com.javamentor.qa.platform.models.dto.RelatedTagsDto" +
-                                "(t.id, t.name, sum(t.questions.size)) " +
-                                "from Tag t inner join Question q on t.id = q.id " +
-                                "group by t.id " +
-                                "order by sum(t.questions.size) desc", RelatedTagsDto.class)
+                        ("SELECT new com.javamentor.qa.platform.models.dto.RelatedTagsDto" +
+                                "(t.id, t.name, SUM(t.questions.size)) " +
+                                "FROM Tag t INNER JOIN Question q ON t.id = q.id " +
+                                "GROUP BY t.id " +
+                                "ORDER BY SUM(t.questions.size) DESC", RelatedTagsDto.class)
                 .setMaxResults(10).getResultList();
     }
 
@@ -61,10 +61,8 @@ public class TagDtoDaoImpl implements TagDtoDao {
                 .getResultList();
 
         Map<Long, List<TagDto>> tagsMap = new HashMap<>();
-        tags.forEach(tuple -> {
-            tagsMap.computeIfAbsent(tuple.get("question_id", Long.class), id -> new ArrayList<>())
-                    .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class)));
-        });
+        tags.forEach(tuple -> tagsMap.computeIfAbsent(tuple.get("question_id", Long.class), id -> new ArrayList<>())
+                .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class))));
         return tagsMap;
     }
 

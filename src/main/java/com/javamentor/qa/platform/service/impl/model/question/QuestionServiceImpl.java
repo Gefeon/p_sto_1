@@ -8,7 +8,6 @@ import com.javamentor.qa.platform.service.abstracts.model.question.QuestionServi
 import com.javamentor.qa.platform.service.abstracts.model.question.TagService;
 import com.javamentor.qa.platform.service.impl.model.ReadWriteServiceImpl;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
