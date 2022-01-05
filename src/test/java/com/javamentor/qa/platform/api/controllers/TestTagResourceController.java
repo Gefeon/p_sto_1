@@ -34,6 +34,7 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";
     private static final String GET_IGNORED_TAGS = "/api/user/tag/ignored";
     private static final String GET_TAGS_BY_LETTERS = "/api/user/tag/letters";
+    private static final String GET_TAGS_BY_NAME = "/api/user/tag/name";
     private static final String AUTH_URI = "/api/auth/token";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
@@ -124,5 +125,61 @@ public class TestTagResourceController extends AbstractTestApi {
                         containsString("se"),
                         containsString("se"),
                         containsString("se"))));
+    }
+
+    /*
+     * Тест пагинации TagDto по имени
+     * */
+    @Test
+    @DataSet(value = {QUESTION, TAG, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    public void getTagsPaginationByName() throws Exception {
+
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+
+        // стандартный запрос
+        mvc.perform(get("/api/user/tag/name?currPage=1&items=3").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(5)))
+                .andExpect(jsonPath("$.itemsOnPage", is(3)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").isNotEmpty())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(107, 110, 104)));
+
+        // нет необязательного параметра - кол-во элементов на странице, по умолчанию 10
+        mvc.perform(get("/api/user/tag/name?currPage=1").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").value(hasSize(10)));
+
+        // запрос на большее кол-во данных чем есть
+        mvc.perform(get("/api/user/tag/name?currPage=2&items=30").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(30)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // нет обязательного параметра - текущей страницы
+        mvc.perform(get("/api/user/tag/name?items=4").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 }
