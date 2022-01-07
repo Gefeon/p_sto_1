@@ -70,11 +70,11 @@ public class TagResourceController {
             @ApiResponse(description = "successfully get tags from DB", responseCode = "200",
                     content = @Content(schema = @Schema(implementation = Tag.class)))
     })
-    @PostMapping("/letters")
+    @GetMapping("/letters")
     public ResponseEntity<?> getTagsByLetters(
-            @ApiParam(value = "A JSON object containing letters for the next desired tag to attach to question", required = true)
-            @RequestBody Map<String, String> json) {
-        List<TagDto> tags = tagService.getTagsByLetters(json.get("letters"));
+            @ApiParam(value = "Letters for the next desired tag to attach to question")
+            @RequestParam(required = false) String letters) {
+        List<TagDto> tags = tagService.getTagsByLetters(letters);
         return ResponseEntity.ok(tags);
     }
 
