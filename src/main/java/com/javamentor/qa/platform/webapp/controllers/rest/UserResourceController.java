@@ -4,7 +4,9 @@ import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
+import com.javamentor.qa.platform.service.abstracts.dto.UserReputationDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
+import com.javamentor.qa.platform.service.impl.dto.UserReputationDtoServiceImpl;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -30,10 +32,12 @@ import java.util.Optional;
 public class UserResourceController {
 
     private final UserDtoService userDtoService;
+    private final UserReputationDtoService userReputationDtoService;
     private final UserService userService;
 
-    public UserResourceController(UserDtoService userDtoService, UserService userService) {
+    public UserResourceController(UserDtoService userDtoService, UserReputationDtoService userReputationDtoService, UserService userService) {
         this.userDtoService = userDtoService;
+        this.userReputationDtoService = userReputationDtoService;
         this.userService = userService;
     }
 
@@ -76,7 +80,7 @@ public class UserResourceController {
     public ResponseEntity<?> getReputation(@RequestParam int currPage, @RequestParam(required = false, defaultValue = "10") int items) {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "UserReputation");
-        return ResponseEntity.ok(userDtoService.getPage(currPage, items, map));
+        return ResponseEntity.ok(userReputationDtoService.getPage(currPage, items, map));
     }
 
     @Operation(summary = "change user password", responses = {

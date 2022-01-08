@@ -180,7 +180,7 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[*].reputation").value(containsInRelativeOrder(84, 0, 0, 0)))
                 .andExpect(jsonPath("$.items[*].linkImage").value(containsInRelativeOrder("link.com", "link.com2", "link.com3", null)))
                 .andExpect(jsonPath("$.items[*].city").value(containsInRelativeOrder("Irkutsk", "Smolensk", "Voronej", null)))
-                .andExpect(jsonPath("$.items[*].tags[*].id").value(containsInAnyOrder(101, 100)));
+                .andExpect(jsonPath("$.items[*].tags[*].id").value(containsInRelativeOrder(100,101,100,100,100)));
     }
 
     @Test

@@ -2,6 +2,7 @@ package com.javamentor.qa.platform.service.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
 import com.javamentor.qa.platform.models.dto.*;
+import com.javamentor.qa.platform.service.abstracts.dto.UserReputationDtoService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,7 +11,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
-public class UserReputationDtoServiceImpl extends PageDtoServiceImpl<UserReputationDto>{
+public class UserReputationDtoServiceImpl extends PageDtoServiceImpl<UserReputationDto> implements UserReputationDtoService {
 
     private final TagDtoDao tagDtoDao;
 
