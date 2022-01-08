@@ -1,7 +1,9 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
+import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.dto.RelatedTagsDto;
 import com.javamentor.qa.platform.models.dto.TagDto;
+import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.Tag;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.service.abstracts.dto.TagDtoService;
@@ -9,6 +11,7 @@ import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,11 +70,23 @@ public class TagResourceController {
             @ApiResponse(description = "successfully get tags from DB", responseCode = "200",
                     content = @Content(schema = @Schema(implementation = Tag.class)))
     })
-    @PostMapping("/letters")
+    @GetMapping("/letters")
     public ResponseEntity<?> getTagsByLetters(
-            @ApiParam(value = "A JSON object containing letters for the next desired tag to attach to question", required = true)
-            @RequestBody Map<String, String> json) {
-        List<TagDto> tags = tagService.getTagsByLetters(json.get("letters"));
+            @ApiParam(value = "Letters for the next desired tag to attach to question")
+            @RequestParam(required = false) String letters) {
+        List<TagDto> tags = tagService.getTagsByLetters(letters);
         return ResponseEntity.ok(tags);
+    }
+
+    @Operation(summary = "Get page of tags with pagination selected by name", responses = {
+            @ApiResponse(description = " success", responseCode = "200",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = TagDto.class)))),
+            @ApiResponse(description = "There is no curPage in the url or the parameters in the url are wrong", responseCode = "400")
+    })
+    @GetMapping("/name")
+    public ResponseEntity<?> getPaginationTagsByName(@RequestParam int currPage, @RequestParam(required = false, defaultValue = "10") int items) {
+        Map<Object, Object> map = new HashMap<>();
+        map.put("class", "TagPaginationByName");
+        return ResponseEntity.ok(tagService.getPage(currPage, items, map));
     }
 }
