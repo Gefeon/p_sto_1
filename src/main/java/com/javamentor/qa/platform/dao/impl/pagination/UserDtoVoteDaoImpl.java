@@ -24,7 +24,7 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
 
         return entityManager.createQuery("SELECT " +
-                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(CASE WHEN r IS NULL THEN 0 ELSE r.count END)," +
+                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(COALESCE(r.count, 0))," +
                         "((SELECT COUNT(vq.vote) FROM VoteQuestion vq WHERE vq.user.id = u.id) +" +
                         "(SELECT COUNT(va.vote) FROM VoteAnswer va WHERE va.user.id = u.id)) AS sort " +
                         " FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +

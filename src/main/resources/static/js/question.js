@@ -153,6 +153,7 @@ $(document).ready(function() {
     });
 });
 
+
 let descriptionField = $("#description")[0];
 let displayField = $("#displayField");
 let patternBold = new RegExp(/[*]([^*]+)[*]/g);
@@ -164,6 +165,7 @@ descriptionField.addEventListener("keyup", updateDisplayField, false);
 function makeTransformation(sign) {
     if (descriptionField.selectionStart === descriptionField.selectionEnd) {
         let signText;
+        let text;
         if(sign === "$") signText = "курсивом";
         if(sign === "*") signText = "жирным шрифтом";
         if(sign === "\'") signText = "кодом";
