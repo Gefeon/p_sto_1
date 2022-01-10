@@ -12,10 +12,10 @@ $.ajax({
         const persistDate = new Date(result.persistDateTime);
         const months = ['янв','фев','мар','апр','мая','июн','июл','авг','сен','окт','ноя','дек']
         $("#questionTitle").text(`${result.title}`);
-        $("#question-created-date").replaceWith(`<span style="color: gray;">Вопрос задан</span> ${persistDate.getUTCDay()} ${months[`${persistDate.getMonth()}`]} ${persistDate.getFullYear()%100}г. в ${persistDate.getHours()}:${persistDate.getMinutes()}`);
+        $("#question-created-date").replaceWith(`<span style="color: gray;">Вопрос задан</span> ${persistDate.getDate()} ${months[`${persistDate.getMonth()}`]} ${persistDate.getFullYear()%100}г. в ${persistDate.getHours()}:${persistDate.getMinutes()}`);
         $("#views-counter").replaceWith(`<span style="color: gray;">Просмотрен</span> ${result.viewCount} раз`);
         $("#questionDescription").text(`${result.description}`);
-        $("#relativeTime").text(` ${persistDate.getDay()} ${months[`${persistDate.getMonth()}`]} ${persistDate.getFullYear()%100}г. в ${persistDate.getHours()}:${persistDate.getMinutes()}`);
+        $("#relativeTime").text(` ${persistDate.getDate()} ${months[`${persistDate.getMonth()}`]} ${persistDate.getFullYear()%100}г. в ${persistDate.getHours()}:${persistDate.getMinutes()}`);
         $("#userImageLink").attr("src",`${result.authorImage}`);
         $("#userName").text(`${result.authorName}`);
         $("#questionValuable").text(`${result.countValuable}`);
@@ -33,23 +33,23 @@ $.ajax({
                             const persistDate = new Date(answer.persistDate);
                             $("#answersContainer")[0].insertAdjacentHTML('beforeend',
                                 `<div class="col col-lg-1">
-                                    <a onclick="answerUpVote(${answer.id})"
+                                    <a id="answerLinkUp${answer.id}" onclick="answerUpVote(${answer.id})"
                                        title="Вопрос отражает стремление разобраться; он понятен и несёт пользу.">
                                         <svg aria-hidden="true" class="svg-icon iconArrowUpLg" width="36" height="36"
                                              viewBox="0 0 36 36">
-                                            <path d="M2 26h32L18 10 2 26Z"></path>
+                                            <path id="answerPathUp${answer.id}" d="M2 26h32L18 10 2 26Z"></path>
                                         </svg>
                                     </a>
                                     <h3 id="answerValuable${answer.id}" style="text-indent: 5px;">${answer.countValuable}</h3>
-                                    <a onclick="answerDownVote(${answer.id})"
+                                    <a id="answerLinkDown${answer.id}" onclick="answerDownVote(${answer.id})"
                                        title="Вопрос не отражает стремления разобраться; он непонятен или не несёт пользы.">
                                         <svg aria-hidden="true" class="svg-icon iconArrowDownLg" width="36" height="36"
                                              viewBox="0 0 36 36">
-                                            <path d="M2 10h32L18 26 2 10Z"></path>
+                                            <path id="answerPathDown${answer.id}" d="M2 10h32L18 26 2 10Z"></path>
                                         </svg>
                                     </a>
                                 <div style="text-indent: 2px;">
-                                    <a href="/*" title="Автор вопроса принял ответ ${dateAccept.getUTCDay()} ${months[`${dateAccept.getMonth()}`]} ${dateAccept.getFullYear() % 100}г. в ${dateAccept.getHours()}:${dateAccept.getMinutes()}\`.">
+                                    <a href="/*" title="Автор вопроса принял ответ ${dateAccept.getDate()} ${months[`${dateAccept.getMonth()}`]} ${dateAccept.getFullYear() % 100}г. в ${dateAccept.getHours()}:${dateAccept.getMinutes()}\`.">
                                         <svg aria-hidden="true" class="svg-icon iconCheckmarkLg" width="36" height="36"
                                              viewBox="0 0 36 36">
                                             <path d="m6 14 8 8L30 6v8L14 30l-8-8v-8Z"></path>
@@ -75,7 +75,7 @@ $.ajax({
                                     <div class="card text-gray bg-light border-0 mb-3">
                                         <div class="text font-weight-light"
                                              style="margin-right:5px; margin-left:5px;">
-                                            <p>ответ дан<span class="relativetime"> ${persistDate.getUTCDay()} ${months[`${persistDate.getMonth()}`]} ${persistDate.getFullYear() % 100}г. в ${persistDate.getHours()}:${persistDate.getMinutes()}</span></p>
+                                            <p>ответ дан<span class="relativetime"> ${persistDate.getDate()} ${months[`${persistDate.getMonth()}`]} ${persistDate.getFullYear() % 100}г. в ${persistDate.getHours()}:${persistDate.getMinutes()}</span></p>
                                         </div>
                                         <div class="d-flex">
                                             <div class="user-avatar" style="margin-left:5px; margin-bottom:3px;">
@@ -101,7 +101,6 @@ $.ajax({
                             </div>`)
                         }
                     )
-
                 },
                 error: function (error) {
                     alert(error.error());
@@ -131,7 +130,12 @@ $.post({
         questionVal.text(text + 1);
     },
     error: function (error) {
-        alert(error.responseText);
+        if(error.responseText.substring("Vote for this question already exists")) {
+            $("#iconArrowUpLg").attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+            $("#iconArrowUpLg").parents().parents().attr("onclick", "");
+            $("#iconArrowDownLg").attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+            $("#iconArrowDownLg").parents().parents().attr("onclick", "");
+        }
     }
     })
 }
@@ -151,7 +155,12 @@ function questionDownVote() {
             questionVal.text(text - 1);
         },
         error: function (error) {
-            alert(error.responseText);
+            if(error.responseText.substring("Vote for this question already exists")) {
+                $("#iconArrowUpLg").attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+                $("#iconArrowUpLg").parents().parents().attr("onclick", "");
+                $("#iconArrowDownLg").attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+                $("#iconArrowDownLg").parents().parents().attr("onclick", "");
+            }
         }
     })
 }
@@ -171,7 +180,12 @@ function answerUpVote(answerId) {
             answerVal.text(text + 1);
         },
         error: function (error) {
-            alert(error.responseText);
+            if(error.responseText.substring("User is already voted")) {
+                $(`#answerPathUp${answerId}`).attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+                $(`#answerLinkUp${answerId}`).attr("onclick", "");
+                $(`#answerPathDown${answerId}`).attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+                $(`#answerLinkDown${answerId}`).attr("onclick", "");
+            }
         }
     })
 }
@@ -191,7 +205,12 @@ function answerDownVote(answerId) {
             answerVal.text(text - 1);
         },
         error: function (error) {
-            alert(error.responseText);
+            if(error.responseText.substring("User is already voted")) {
+                $(`#answerPathUp${answerId}`).attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+                $(`#answerLinkUp${answerId}`).attr("onclick", "");
+                $(`#answerPathDown${answerId}`).attr("stroke", "hsl(0,0%,50%)").attr("fill", "hsl(0,0%,85%)");
+                $(`#answerLinkDown${answerId}`).attr("onclick", "");
+            }
         }
     })
 }

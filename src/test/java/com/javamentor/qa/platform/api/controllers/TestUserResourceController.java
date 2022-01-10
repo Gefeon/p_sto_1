@@ -176,7 +176,6 @@ public class TestUserResourceController extends AbstractTestApi {
     @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoByPersistDateWithoutRequiredParam_expectBadRequest() throws Exception {
 
-
         // нет обязательного параметра - текущей страницы
         ResultActions response = mvc.perform(get("/api/user/new?items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andDo(print())
