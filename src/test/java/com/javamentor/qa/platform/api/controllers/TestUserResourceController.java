@@ -53,7 +53,7 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.id", is(103)))
                 .andExpect(jsonPath("$.fullName", is("Roman")))
                 .andExpect(jsonPath("$.email", is("Rom@ya.ru")))
-                .andExpect(jsonPath("$.city", is("Surgut")))
+                .andExpect(jsonPath("$.city", nullValue()))
                 .andExpect(jsonPath("$.linkImage", nullValue()))
                 .andExpect(jsonPath("$.reputation", is(41)));
 
@@ -335,7 +335,7 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.itemsOnPage", is(4)))
                 .andExpect(jsonPath("$.totalResultCount", is(14)))
                 .andExpect(jsonPath("$.items").isNotEmpty())
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 100, 102, 103)));
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 100)));
 
         // запрос на большее кол-во данных чем есть
         mvc.perform(get("/api/user/vote?currPage=2&items=30").header(AUTH_HEADER, PREFIX + token.getToken()))

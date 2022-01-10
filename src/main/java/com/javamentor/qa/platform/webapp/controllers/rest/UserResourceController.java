@@ -2,11 +2,11 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
+import com.javamentor.qa.platform.models.dto.UserSupplierDto;
 import com.javamentor.qa.platform.models.entity.user.User;
+import com.javamentor.qa.platform.service.abstracts.dto.UserSupplierDtoService;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
-import com.javamentor.qa.platform.service.abstracts.dto.UserReputationDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
-import com.javamentor.qa.platform.service.impl.dto.UserReputationDtoServiceImpl;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -31,24 +31,24 @@ import java.util.Optional;
 @Validated
 public class UserResourceController {
 
+    private final UserSupplierDtoService userSupplierDtoService;
     private final UserDtoService userDtoService;
-    private final UserReputationDtoService userReputationDtoService;
     private final UserService userService;
 
-    public UserResourceController(UserDtoService userDtoService, UserReputationDtoService userReputationDtoService, UserService userService) {
+    public UserResourceController(UserSupplierDtoService userSupplierDtoService, UserDtoService userDtoService, UserService userService) {
+        this.userSupplierDtoService = userSupplierDtoService;
         this.userDtoService = userDtoService;
-        this.userReputationDtoService = userReputationDtoService;
         this.userService = userService;
     }
 
     @GetMapping(path = "/api/user/{userId}")
     @Operation(summary = "Get user dto", responses = {
             @ApiResponse(description = "Get user dto success", responseCode = "200",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserSupplierDto.class))),
             @ApiResponse(description = "User not found", responseCode = "404", content = @Content)
     })
     public ResponseEntity<Object> getUserDto(@PathVariable("userId") Long id) {
-        Optional<UserDto> dto = userDtoService.getUserDtoById(id);
+        Optional<UserSupplierDto> dto = userSupplierDtoService.getUserDtoById(id);
         return dto.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is absent or wrong Id")
                 : ResponseEntity.ok(dto.get());
@@ -80,7 +80,7 @@ public class UserResourceController {
     public ResponseEntity<?> getReputation(@RequestParam int currPage, @RequestParam(required = false, defaultValue = "10") int items) {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "UserReputation");
-        return ResponseEntity.ok(userReputationDtoService.getPage(currPage, items, map));
+        return ResponseEntity.ok(userDtoService.getPage(currPage, items, map));
     }
 
     @Operation(summary = "change user password", responses = {

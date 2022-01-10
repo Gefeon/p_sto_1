@@ -24,7 +24,7 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
 
         return entityManager.createQuery("SELECT " +
-                        "u.id, u.email, u.fullName, u.imageLink, u.city, SUM(COALESCE(r.count, 0))," +
+                        "u.id, u.nickname, u.city, SUM(COALESCE(r.count, 0)), u.imageLink," +
                         "((SELECT COUNT(vq.vote) FROM VoteQuestion vq WHERE vq.user.id = u.id) +" +
                         "(SELECT COUNT(va.vote) FROM VoteAnswer va WHERE va.user.id = u.id)) AS sort " +
                         " FROM User u LEFT JOIN Reputation r ON u.id = r.author.id " +
@@ -33,14 +33,13 @@ public class UserDtoVoteDaoImpl implements PageDtoDao<UserDto> {
                 .setResultTransformer(new ResultTransformer() {
                     @Override
                     public Object transformTuple(Object[] tuples, String[] aliases) {
-                        UserDto userDTO = new UserDto();
-                        userDTO.setId((long) tuples[0]);
-                        userDTO.setEmail((String) tuples[1]);
-                        userDTO.setFullName((String) tuples[2]);
-                        userDTO.setLinkImage((String) tuples[3]);
-                        userDTO.setCity((String) tuples[4]);
-                        userDTO.setReputationLong((Long) tuples[5]);
-                        return userDTO;
+                        UserDto userDto = new UserDto();
+                        userDto.setId((long) tuples[0]);
+                        userDto.setNickname((String) tuples[1]);
+                        userDto.setCity((String) tuples[2]);
+                        userDto.setReputationTotal((long) tuples[3]);
+                        userDto.setLinkImage((String) tuples[4]);
+                        return userDto;
                     }
 
                     @Override

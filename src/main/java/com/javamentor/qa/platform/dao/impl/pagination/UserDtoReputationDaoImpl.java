@@ -2,7 +2,6 @@ package com.javamentor.qa.platform.dao.impl.pagination;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.PageDtoDao;
 import com.javamentor.qa.platform.models.dto.UserDto;
-import com.javamentor.qa.platform.models.dto.UserReputationDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,21 +10,21 @@ import java.util.List;
 import java.util.Map;
 
 @Repository(value = "UserReputation")
-public class UserDtoReputationDaoImpl implements PageDtoDao<UserReputationDto> {
+public class UserDtoReputationDaoImpl implements PageDtoDao<UserDto> {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<UserReputationDto> getItems(Map<Object, Object> param) {
+    public List<UserDto> getItems(Map<Object, Object> param) {
 
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
 
-        return  entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserReputationDto" +
+        return  entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
                 "(u.id, u.nickname, u.city, SUM(COALESCE(r.count, 0)) AS rep, u.imageLink) " +
                 "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id " +
-                "ORDER BY rep DESC", UserReputationDto.class)
+                "ORDER BY rep DESC", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
     }
