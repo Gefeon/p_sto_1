@@ -1,7 +1,7 @@
 package com.javamentor.qa.platform.models.dto;
 
 import lombok.*;
-import org.dbunit.dataset.datatype.LongDataType;
+import java.time.LocalDateTime;
 
 
 @Data
@@ -16,5 +16,5 @@ public class CommentDto {
     private Long userId;
     private String fullName;
     private Long reputation;
-    private LongDataType dateAdded;
+    private LocalDateTime dateAdded;
 }
