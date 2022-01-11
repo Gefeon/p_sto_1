@@ -22,9 +22,9 @@ public class UserDtoReputationDaoImpl implements PageDtoDao<UserDto> {
         int itemsOnPage = (int) param.get("itemsOnPage");
 
         return  entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
-                "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(CASE WHEN r IS NULL THEN 0 ELSE r.count END))" +
+                "(u.id, u.nickname, u.city, SUM(COALESCE(r.count, 0)) AS rep, u.imageLink) " +
                 "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id " +
-                "ORDER BY SUM(r.count) DESC", UserDto.class)
+                "ORDER BY rep DESC", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
                 .getResultList();
     }

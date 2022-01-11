@@ -20,7 +20,7 @@ public class UserDtoPersistDateDaoImpl implements PageDtoDao<UserDto> {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
         return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
-                        "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(CASE WHEN r IS NULL THEN 0 ELSE r.count END)) " +
+                        "(u.id, u.nickname, u.city, SUM(COALESCE(r.count, 0)), u.imageLink) " +
                         "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id " +
                         "ORDER BY u.persistDateTime", UserDto.class)
                 .setFirstResult((curPageNumber - 1) * itemsOnPage).setMaxResults(itemsOnPage)
