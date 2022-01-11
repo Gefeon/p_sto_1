@@ -10,12 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class UserSupplierSupplierDtoServiceImpl extends PageDtoServiceImpl<UserSupplierDto> implements UserSupplierDtoService {
+public class UserSupplierDtoServiceImpl extends PageDtoServiceImpl<UserSupplierDto> implements UserSupplierDtoService {
 
     private final UserSupplierDtoDao userSupplierDtoDao;
 
     @Autowired
-    public UserSupplierSupplierDtoServiceImpl(UserSupplierDtoDao userSupplierDtoDao) {
+    public UserSupplierDtoServiceImpl(UserSupplierDtoDao userSupplierDtoDao) {
         this.userSupplierDtoDao = userSupplierDtoDao;
     }
 
