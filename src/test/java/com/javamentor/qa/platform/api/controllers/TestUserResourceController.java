@@ -354,6 +354,5 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
-
     }
 }
