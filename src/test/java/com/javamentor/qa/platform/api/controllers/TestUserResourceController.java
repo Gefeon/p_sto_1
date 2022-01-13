@@ -32,7 +32,7 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String USER_BY_VOTE_ANSWER = "dataset/userResourceController/vote_answer.yml";
     private static final String USER_BY_VOTE_QUESTION = "dataset/userResourceController/vote_question.yml";
     private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
-    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/question_has_tag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/paginationByTag/question_has_tag.yml";
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
