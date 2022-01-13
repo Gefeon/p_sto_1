@@ -29,6 +29,8 @@ public class TestAnswerResourceController extends AbstractTestApi {
     private static final String REPUTATION_DTO = "dataset/answerResourceController/getAnswerByQuestionId/reputation.yml";
     private static final String VOTE_ANSWER_DTO = "dataset/answerResourceController/getAnswerByQuestionId/vote_answer.yml";
     private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/another_answer.yml";
+    private static final String COMMENT_DTO = "dataset/answerResourceController/getAnswerByQuestionId/comment.yml";
+    private static final String COMMENT_ANSWER = "dataset/answerResourceController/getAnswerByQuestionId/comment_answer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -49,7 +51,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO}, disableConstraints = true)
+    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO, COMMENT_DTO, COMMENT_ANSWER}, disableConstraints = true)
     public void getAnswersByQuestionId() throws Exception {
 
         String token = getToken("user100@user.ru", "user");
@@ -62,7 +64,6 @@ public class TestAnswerResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$[0].userId", is(100)))
                 .andExpect(jsonPath("$[0].userReputation", is(30)))
                 .andExpect(jsonPath("$[0].countValuable", is(2)))
-                .andExpect(jsonPath("$[1].questionId", is(100)))
                 .andExpect(jsonPath("$[1].userId", is(101)))
                 .andExpect(jsonPath("$[1].userReputation", is(33)))
                 .andExpect(jsonPath("$[1].countValuable", is(1)))
@@ -78,10 +79,10 @@ public class TestAnswerResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$").isEmpty());
 
         // Id не задан
-        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + token))
-                .andDo(print())
-                .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$").doesNotExist());
+//        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + token))
+//                .andDo(print())
+//                .andExpect(status().isNotFound())
+//                .andExpect(jsonPath("$").doesNotExist());
 
         // не верный формат Id
         mvc.perform(get("/api/user/question/ggg/answer").header(AUTH_HEADER, PREFIX + token))
@@ -89,6 +90,39 @@ public class TestAnswerResourceController extends AbstractTestApi {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
+    //==================================================================================================================
+    @Test
+    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO, COMMENT_DTO, COMMENT_ANSWER}, disableConstraints = true)
+    public void getCommentsDtoInAnswersByQuestionId() throws Exception {
+
+        String token = getToken("user100@user.ru", "user");
+
+        mvc.perform(get("/api/user/question/100/answer").header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].comments[0].id", is(101)))
+                .andExpect(jsonPath("$[0].comments[0].comment", is("Hello world")))
+                .andExpect(jsonPath("$[0].comments[0].userId", is(100)))
+                .andExpect(jsonPath("$[0].comments[0].fullName", is("Ivan")))
+                .andExpect(jsonPath("$[0].comments[0].reputation", is(30)))
+                .andExpect(jsonPath("$[0].comments[1].id", is(102)))
+                .andExpect(jsonPath("$[0].comments[1].comment", is("Hello brother")))
+                .andExpect(jsonPath("$[0].comments[1].userId", is(101)))
+                .andExpect(jsonPath("$[0].comments[1].fullName", is("Olga")))
+                .andExpect(jsonPath("$[0].comments[1].reputation", is(33)))
+                .andExpect(jsonPath("$[1].comments[0].id", is(103)))
+                .andExpect(jsonPath("$[1].comments[0].comment", is("Hello mother")))
+                .andExpect(jsonPath("$[1].comments[0].userId", is(102)))
+                .andExpect(jsonPath("$[1].comments[0].fullName", is("Elena")))
+                .andExpect(jsonPath("$[1].comments[0].reputation", is(22)))
+                .andExpect(jsonPath("$[2].comments[0].id", is(104)))
+                .andExpect(jsonPath("$[2].comments[0].comment", is("Hello wife")))
+                .andExpect(jsonPath("$[2].comments[0].userId", is(103)))
+                .andExpect(jsonPath("$[2].comments[0].fullName", is("Roman")))
+                .andExpect(jsonPath("$[2].comments[0].reputation", is(33)));
+    }
+
     //==================================================================================================================
     private final String URL_ANSWER = "/api/user/question/100/answer";
     private static final String VOTE_USER_ENTITY = "dataset/answerResourceController/vote/user_entity.yml";
