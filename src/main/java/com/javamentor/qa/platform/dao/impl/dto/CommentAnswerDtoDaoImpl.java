@@ -21,7 +21,7 @@ public class CommentAnswerDtoDaoImpl implements CommentAnswerDtoDao {
                         "coma.text," +
                         "coma.user.id," +
                         "coma.user.fullName," +
-                        "SUM(r.count)," +
+                        "SUM(COALESCE(r.count, 0))," +
                         "coma.persistDateTime) " +
                         "FROM Comment coma " +
                         "LEFT JOIN CommentAnswer ca ON ca.comment.id = coma.id " +

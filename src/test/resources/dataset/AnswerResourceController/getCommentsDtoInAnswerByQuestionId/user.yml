@@ -20,7 +20,7 @@ user_entity:
     city: "Smolensk"
     email: "user101@user.ru"
     full_name: "Olga"
-    image_link: "link.com2"
+    image_link: "link.com"
     is_deleted: "false"
     is_enabled: "true"
     last_redaction_date: "2021-11-29 00:00:00"
@@ -36,7 +36,7 @@ user_entity:
     city: "Voronej"
     email: "user102@user.ru"
     full_name: "Elena"
-    image_link: "link.com3"
+    image_link: "link.com"
     is_deleted: "false"
     is_enabled: "true"
     last_redaction_date: "2021-11-29 00:00:00"
@@ -49,7 +49,7 @@ user_entity:
     role_id: 102
   - id: 103
     about: "fourth user"
-    city: null
+    city: "Surgut"
     email: "Rom@ya.ru"
     full_name: "Roman"
     image_link: null

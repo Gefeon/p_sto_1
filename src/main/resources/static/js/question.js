@@ -3,16 +3,12 @@ new autoComplete({
     minChars: 1,
     source: function (term, suggest) {
         term = term.split(/\s*[ ,;]\s*/).filter(item => item !== "").pop();
-        if(term !== undefined){
+        if (term !== undefined) {
             term = term.toLowerCase();
         }
-        let letters = {
-            letters: term,
-        }
-        $.post({
-            url: "/api/user/tag/letters",
+        $.get({
+            url: "/api/user/tag/letters?letters=" + term,
             contentType: 'application/json',
-            data: JSON.stringify(letters),
             beforeSend: function (request) {
                 let token = $.cookie("jwt_token");
                 if (token != null) {
@@ -23,15 +19,24 @@ new autoComplete({
                 suggest(result);
             },
             error: function (error) {
-                if(error.status === 403) window.location.replace("/login");
-                else alert(error.responseText);
+                $(".autocomplete-suggestions")[0].style.display = "none";
+                if (error.status === 400 && error.responseText.substring("The valid characters are defined in RFC 7230 and RFC 3986")) {
+                    $("#lettersError")[0].insertAdjacentHTML('afterbegin',
+                        "<span style='color: red'>" +
+                        "<b>Некоторые введённые символы недопустимы. Пожалуйста, заполните поле согласно примеру</b><br>" +
+                        "<span style='color: black'>android, java; kotlin RXJava</span>" +
+                        "</span>");
+                }
+                if (error.status === 403) {
+                    window.location.replace("/login");
+                }
             }
         })
     },
     onSelect(event, term, item) {
         let tags = $("#tags");
         let modifiedText = tags.val().replace(/[ ,;]*[^ ,;]*$/ig, "");
-        if(modifiedText === "") {
+        if (modifiedText === "") {
             tags.val(term);
         } else {
             tags.val(modifiedText + ", " + term);
@@ -71,7 +76,7 @@ $(document).on('submit', '#askQuestionForm', function () {
                 window.location.replace("/question/" + id);
             },
             error: function (error) {
-                if(error.status === 403) window.location.replace("/login");
+                if (error.status === 403) window.location.replace("/login");
                 else alert(error.responseText);
             }
         })
@@ -112,14 +117,22 @@ function validate(formData) {
             "<span style='color: red'>" +
             "<b>Tags cannot be empty!</b>" +
             "</span>");
-        isValidationsFails = true;
+        return false;
     }
     if (formData.tags.length > 5) {
         $("#tagsError")[0].insertAdjacentHTML('afterbegin',
             "<span style='color: red'>" +
             "<b>Tag's amount cannot be more than 5!</b>" +
             "</span>");
-        isValidationsFails = true;
+        return false;
+    }
+    let invalidCharacters = formData.tags[0].name.match(/[^\w ;',.!@#$%^&*()_+|\\/~`абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНУФХЦЧШЩЪЫЬЭЮЯ№":?=-]/g);
+    if (invalidCharacters !== null) {
+        $("#tagsError")[0].insertAdjacentHTML('afterbegin',
+            "<span style='color: red'>" +
+            '<b>Недопустимый символ: ' + invalidCharacters[0] +"</b>" +
+            "</span>");
+        return false;
     }
     return !isValidationsFails;
 }
@@ -144,9 +157,15 @@ $.fn.serializeToQuestionCreateDto = function () {
     return questionCreateDto;
 };
 
-$(document).ready(function() {
-    $("#askQuestionForm").keydown(function(event){
-        if(event.keyCode === 13 && $(".autocomplete-suggestions").is(":visible")) {
+$(document).ready(function () {
+    $("#tags").keydown(function (event) {
+        let errorLettersField = $("#lettersError span");
+        if (errorLettersField.length >= 1) {
+            errorLettersField[0].remove();
+        }
+    });
+    $("#askQuestionForm").keydown(function (event) {
+        if (event.keyCode === 13 && $(".autocomplete-suggestions").is(":visible")) {
             event.preventDefault();
             return false;
         }
@@ -166,11 +185,11 @@ function makeTransformation(sign) {
     if (descriptionField.selectionStart === descriptionField.selectionEnd) {
         let signText;
         let text;
-        if(sign === "$") signText = "курсивом";
-        if(sign === "*") signText = "жирным шрифтом";
-        if(sign === "\'") signText = "кодом";
+        if (sign === "$") signText = "курсивом";
+        if (sign === "*") signText = "жирным шрифтом";
+        if (sign === "\'") signText = "кодом";
         signText = `${sign}текст, выделенный ${signText}${sign}`;
-        if(sign === "~") signText = `${sign}Цитата${sign}`;
+        if (sign === "~") signText = `${sign}Цитата${sign}`;
         descriptionField.setRangeText(signText);
         updateDisplayField();
         return;
@@ -178,7 +197,7 @@ function makeTransformation(sign) {
     let text = descriptionField.value;
     let startSymbPos = descriptionField.selectionStart;
     let endSymbPos = descriptionField.selectionEnd;
-    if(text.charAt(startSymbPos - 1) === sign && text.charAt(endSymbPos) === sign){
+    if (text.charAt(startSymbPos - 1) === sign && text.charAt(endSymbPos) === sign) {
         descriptionField.value = spliceString(text, startSymbPos - 1, 1, "");
         descriptionField.value = spliceString(descriptionField.value, endSymbPos - 1, 1, "");
         updateDisplayField();
@@ -199,9 +218,9 @@ function spliceString(str, start, count, stringToInsert) {
     return str.slice(0, start) + stringToInsert + str.slice(start + count);
 }
 
-function updateDisplayField(){
+function updateDisplayField() {
     displayField.html(descriptionField.value
-        .replace(patternBold,'<b>$1</b>')
+        .replace(patternBold, '<b>$1</b>')
         .replace(patternItalic, '<i>$1</i>')
         .replace(patternCode, '<span class="code">$1</span>')
         .replace(patternBlockQuote, '<br></p><span class="block">$1</span>'));

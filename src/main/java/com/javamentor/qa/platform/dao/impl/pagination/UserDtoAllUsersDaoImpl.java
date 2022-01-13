@@ -18,7 +18,7 @@ public class UserDtoAllUsersDaoImpl implements PageDtoDao<UserDto> {
     @Override
     public List<UserDto> getItems(Map<Object, Object> param) {
         return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.UserDto" +
-                        "(u.id, u.email, u.fullName, u.imageLink, u.city, SUM(r.count )) " +
+                        "(u.id, u.nickname, u.city, SUM(COALESCE(r.count, 0)), u.imageLink) " +
                         "FROM User u LEFT JOIN Reputation r ON u.id = r.author.id GROUP BY u.id", UserDto.class)
                 .getResultList();
     }

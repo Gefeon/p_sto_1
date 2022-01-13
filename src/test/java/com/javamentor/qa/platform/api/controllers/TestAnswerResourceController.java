@@ -6,6 +6,7 @@ import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
+import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -29,8 +30,6 @@ public class TestAnswerResourceController extends AbstractTestApi {
     private static final String REPUTATION_DTO = "dataset/answerResourceController/getAnswerByQuestionId/reputation.yml";
     private static final String VOTE_ANSWER_DTO = "dataset/answerResourceController/getAnswerByQuestionId/vote_answer.yml";
     private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/another_answer.yml";
-    private static final String COMMENT_DTO = "dataset/answerResourceController/getAnswerByQuestionId/comment.yml";
-    private static final String COMMENT_ANSWER = "dataset/answerResourceController/getAnswerByQuestionId/comment_answer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -51,7 +50,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO, COMMENT_DTO, COMMENT_ANSWER}, disableConstraints = true)
+    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO}, disableConstraints = true)
     public void getAnswersByQuestionId() throws Exception {
 
         String token = getToken("user100@user.ru", "user");
@@ -92,8 +91,18 @@ public class TestAnswerResourceController extends AbstractTestApi {
     }
 
     //==================================================================================================================
+    private static final String ANSWER_COMMENTS_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/answer.yml";
+    private static final String USER_COMMENTS_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/user.yml";
+    private static final String ROLE_COMMENTS_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/role.yml";
+    private static final String QUESTION_COMMENTS_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/question.yml";
+    private static final String REPUTATION_COMMENTS_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/reputation.yml";
+    private static final String VOTE_ANSWER__COMMENTS_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/vote_answer.yml";
+    private static final String COMMENT_DTO = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/comment.yml";
+    private static final String COMMENT_ANSWER = "dataset/answerResourceController/getCommentsDtoInAnswerByQuestionId/comment_answer.yml";
+
     @Test
-    @DataSet(value = {ANSWER_DTO, USER_DTO, ROLE_DTO, QUESTION_DTO, REPUTATION_DTO, VOTE_ANSWER_DTO, COMMENT_DTO, COMMENT_ANSWER}, disableConstraints = true)
+    @DataSet(value = {ANSWER_COMMENTS_DTO, USER_COMMENTS_DTO, ROLE_COMMENTS_DTO,
+            QUESTION_COMMENTS_DTO, REPUTATION_COMMENTS_DTO, VOTE_ANSWER__COMMENTS_DTO, COMMENT_DTO, COMMENT_ANSWER}, disableConstraints = true)
     public void getCommentsDtoInAnswersByQuestionId() throws Exception {
 
         String token = getToken("user100@user.ru", "user");
@@ -101,26 +110,12 @@ public class TestAnswerResourceController extends AbstractTestApi {
         mvc.perform(get("/api/user/question/100/answer").header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].comments[0].id", is(101)))
-                .andExpect(jsonPath("$[0].comments[0].comment", is("Hello world")))
-                .andExpect(jsonPath("$[0].comments[0].userId", is(100)))
-                .andExpect(jsonPath("$[0].comments[0].fullName", is("Ivan")))
-                .andExpect(jsonPath("$[0].comments[0].reputation", is(30)))
-                .andExpect(jsonPath("$[0].comments[1].id", is(102)))
-                .andExpect(jsonPath("$[0].comments[1].comment", is("Hello brother")))
-                .andExpect(jsonPath("$[0].comments[1].userId", is(101)))
-                .andExpect(jsonPath("$[0].comments[1].fullName", is("Olga")))
-                .andExpect(jsonPath("$[0].comments[1].reputation", is(33)))
-                .andExpect(jsonPath("$[1].comments[0].id", is(103)))
-                .andExpect(jsonPath("$[1].comments[0].comment", is("Hello mother")))
-                .andExpect(jsonPath("$[1].comments[0].userId", is(102)))
-                .andExpect(jsonPath("$[1].comments[0].fullName", is("Elena")))
-                .andExpect(jsonPath("$[1].comments[0].reputation", is(22)))
-                .andExpect(jsonPath("$[2].comments[0].id", is(104)))
-                .andExpect(jsonPath("$[2].comments[0].comment", is("Hello wife")))
-                .andExpect(jsonPath("$[2].comments[0].userId", is(103)))
-                .andExpect(jsonPath("$[2].comments[0].fullName", is("Roman")))
-                .andExpect(jsonPath("$[2].comments[0].reputation", is(33)));
+                .andExpect(jsonPath("$[*].comments[*].id", containsInRelativeOrder(101,102,103,104)))
+                .andExpect(jsonPath("$[*].comments[*].comment", containsInRelativeOrder("Hello world",
+                        "Hello brother", "Hello mother", "Hello wife")))
+                .andExpect(jsonPath("$[*].comments[*].userId", containsInRelativeOrder(100, 101, 102, 103)))
+                .andExpect(jsonPath("$[*].comments[*].fullName", containsInRelativeOrder("Ivan", "Olga", "Elena", "Roman")))
+                .andExpect(jsonPath("$[*].comments[*].reputation", containsInRelativeOrder(30, 33, 22, 0)));
     }
 
     //==================================================================================================================
