@@ -89,4 +89,16 @@ public class TagResourceController {
         map.put("class", "TagPaginationByName");
         return ResponseEntity.ok(tagService.getPage(currPage, items, map));
     }
+
+    @Operation(summary = "Get page of tags with pagination sorted by date", responses = {
+            @ApiResponse(description = " success", responseCode = "200",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = TagDto.class)))),
+            @ApiResponse(description = "Url parameters are wrong", responseCode = "400")
+    })
+    @GetMapping("/new")
+    public ResponseEntity<?> getPaginationTagsByPersistDate(@RequestParam int currPage, @RequestParam(required = false, defaultValue = "10") int items){
+        Map<Object, Object> map = new HashMap<>();
+        map.put("class", "TagPaginationByDate");
+        return ResponseEntity.ok(tagService.getPage(currPage, items, map));
+    }
 }
