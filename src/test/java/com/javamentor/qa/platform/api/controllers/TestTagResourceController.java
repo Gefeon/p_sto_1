@@ -34,7 +34,6 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";
     private static final String GET_IGNORED_TAGS = "/api/user/tag/ignored";
     private static final String GET_TAGS_BY_LETTERS = "/api/user/tag/letters";
-    private static final String GET_TAGS_BY_NAME = "/api/user/tag/name";
     private static final String AUTH_URI = "/api/auth/token";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
@@ -48,7 +47,6 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(status().isOk());
     }
 
-
     @Test
     @DataSet(value = {USER_ENTITY, TAG_ENTITY, IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getAllIgnoredTags_returnStatusOkAndCorrectTags() throws Exception {
@@ -59,7 +57,6 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$[0].description", nullValue()));
     }
 
-
     @Test
     @DataSet(value = {USER_ENTITY, TAG_ENTITY, OTHER_USER_IGNORED_TAG_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getIgnoredTagsWithNoUserRelated_returnEmptyArray() throws Exception {
@@ -67,8 +64,6 @@ public class TestTagResourceController extends AbstractTestApi {
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
-
-
 
     @Test
     @DataSet(value = {EMPTY, USER_ENTITY}, disableConstraints = true)
@@ -97,9 +92,8 @@ public class TestTagResourceController extends AbstractTestApi {
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
-        ResultActions response = mvc.perform(post(GET_TAGS_BY_LETTERS)
+        ResultActions response = mvc.perform(get(GET_TAGS_BY_LETTERS + "?letters=en")
                 .header(AUTH_HEADER, PREFIX + token.getToken())
-                .content("{\"letters\": \"en\"}")
                 .contentType(MediaType.APPLICATION_JSON));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*].name", containsInAnyOrder("seven","ten","eleven","thirteen")));
@@ -113,9 +107,8 @@ public class TestTagResourceController extends AbstractTestApi {
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
-        ResultActions response = mvc.perform(post(GET_TAGS_BY_LETTERS)
+        ResultActions response = mvc.perform(get(GET_TAGS_BY_LETTERS + "?letters=se")
                 .header(AUTH_HEADER, PREFIX + token.getToken())
-                .content("{\"letters\": \"se\"}")
                 .contentType(MediaType.APPLICATION_JSON));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$[*].name", containsInAnyOrder(
