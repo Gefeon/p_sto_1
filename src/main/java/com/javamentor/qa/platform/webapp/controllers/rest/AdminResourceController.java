@@ -8,6 +8,8 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +29,8 @@ import java.util.Optional;
 public class AdminResourceController {
 
     private final UserService userService;
+    @Autowired
+    private CacheManager cacheManager;
 
     @PostMapping("/delete/{email}")
     @Operation(summary = "Delete user", responses = {
@@ -39,6 +43,7 @@ public class AdminResourceController {
         if (optionalUser.isPresent()) {
             optionalUser.get().setIsEnabled(false);
             userService.update(optionalUser.get());
+            cacheManager.getCache("users").evict(email);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

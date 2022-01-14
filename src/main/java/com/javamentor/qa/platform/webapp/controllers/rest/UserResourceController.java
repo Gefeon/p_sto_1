@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -34,6 +36,8 @@ public class UserResourceController {
     private final UserSupplierDtoService userSupplierDtoService;
     private final UserDtoService userDtoService;
     private final UserService userService;
+    @Autowired
+    private  CacheManager cacheManager;
 
     public UserResourceController(UserSupplierDtoService userSupplierDtoService, UserDtoService userDtoService, UserService userService) {
         this.userSupplierDtoService = userSupplierDtoService;
@@ -102,9 +106,10 @@ public class UserResourceController {
         if (!onlyLatinAlphabet) {
             return new ResponseEntity<>("Use only latin alphabet, numbers and special chars", HttpStatus.BAD_REQUEST);
         }
-
         Long id = ((User) authentication.getPrincipal()).getId();
         userService.changePasswordById(id, password);
+        String email =  ((User) authentication.getPrincipal()).getEmail();
+        cacheManager.getCache("users").evict(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
