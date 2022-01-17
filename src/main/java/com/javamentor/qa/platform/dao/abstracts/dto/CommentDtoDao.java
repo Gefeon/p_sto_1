@@ -5,6 +5,6 @@ import com.javamentor.qa.platform.models.dto.CommentDto;
 import java.util.List;
 import java.util.Map;
 
-public interface CommentAnswerDtoDao {
+public interface CommentDtoDao {
     Map<Long, List<CommentDto>> getCommentsDtoByAnswersIds(List<Long> answerIds);
 }
