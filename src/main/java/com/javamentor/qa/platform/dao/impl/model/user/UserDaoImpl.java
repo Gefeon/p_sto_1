@@ -20,7 +20,7 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
 
     @Override
     @SuppressWarnings("unchecked")
-    @Cacheable(value = "users", key = "#email")
+    @Cacheable(value = "user-email", key = "#email")
     public Optional<User> findByEmail(String email) {
         String hql = "FROM User u JOIN FETCH u.role WHERE u.email = :email";
         TypedQuery<User> query = (TypedQuery<User>) entityManager.createQuery(hql).setParameter("email", email);
@@ -29,11 +29,11 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
 
     @Override
     @SuppressWarnings("unchecked")
-    public void changePassword(Long id, String password) {
-        String hql = "update User set password = :passwordParam where id = :idParam";
+    public void changePassword(String email, String password) {
+        String hql = "update User set password = :passwordParam where email = :email";
         entityManager.createQuery(hql)
                 .setParameter("passwordParam", password)
-                .setParameter("idParam", id)
+                .setParameter("email", email)
                 .executeUpdate();
     }
 

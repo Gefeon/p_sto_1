@@ -38,15 +38,14 @@ public class TestUserResourceController extends AbstractTestApi {
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoById() throws Exception {
 
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("Rom@ya.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         //user exist
-        mvc.perform(get("/api/user/103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+        mvc.perform(get("/api/user/103").header(AUTH_HEADER, PREFIX +token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$").hasJsonPath())
@@ -201,8 +200,6 @@ public class TestUserResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoByPersistDateWithoutRequiredParam_expectBadRequest() throws Exception {
-
-
         // нет обязательного параметра - текущей страницы
         ResultActions response = mvc.perform(get("/api/user/new?items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andDo(print())
