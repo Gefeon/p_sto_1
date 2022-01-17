@@ -8,34 +8,26 @@ import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 public class TestQuestionResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question";
-    private final String url1 = "/api/user/question/100";
-    private final String urlComment = "/api/user/question/100/comment";
 
     private final String urlUpVote = "/api/user/question/100/upVote";
-    private final String urlDownVote = "/api/user/question/100/downVote";
 
     private static final String USER_ENTITY = "dataset/questionResourceController/user.yml";
     private static final String USER_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/user.yml";
@@ -43,11 +35,14 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String QUESTION_ENTITY = "dataset/questionResourceController/question.yml";
     private static final String ANSWER_ENTITY = "dataset/questionResourceController/answer.yml";
     private static final String QUESTION_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/question.yml";
+    private static final String QUESTION_PAGINATION_BY_TAG = "dataset/questionResourceController/paginationByTag/question.yml";
     private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
     private static final String REPUTATION_ENTITY = "dataset/questionResourceController/reputation.yml";
+    private static final String REPUTATION_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/reputation.yml";
     private static final String VOTEQUESTION_ENTITY = "dataset/questionResourceController/vote_question.yml";
     private static final String TAG_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY_PAGINATION = "dataset/questionResourceController/allQuestuionDtos/question_has_tag.yml";
+    private static final String QUESTION_HAS_TAG_PAGINATION_BY_TAG = "dataset/questionResourceController/paginationByTag/question_has_tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/question_has_tag.yml";
     private static final String USER_ADD = "dataset/questionResourceController/user_add.yml";
     private static final String QUESTION_ADD = "dataset/questionResourceController/question_add.yml";
@@ -133,8 +128,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
         tag.setName("tagName");
         questionCreateDto.setTags(List.of(tag));
 
-        MvcResult result = mvc
-                .perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
+       mvc.perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -150,7 +144,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
         tag.setName("tagName");
         questionCreateDto.setTags(List.of(tag));
 
-        MvcResult result = mvc.perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
+        mvc.perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -164,7 +158,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
         questionCreateDto.setDescription("question description");
         questionCreateDto.setTitle("title");
 
-        MvcResult result = mvc.perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
+        mvc.perform(post(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user"))
                         .content(objectMapper.writeValueAsString(questionCreateDto))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -210,7 +204,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk()).andReturn();
-
     }
 
     @Test
@@ -240,13 +233,13 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(status().isBadRequest());
     }
 
-
     @Test
     @DataSet(value = {USER_ADD, ROLE_ENTITY, QUESTION_ADD}, disableConstraints = true)
     public void shouldDownVote() throws Exception {
 
         String authToken = getToken("user103@user.ru", "user");
 
+        String urlDownVote = "/api/user/question/100/downVote";
         mvc.perform(post(urlDownVote).header(AUTH_HEADER, PREFIX + authToken)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -328,7 +321,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(105,100,105,109)));
     }
 
-
     // trackedTag не передавать, полагается что trackedTags - все записи в БД
     @Test
     @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY}, disableConstraints = true)
@@ -393,7 +385,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     // тест пагинации и корректности выводимых данных для репутации, голосования за вопрос, подсчёта ответов
     @Test
-    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY, VOTE_QUESTION_ENTITY1}, disableConstraints = true)
+    @DataSet(value = {QUESTION_ENTITY_PAGINATION, USER_ENTITY_PAGINATION, ROLE_ENTITY, ANSWER_ENTITY_PAGINATION, TAG_ENTITY_PAGINATION, QUESTION_HAS_TAG_ENTITY_PAGINATION, REPUTATION_ENTITY_PAGINATION, VOTE_QUESTION_ENTITY1}, disableConstraints = true)
     public void getAllQuestionDtoPaginationCheck_expectedCorrectData() throws Exception {
         mvc.perform(get(url + "?currPage=2&ignoredId=100&ignoredId=101&ignoredId=103&items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
@@ -412,9 +404,9 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {"dataset/QuestionResourceController/countShouldBeThree/Question.yml",
-            "dataset/QuestionResourceController/countShouldBeThree/user.yml",
-            "dataset/QuestionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
+    @DataSet(value = {"dataset/questionResourceController/countShouldBeThree/Question.yml",
+            "dataset/questionResourceController/countShouldBeThree/user.yml",
+            "dataset/questionResourceController/countShouldBeThree/role.yml"}, disableConstraints = true)
     public void countShouldBeThree() throws Exception {
         ResultActions response = mvc.perform(get(url + "/count").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
 
@@ -425,7 +417,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {USER_ENTITY, ROLE_ENTITY, QUESTION_ENTITY, TAG_ENTITY, QUESTION_HAS_TAG_ENTITY, ANSWER_ENTITY, REPUTATION_ENTITY, VOTEQUESTION_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, ROLE_ENTITY, QUESTION_PAGINATION_BY_TAG, TAG_ENTITY, QUESTION_HAS_TAG_PAGINATION_BY_TAG, ANSWER_ENTITY, REPUTATION_ENTITY, VOTEQUESTION_ENTITY}, disableConstraints = true)
     public void getQuestionDtoByTag() throws Exception {
         String authToken = getToken("user100@user.ru", "user");
         ResultActions response = mvc.perform(get("/api/user/question/tag/101?currPage=1&items=5").header(AUTH_HEADER, PREFIX + authToken));
@@ -588,6 +580,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
         String token = getToken("user100@user.ru", "user");
 
+        String url1 = "/api/user/question/100";
         mvc.perform(get(url1).header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -625,6 +618,7 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
         String token = getToken("user100@user.ru", "user");
 
+        String urlComment = "/api/user/question/100/comment";
         mvc.perform(get(urlComment).header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -637,7 +631,6 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.[*].imageLink", containsInAnyOrder("test.ru")))
                 .andExpect(jsonPath("$.[*].reputation", containsInAnyOrder(65)));
     }
-
 
     /*
      * Пагинация вопросов без ответов
@@ -715,5 +708,4 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items.length()", is(2)))
                 .andExpect(jsonPath("$.totalResultCount", is(2)));
     }
-
 }
