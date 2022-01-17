@@ -19,4 +19,6 @@ public interface TagDtoDao {
     Map<Long, List<TagDto>> getMapTagsByQuestionIds(List<Long> questionIds);
 
     List<TagDto> getTagDtoListByQuestionId(Long id);
+
+    Map<Long, List<TagDto>> getMapTagsByUserIds(List<Long> userIds);
 }
