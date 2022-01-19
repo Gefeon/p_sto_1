@@ -47,7 +47,6 @@ public class TestAdminResourceController extends AbstractTestApi {
     public void shouldNotGetAccessToDeletedUserWithValidJwt() throws Exception {
         String tokenAdmin = getToken("admin100@admin.ru", "admin");
         String tokenUser = getToken("user101@user.ru", "user");
-
         //before delete
         mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + tokenUser)).andExpect(status().isOk());
         //deleting

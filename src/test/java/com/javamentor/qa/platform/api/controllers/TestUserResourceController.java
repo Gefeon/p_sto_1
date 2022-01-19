@@ -23,6 +23,7 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String USER_ENTITY = "dataset/userResourceController/user.yml";
     private static final String ROLE_REP_ENTITY = "dataset/userResourceController/role_for_reputation.yml";
     private static final String REPUTATION_ENTITY = "dataset/userResourceController/reputation.yml";
+    private static final String REPUTATION_NOT_ALL_USERS = "dataset/userResourceController/reputation_not_all_users.yml";
     private static final String QUESTION_ENTITY = "dataset/userResourceController/question.yml";
     private static final String ANSWER_ENTITY = "dataset/userResourceController/answer.yml";
     private static final String USER_BY_PERSIST_DATE = "dataset/userResourceController/paginationByPersistDate/user_entity.yml";
@@ -30,27 +31,28 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String REPUTATION_BY_PERSIST_DATE = "dataset/userResourceController/paginationByPersistDate/reputation.yml";
     private static final String USER_BY_VOTE_ANSWER = "dataset/userResourceController/vote_answer.yml";
     private static final String USER_BY_VOTE_QUESTION = "dataset/userResourceController/vote_question.yml";
+    private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/paginationByTag/question_has_tag.yml";
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoById() throws Exception {
 
-        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
-
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("Rom@ya.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         //user exist
-        mvc.perform(get("/api/user/103").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
+        mvc.perform(get("/api/user/103").header(AUTH_HEADER, PREFIX +token.getToken()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$").hasJsonPath())
                 .andExpect(jsonPath("$.id", is(103)))
                 .andExpect(jsonPath("$.fullName", is("Roman")))
                 .andExpect(jsonPath("$.email", is("Rom@ya.ru")))
-                .andExpect(jsonPath("$.city", is("Surgut")))
+                .andExpect(jsonPath("$.city", nullValue()))
                 .andExpect(jsonPath("$.linkImage", nullValue()))
                 .andExpect(jsonPath("$.reputation", is(41)));
 
@@ -158,6 +160,29 @@ public class TestUserResourceController extends AbstractTestApi {
     }
 
     @Test
+    @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_NOT_ALL_USERS, QUESTION_ENTITY, ANSWER_ENTITY, TAG_ENTITY, QUESTION_HAS_TAG_ENTITY}, disableConstraints = true)
+    public void getReputationWithEmptyFields() throws Exception {
+
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+
+        // проверка корректности данных
+        mvc.perform(get("/api/user/reputation?currPage=1").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(100, 101, 102, 103)))
+                .andExpect(jsonPath("$.items[*].nickname").value(containsInRelativeOrder("Iv", "Ol", "El", "Rn")))
+                .andExpect(jsonPath("$.items[*].reputation").value(containsInRelativeOrder(84, 0, 0, 0)))
+                .andExpect(jsonPath("$.items[*].linkImage").value(containsInRelativeOrder("link.com", "link.com2", "link.com3", null)))
+                .andExpect(jsonPath("$.items[*].city").value(containsInRelativeOrder("Irkutsk", "Smolensk", "Voronej", null)))
+                .andExpect(jsonPath("$.items[*].tags[*].id").value(containsInRelativeOrder(100,101,100,100,100)));
+    }
+
+    @Test
     @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoByPersistDate_expectCorrectData() throws Exception {
 
@@ -175,8 +200,6 @@ public class TestUserResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {USER_BY_PERSIST_DATE, ROLE_ENTITY, REPUTATION_BY_PERSIST_DATE, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)
     public void getUserDtoByPersistDateWithoutRequiredParam_expectBadRequest() throws Exception {
-
-
         // нет обязательного параметра - текущей страницы
         ResultActions response = mvc.perform(get("/api/user/new?items=4").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andDo(print())
@@ -309,7 +332,7 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.itemsOnPage", is(4)))
                 .andExpect(jsonPath("$.totalResultCount", is(14)))
                 .andExpect(jsonPath("$.items").isNotEmpty())
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 100, 102, 103)));
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(101, 100)));
 
         // запрос на большее кол-во данных чем есть
         mvc.perform(get("/api/user/vote?currPage=2&items=30").header(AUTH_HEADER, PREFIX + token.getToken()))
@@ -328,6 +351,5 @@ public class TestUserResourceController extends AbstractTestApi {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
-
     }
 }

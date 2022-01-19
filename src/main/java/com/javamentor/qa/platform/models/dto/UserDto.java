@@ -1,11 +1,12 @@
 package com.javamentor.qa.platform.models.dto;
 
-import lombok.NoArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -13,20 +14,19 @@ import java.io.Serializable;
 @ToString
 public class UserDto implements Serializable {
     private Long id;
-    private String email;
-    private String fullName;
-    private String linkImage;
+    private String nickname;
     private String city;
     private int reputation;
-    private long reputationLong;
+    private Long reputationTotal;
+    private String linkImage;
+    private List<TagDto> tags;
 
-    public UserDto(Long id, String email, String fullName, String linkImage, String city, long reputationLong) {
+    public UserDto(Long id, String nickname, String city, long reputationTotal, String linkImage) {
         this.id = id;
-        this.email = email;
-        this.fullName = fullName;
-        this.linkImage = linkImage;
+        this.nickname = nickname;
         this.city = city;
-        this.reputationLong = reputationLong;
-        this.reputation = (int)reputationLong;
+        this.reputationTotal = reputationTotal;
+        this.reputation = (int) reputationTotal;
+        this.linkImage = linkImage;
     }
 }

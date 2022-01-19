@@ -2,7 +2,7 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
-import com.javamentor.qa.platform.models.dto.UserDto;
+import com.javamentor.qa.platform.models.dto.UserSupplierDto;
 import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.security.jwt.JwtService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
@@ -56,7 +56,7 @@ public class AuthenticationResourceController {
     @Operation(summary = "checking user authorization", responses = {
             @ApiResponse(responseCode = "200", description = "user successful authorization"),
             @ApiResponse(responseCode = "403", description = "user failed authorization")})
-    public ResponseEntity<UserDto> checkUser() {
+    public ResponseEntity<UserSupplierDto> checkUser() {
 
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof User) {

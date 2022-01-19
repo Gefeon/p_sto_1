@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -23,4 +25,22 @@ public class AnswerDto implements Serializable {
     private Long countValuable;
     private String image;
     private String nickName;
+    private List<CommentDto> comments = new ArrayList<>();
+
+    public AnswerDto(Long id, Long userId, Long userReputation, Long questionId,
+                     String body, LocalDateTime persistDate, Boolean isHelpful,
+                     LocalDateTime dateAccept, Long countValuable, String image,
+                     String nickName) {
+        this.id = id;
+        this.userId = userId;
+        this.userReputation = userReputation;
+        this.questionId = questionId;
+        this.body = body;
+        this.persistDate = persistDate;
+        this.isHelpful = isHelpful;
+        this.dateAccept = dateAccept;
+        this.countValuable = countValuable;
+        this.image = image;
+        this.nickName = nickName;
+    }
 }

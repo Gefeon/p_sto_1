@@ -1,0 +1,25 @@
+comment:
+  - id: 101
+    user_id: 100
+    text: "Hello world"
+    persist_date: "2021-10-29 00:00:00"
+    last_redaction_date: "2021-11-29 00:00:00"
+    comment_type: 1
+  - id: 102
+    user_id: 101
+    text: "Hello brother"
+    persist_date: "2020-10-29 00:00:00"
+    last_redaction_date: "2020-12-29 00:00:00"
+    comment_type: 1
+  - id: 103
+    user_id: 102
+    text: "Hello mother"
+    persist_date: "2019-10-29 00:00:00"
+    last_redaction_date: "2019-12-29 00:00:00"
+    comment_type: 1
+  - id: 104
+    user_id: 103
+    text: "Hello wife"
+    persist_date: "2018-10-29 00:00:00"
+    last_redaction_date: "2018-09-29 00:00:00"
+    comment_type: 1

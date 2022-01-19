@@ -72,5 +72,18 @@ public class TagDtoDaoImpl implements TagDtoDao {
                 "(tag.id, tag.name, tag.description)" +
                 "FROM Tag tag where :id IN (select tt.id from tag.questions tt)", TagDto.class).setParameter("id", id).getResultList();
     }
+
+    @Override
+    public Map<Long, List<TagDto>> getMapTagsByUserIds(List<Long> userIds) {
+        List<Tuple> tags = em.createQuery("SELECT t.id as tag_id, t.name as tag_name, t.description as tag_description," +
+                        " q.id as user_id From Tag t JOIN t.questions q WHERE q.user.id in :ids", Tuple.class)
+                .setParameter("ids", userIds)
+                .getResultList();
+
+        Map<Long, List<TagDto>> tagsMap = new HashMap<>();
+        tags.forEach(tuple -> tagsMap.computeIfAbsent(tuple.get("user_id", Long.class), id -> new ArrayList<>())
+                .add(new TagDto(tuple.get("tag_id", Long.class), tuple.get("tag_name", String.class), tuple.get("tag_description", String.class))));
+        return tagsMap;
+    }
 }
 

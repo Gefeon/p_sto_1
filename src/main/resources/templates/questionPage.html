@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script type="text/javascript" src="/static/js/jquery.cookie.js" thgit:src="@{/js/jquery.cookie.js}"></script>
+    <script type="text/javascript" src="/static/js/libs/jquery.cookie.js" th:src="@{/js/libs/jquery.cookie.js}"></script>
     <script src="/static/js/authorization_check.js" th:src="@{/js/authorization_check.js}"></script>
 </head>
 
@@ -21,22 +21,19 @@
         <jm-sidebar></jm-sidebar>
     </aside>
     <main>
-        <div class="d-flex" style="width: 90vw; height: 100%; min-height: 100%;">
-            <div class="d-flex r0">
+        <div class="d-flex justify-content-md-center align-items-center" style="width: 90vw; height: 100%; min-height: 100%;">
+            <div class="d-flex">
                 <div class="col-md-10">
                     <div class="info-comment d-flex justify-content-between align-items-center">
                         <div class="info" style="flex-basis: 75%;">
-                            <h1 class="title h3">
-                                Почему при переопределении hashCode чаще всего используют просто число 31?
+                            <h1 id="questionTitle" class="title h3">
+                                going to
                             </h1>
                             <div class="more-info d-flex justify-content-between align-items-center">
-                        <span class="question-created-date">
+                        <span id="question-created-date">
                             <span style="color: gray;">Вопрос задан</span> вчера
                         </span>
-                                <span class="last-active">
-                            <span style="color: gray;">Последняя активность</span> вчера
-                        </span>
-                                <span class="views-counter">
+                                <span id="views-counter">
                             <span style="color: gray;">Просмотрен</span> 59 раз
                         </span>
                             </div>
@@ -49,23 +46,23 @@
                         <div class="row justify-content-md-center" style="margin-right: 20px;">
                             <div class="col col-lg-1">
                                 <div>
-                                    <a href="/*"
+                                    <a onclick="questionUpVote()"
                                        title="Вопрос отражает стремление разобраться; он понятен и несёт пользу.">
-                                        <svg aria-hidden="true" class="svg-icon iconArrowUpLg" width="36" height="36"
+                                        <svg aria-hidden="true" class="svg-icon" width="36" height="36"
                                              viewBox="0 0 36 36">
-                                            <path d="M2 26h32L18 10 2 26Z"></path>
+                                            <path id="iconArrowUpLg" d="M2 26h32L18 10 2 26Z "></path>
                                         </svg>
                                     </a>
                                 </div>
                                 <div>
-                                    <h3 style="text-indent: 12px;">1</h3>
+                                    <h3 id="questionValuable" style="text-indent: 12px;">1</h3>
                                 </div>
                                 <div>
-                                    <a href="/*"
+                                    <a onclick="questionDownVote()"
                                        title="Вопрос не отражает стремления разобраться; он непонятен или не несёт пользы.">
-                                        <svg aria-hidden="true" class="svg-icon iconArrowDownLg" width="36" height="36"
+                                        <svg aria-hidden="true"  class="svg-icon" width="36" height="36"
                                              viewBox="0 0 36 36">
-                                            <path d="M2 10h32L18 26 2 10Z"></path>
+                                            <path id="iconArrowDownLg" d="M2 10h32L18 26 2 10Z"></path>
                                         </svg>
                                     </a>
                                 </div>
@@ -78,12 +75,9 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="col col-lg-11">
-                                <p class="h5 font-weight-normal">
-                                    Почему при переопределении hashCode чаще всего используют просто число 31?
-                                    Где-то слышал, что это число, было выбрано, с математической точки зрения, так как
-                                    оно обеспечивает равномерное распределение hashCode функции, что обеспечивает
-                                    минимальную вероятность появления коллизий.
+                            <div class="col col-lg-11" >
+                                <p id="questionDescription" class="h5 font-weight-normal" >
+                                    big package live buy window
                                 </p>
                                 <div class="more-info d-flex justify-content-between align-items-center"
                                      style="flex-basis: 75%;">
@@ -98,19 +92,20 @@
 
                                     <div class="card text-white bg-secondary border-dark mb-3">
                                         <div class="text font-weight-light" style="margin-right:5px; margin-left:5px;">
-                                            <p>задан<span class="relativetime"> 5 дек '21 в 22:12</span></p>
+                                            <p>задан<span id="relativeTime"> 5 дек '21 в 22:12</span></p>
                                         </div>
                                         <div class="d-flex">
                                             <div class="user-avatar" style="margin-left:5px; margin-bottom:3px;">
                                                 <a href="/user">
-                                                    <div class="gravatar-wrapper-32"><img
-                                                            src="https://www.gravatar.com/avatar/299945ca3d3ec44fe21c1d3f7fb2ff8c?s=64&amp;d=identicon&amp;r=PG&amp;f=1"
-                                                            alt="" width="32" height="32" class="bar-sm">
+                                                    <div class="gravatar-wrapper-32">
+                                                        <img id="userImageLink"
+                                                             src="https://www.gravatar.com/avatar/299945ca3d3ec44fe21c1d3f7fb2ff8c?s=64&amp;d=identicon&amp;r=PG&amp;f=1"
+                                                             alt="" width="32" height="32" class="bar-sm">
                                                     </div>
                                                 </a>
                                             </div>
                                             <div class="user-name d-flex" style="margin-left:3px;">
-                                                <a class="text-info" href="/user">user</a><span
+                                                <a id="userName" class="text-info" href="/user">user</a><span
                                                     class="d-none">minotna</span>
                                             </div>
                                         </div>
@@ -127,7 +122,7 @@
                     </div>
                     <div class="more-info d-flex justify-content-between align-items-center">
                         <span class="question-created-date">
-                            <span><h4>1 ответ</h4></span>
+                            <span><h4 id="countAnswers">1 ответ</h4></span>
                         </span>
                         <span class="last-active">
                             <span></span>
@@ -142,107 +137,8 @@
                         </span>
                     </div>
                     <div style="margin-top: 30px;">
-                        <div class="row justify-content-md-center" style="margin-right: 20px;">
-                            <div class="col col-lg-1">
-                                <div>
-                                    <a href="/*"
-                                       title="Вопрос отражает стремление разобраться; он понятен и несёт пользу.">
-                                        <svg aria-hidden="true" class="svg-icon iconArrowUpLg" width="36" height="36"
-                                             viewBox="0 0 36 36">
-                                            <path d="M2 26h32L18 10 2 26Z"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div>
-                                    <h3 style="text-indent: 5px;">13</h3>
-                                </div>
-                                <div>
-                                    <a href="/*"
-                                       title="Вопрос не отражает стремления разобраться; он непонятен или не несёт пользы.">
-                                        <svg aria-hidden="true" class="svg-icon iconArrowDownLg" width="36" height="36"
-                                             viewBox="0 0 36 36">
-                                            <path d="M2 10h32L18 26 2 10Z"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-                                <div style="text-indent: 2px;">
-                                    <a href="/*" title="Автор вопроса принял ответ 9 декабря '21 в 12:24.">
-                                        <svg aria-hidden="true" class="svg-icon iconCheckmarkLg" width="36" height="36"
-                                             viewBox="0 0 36 36">
-                                            <path d="m6 14 8 8L30 6v8L14 30l-8-8v-8Z"></path>
-                                        </svg>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col col-lg-11">
-                                <p class="h5 font-weight-normal">
-                                    В <a href="/*"> Effective Java </a> Джошуа Блоха говорится, что:</p>
-                                </br>
-                                <div class="card border-0 bg-light">
-                                    <div class="text-with-grey-line font-weight-light"
-                                         style="border-left: 5px solid #a6a2a2; color: gray; padding: 10px; margin-left:20px;">
-                                        31 было выбрано так как это нечётное простое число.</br>
-                                    </div>
-                                </div>
-                                </br>
-                                <p class="h5 font-weight-normal">
-                                    Если вопрос в том, почему именно 31, то это потому что операция умножения может быть
-                                    заменена сдвигом и вычитанием для повышения производительности:
-                                    <span class="bg-secondary font-weight-light rounded"
-                                          style="padding-left: 7px; padding-right: 7px;">31 * i == (i << 5) - i</span>
-                                    . Современные виртуальные машины делают такого рода оптимизации автоматически.</p>
-                                </br>
-                                <p class="h5 font-weight-normal">
-                                    Можно так же почитать <a href="/*"> это</a>: </p>
-                                <div class="card border-0 bg-light">
-                                    <div class="text-with-grey-line font-weight-light"
-                                         style="border-left: 5px solid #a6a2a2; color: gray; padding: 10px; margin-left:20px;">
-                                        Из оставшихся четырех я, наверное, выберу P(31), так как его дешевле вычислять
-                                        на RISC архитектурах (потому что 31 разность двух степеней двойки). Р(33) так же
-                                        дешева для вычисления, но его производительность незначительно хуже, и 33 -
-                                        составное, что заставляет меня нервничать.</br>
-                                    </div>
-                                </div>
+                        <div id="answersContainer" class="row justify-content-md-center" style="margin-right: 20px;">
 
-                                </p>
-                                <div class="more-info d-flex justify-content-between align-items-center"
-                                     style="flex-basis: 75%;">
-                                    <div class="share-edit-follow" style="align-self: baseline;">
-                                        <a href="/*" title="Короткая постоянная ссылка на этот вопрос"><span
-                                                style="color: gray;">Поделиться</span></a> <a href="/*"
-                                                                                              title="Отредактируйте сообщение, чтобы улучшить его"><span
-                                            style="color: gray;">Править</span></a> <a href="/*"
-                                                                                       title="Нажмите отслеживать, чтобы получать уведомления"><span
-                                            style="color: gray;">Отслеживать</span></a>
-                                    </div>
-
-                                    <div class="card text-gray bg-light border-0 mb-3">
-                                        <div class="text font-weight-light"
-                                             style="margin-right:5px; margin-left:5px;">
-                                            <p>ответ дан<span class="relativetime"> 8 дек '21 в 22:24</span></p>
-                                        </div>
-                                        <div class="d-flex">
-                                            <div class="user-avatar" style="margin-left:5px; margin-bottom:3px;">
-                                                <a href="/user">
-                                                    <div class="gravatar-wrapper-32"><img
-                                                            src="https://www.gravatar.com/avatar/9f4334ec91fdbfc35b916b068ebb8903?s=64&amp;d=identicon&amp;r=PG&amp;f=1"
-                                                            alt="" width="32" height="32" class="bar-sm"></div>
-                                                </a>
-                                            </div>
-                                            <div class="user-name d-flex" style="margin-left:3px;">
-                                                <a class="text-info" href="/user">user2</a><span
-                                                    class="d-none">user2</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="add comment" style="margin-top:10px;">
-                                    <a href="/*"
-                                       title="Используйте комментарии для запроса дополнительной информации или предложения улучшений. Избегайте публикации ответа на вопросы в комментариях"><span
-                                            style="color: gray;">Добавить комментарий</span></a>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="form-group" style="margin-right: 20px;">
@@ -273,10 +169,10 @@
     <jm-footer></jm-footer>
 </footer>
 </div>
+<script src="/static/js/fill_question_page.js" th:src="@{/js/fill_question_page.js}"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
         crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="/static/js/header.js" th:src="@{/js/header.js}"></script>
 <script type="text/javascript" src="/static/js/sidebar.js" th:src="@{/js/sidebar.js}"></script>
 <script type="text/javascript" src="/static/js/footer.js" th:src="@{/js/footer.js}"></script>

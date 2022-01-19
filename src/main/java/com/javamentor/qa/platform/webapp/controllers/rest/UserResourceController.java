@@ -2,7 +2,9 @@ package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
+import com.javamentor.qa.platform.models.dto.UserSupplierDto;
 import com.javamentor.qa.platform.models.entity.user.User;
+import com.javamentor.qa.platform.service.abstracts.dto.UserSupplierDtoService;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
@@ -29,10 +31,12 @@ import java.util.Optional;
 @Validated
 public class UserResourceController {
 
+    private final UserSupplierDtoService userSupplierDtoService;
     private final UserDtoService userDtoService;
     private final UserService userService;
 
-    public UserResourceController(UserDtoService userDtoService, UserService userService) {
+    public UserResourceController(UserSupplierDtoService userSupplierDtoService, UserDtoService userDtoService, UserService userService) {
+        this.userSupplierDtoService = userSupplierDtoService;
         this.userDtoService = userDtoService;
         this.userService = userService;
     }
@@ -40,11 +44,11 @@ public class UserResourceController {
     @GetMapping(path = "/api/user/{userId}")
     @Operation(summary = "Get user dto", responses = {
             @ApiResponse(description = "Get user dto success", responseCode = "200",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDto.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserSupplierDto.class))),
             @ApiResponse(description = "User not found", responseCode = "404", content = @Content)
     })
     public ResponseEntity<Object> getUserDto(@PathVariable("userId") Long id) {
-        Optional<UserDto> dto = userDtoService.getUserDtoById(id);
+        Optional<UserSupplierDto> dto = userSupplierDtoService.getUserDtoById(id);
         return dto.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is absent or wrong Id")
                 : ResponseEntity.ok(dto.get());
@@ -98,9 +102,8 @@ public class UserResourceController {
         if (!onlyLatinAlphabet) {
             return new ResponseEntity<>("Use only latin alphabet, numbers and special chars", HttpStatus.BAD_REQUEST);
         }
-
-        Long id = ((User) authentication.getPrincipal()).getId();
-        userService.changePasswordById(id, password);
+        String email = ((User) authentication.getPrincipal()).getEmail();
+        userService.changePasswordByEmail(email, password);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
