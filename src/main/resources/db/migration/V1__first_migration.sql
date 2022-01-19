@@ -86,7 +86,7 @@ Create Table votes_on_answers (
   persist_date timestamp,
   vote varchar(255),
   FOREIGN KEY (user_id) REFERENCES user_entity(id),
-  FOREIGN KEY (answer_id) REFERENCES answer(id)
+  FOREIGN KEY (answer_id) REFERENCES answer(id) ON DELETE CASCADE
 );
 
 Create Table votes_on_questions (
@@ -185,7 +185,7 @@ Create Table reputation (
   FOREIGN KEY (question_id) REFERENCES question(id),
   FOREIGN KEY (author_id) REFERENCES user_entity(id),
   FOREIGN KEY (sender_id) REFERENCES user_entity(id),
-  FOREIGN KEY (answer_id) REFERENCES answer(id)
+  FOREIGN KEY (answer_id) REFERENCES answer(id) ON DELETE CASCADE
 );
 
 Create Table badges (

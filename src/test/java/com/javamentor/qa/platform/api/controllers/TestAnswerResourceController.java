@@ -42,7 +42,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY, }, disableConstraints = true)
     @ExpectedDataSet(value = {USER_ENTITY, ROLE_ENTITY})
     public void deleteAnswer_returnStatusOk_AnswerDeleted() throws Exception {
         ResultActions response = mvc.perform(delete(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
@@ -80,7 +80,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
         // Id не задан
 //        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + token))
 //                .andDo(print())
-//                .andExpect(status().isNotFound())
+//                .andExpect(status().isBadRequest())
 //                .andExpect(jsonPath("$").doesNotExist());
 
         // не верный формат Id
