@@ -6,7 +6,8 @@ import com.javamentor.qa.platform.models.entity.user.User;
 import java.util.Optional;
 
 public interface UserDao extends ReadWriteDao<User, Long> {
-    Optional<User> findByEmail(String email);
 
-    void changePassword(Long id, String password);
+    Optional<User> findByEmail(String email);
+    void changePassword(String email, String password);
+
 }

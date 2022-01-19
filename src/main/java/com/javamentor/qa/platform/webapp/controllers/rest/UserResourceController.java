@@ -102,9 +102,8 @@ public class UserResourceController {
         if (!onlyLatinAlphabet) {
             return new ResponseEntity<>("Use only latin alphabet, numbers and special chars", HttpStatus.BAD_REQUEST);
         }
-
-        Long id = ((User) authentication.getPrincipal()).getId();
-        userService.changePasswordById(id, password);
+        String email = ((User) authentication.getPrincipal()).getEmail();
+        userService.changePasswordByEmail(email, password);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
