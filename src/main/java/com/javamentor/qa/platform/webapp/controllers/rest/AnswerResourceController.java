@@ -61,7 +61,6 @@ public class AnswerResourceController {
             @ApiResponse(description = "Got list of answers", responseCode = "200",
                         content = @Content(array = @ArraySchema(schema = @Schema(implementation = AnswerDto.class)))),
             @ApiResponse(description = "No answers with such question id - return empty list", responseCode = "200"),
-            @ApiResponse(description = "No question id", responseCode = "404"),
             @ApiResponse(description = "Wrong type of question id", responseCode = "400")
     })
     @GetMapping
