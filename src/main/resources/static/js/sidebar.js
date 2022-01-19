@@ -10,9 +10,9 @@ class Sidebar extends HTMLElement {
                 <h4>PUBLIC</h4>
                 <div class="collapse show">
                     <ul class="list-unstyled fw-normal pb-1 small">
-                        <li><a href="#" class="link-dark"><h3><small>Questions</small></h3></a></li>
-                        <li><a href="#" class="link-dark"><h3><small>Tags</small></h3></a></li>
-                        <li><a href="#" class="link-dark"><h3><small>Users</small></h3></a></li>
+                        <li><a href="/questions" class="link-dark"><h3><small>Questions</small></h3></a></li>
+                        <li><a href="/tags" class="link-dark"><h3><small>Tags</small></h3></a></li>
+                        <li><a href="/users" class="link-dark"><h3><small>Users</small></h3></a></li>
                     </ul>
                 </div>
             </li>
