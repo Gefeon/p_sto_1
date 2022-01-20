@@ -29,6 +29,7 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String OTHER_USER_IGNORED_TAG_ENTITY = "dataset/tagResourceController/ignoredTags/other_user_ignored_tag.yml";
     private static final String TAG_ENTITY_TRACKED = "dataset/tagResourceController/trackedTags/tag.yml";
     private static final String TRACKED_TAG_ENTITY = "dataset/tagResourceController/trackedTags/tracked_tag.yml";
+    private static final String TAG_PERSIST_DATE = "dataset/tagResourceController/TagPaginationByDate/tagByDate.yml";
     private static final String QUESTION_BY_POPULAR = "dataset/tagResourceController/questionByPopular/question.yml";
     private static final String QUESTION_HAS_TAG_BY_POPULAR = "dataset/tagResourceController/questionByPopular/question_has_tag.yml";
 
@@ -36,6 +37,8 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";
     private static final String GET_IGNORED_TAGS = "/api/user/tag/ignored";
     private static final String GET_TAGS_BY_LETTERS = "/api/user/tag/letters";
+    private static final String GET_TAGS_BY_NAME = "/api/user/tag/name";
+    private static final String GET_TAGS_BY_DATE = "/api/user/tag/new";
     private static final String GET_TAGS_BY_POPULAR = "/api/user/tag/popular";
     private static final String AUTH_URI = "/api/auth/token";
     private static final String AUTH_HEADER = "Authorization";
@@ -178,6 +181,74 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
+    //Тест пагинации по дате
+    @Test
+    @DataSet(value = {TAG_PERSIST_DATE, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    public void getTagsPaginationByDate() throws Exception {
+
+        AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
+
+        TokenResponseDto token = objectMapper.readValue(mvc
+                .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
+
+        // стандартный запрос
+        mvc.perform(get(GET_TAGS_BY_DATE + "?currPage=1&items=10").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").isNotEmpty())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(109, 102, 110)));
+
+        // стандартный запрос на вторую страницу
+        mvc.perform(get(GET_TAGS_BY_DATE + "?currPage=2&items=10").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").isNotEmpty())
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(112, 111, 101)));
+
+        // нет необязательного параметра - кол-во элементов на странице, по умолчанию 10
+        mvc.perform(get(GET_TAGS_BY_DATE + "?currPage=1").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.currentPageNumber", is(1)))
+                .andExpect(jsonPath("$.totalPageCount", is(2)))
+                .andExpect(jsonPath("$.itemsOnPage", is(10)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").value(hasSize(10)));
+
+        // запрос на большее кол-во данных чем есть
+        mvc.perform(get(GET_TAGS_BY_DATE + "?currPage=2&items=30").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").exists())
+                .andExpect(jsonPath("$").hasJsonPath())
+                .andExpect(jsonPath("$.currentPageNumber", is(2)))
+                .andExpect(jsonPath("$.totalPageCount", is(1)))
+                .andExpect(jsonPath("$.itemsOnPage", is(30)))
+                .andExpect(jsonPath("$.totalResultCount", is(13)))
+                .andExpect(jsonPath("$.items").isEmpty());
+
+        // нет обязательного параметра - текущей страницы
+        mvc.perform(get(GET_TAGS_BY_DATE + "?items=4").header(AUTH_HEADER, PREFIX + token.getToken()))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
 
     // Тест пагинации TagDto отсотрированной по популярности
 
