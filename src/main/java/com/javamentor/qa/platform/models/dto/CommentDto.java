@@ -1,14 +1,15 @@
 package com.javamentor.qa.platform.models.dto;
 
 import lombok.*;
-import java.time.LocalDateTime;
 
+import java.time.LocalDateTime;
 
 @Data
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CommentDto {
     private Long id;
     private String comment;

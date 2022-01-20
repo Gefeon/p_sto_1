@@ -83,6 +83,18 @@ public class TestQuestionResourceController extends AbstractTestApi {
     private static final String VOTE_NO_ANSWER = "dataset/questionResourceController/questionsNoAnswer/vote.yml";
     private static final String TRACK_NO_ANSWER = "dataset/questionResourceController/questionsNoAnswer/tracked.yml";
 
+    private static final String USER_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/user.yml";
+    private static final String ROLE_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/role.yml";
+    private static final String ANSWER_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/answer.yml";
+    private static final String QUESTION_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/question.yml";
+    private static final String QUESTION_VIEWED_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/question_viewed.yml";
+    private static final String REPUTATION_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/reputation.yml";
+    private static final String TAG_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/tag.yml";
+    private static final String VOTE_QUESTION_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/question_vote.yml";
+    private static final String QUESTION_HAS_TAG_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/question_has_tag.yml";
+    private static final String COMMENT_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/comment.yml";
+    private static final String COMMENT_QUESTION_HAS_TAG_ENTITY_WITH_COMMENT = "dataset/questionResourceController/getQuestionDtoByIdWithComment/comment_question.yml";
+
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -707,5 +719,44 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$").exists())
                 .andExpect(jsonPath("$.items.length()", is(2)))
                 .andExpect(jsonPath("$.totalResultCount", is(2)));
+    }
+
+    @Test
+    @DataSet(value = {
+            USER_ENTITY_WITH_COMMENT,
+            ROLE_ENTITY_WITH_COMMENT,
+            ANSWER_ENTITY_WITH_COMMENT,
+            QUESTION_ENTITY_WITH_COMMENT,
+            QUESTION_VIEWED_ENTITY_WITH_COMMENT,
+            REPUTATION_ENTITY_WITH_COMMENT,
+            TAG_ENTITY_WITH_COMMENT,
+            VOTE_QUESTION_ENTITY_WITH_COMMENT,
+            QUESTION_HAS_TAG_ENTITY_WITH_COMMENT,
+            COMMENT_ENTITY_WITH_COMMENT,
+            COMMENT_QUESTION_HAS_TAG_ENTITY_WITH_COMMENT
+    }, disableConstraints = true)
+    void getQuestionDtoByIdWithComment() throws Exception {
+        String token = getToken("user100@user.ru", "user");
+
+        String urlQuestion = "/api/user/question/100";
+
+        mvc.perform(get(urlQuestion).header(AUTH_HEADER, PREFIX + token))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(100)))
+                .andExpect(jsonPath("$.title", is("lazyEx")))
+                .andExpect(jsonPath("$.authorId", is(100)))
+                .andExpect(jsonPath("$.authorReputation", is(1)))
+                .andExpect(jsonPath("$.authorName", is("ИВАНОВ ИВАН ИВАНОВИЧ")))
+                .andExpect(jsonPath("$.authorImage", is("test.ru")))
+                .andExpect(jsonPath("$.description", is("fix lazyInitialization Exception")))
+                .andExpect(jsonPath("$.viewCount", is(0)))
+                .andExpect(jsonPath("$.countAnswer", is(1)))
+                .andExpect(jsonPath("$.countValuable", is(1)))
+                .andExpect(jsonPath("$.listTagDto.[*].id", containsInAnyOrder(100, 101)))
+                .andExpect(jsonPath("$.listTagDto.[*].name", containsInAnyOrder("db_architecture", "Room")))
+                .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture", "Room Android best practises")))
+                .andExpect(jsonPath("$.listCommentsDto.[*].id", containsInAnyOrder(100, 101)))
+                .andExpect(jsonPath("$.listCommentsDto.[*].comment", containsInAnyOrder("aaa", "bbb")));
     }
 }

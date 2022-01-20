@@ -162,7 +162,7 @@ Create Table comment_question (
   comment_id bigint not null,
   question_id bigint not null,
   FOREIGN KEY (comment_id) REFERENCES comment(id),
-  FOREIGN KEY (question_id) REFERENCES answer(id)
+  FOREIGN KEY (question_id) REFERENCES question(id)
 );
 
 Create Table related_tag (
