@@ -18,16 +18,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TestTagResourceController extends AbstractTestApi {
 
     private static final String QUESTION = "dataset/tagResourceController/relatedTags/question.yml";
-    private static final String TAG = "dataset/tagResourceController/relatedTags/tag.yml";
+    private static final String TAG_ENTITY = "dataset/tagResourceController/allTags/tag.yml";
     private static final String SPECIAL_LETTERS_TAG = "dataset/tagResourceController/tagsByLetters/special_letters_tag.yml";
     private static final String QUESTION_HAS_TAG = "dataset/tagResourceController/relatedTags/question_has_tag.yml";
     private static final String USER_ENTITY = "dataset/tagResourceController/relatedTags/user.yml";
     private static final String ROLE_ENTITY = "dataset/tagResourceController/relatedTags/role.yml";
-    private static final String TAG_ENTITY = "dataset/tagResourceController/ignoredTags/tag.yml";
     private static final String EMPTY = "dataset/tagResourceController/ignoredTags/empty.yml";
     private static final String IGNORED_TAG_ENTITY = "dataset/tagResourceController/ignoredTags/ignored_tag.yml";
     private static final String OTHER_USER_IGNORED_TAG_ENTITY = "dataset/tagResourceController/ignoredTags/other_user_ignored_tag.yml";
-    private static final String TAG_ENTITY_TRACKED = "dataset/tagResourceController/trackedTags/tag.yml";
     private static final String TRACKED_TAG_ENTITY = "dataset/tagResourceController/trackedTags/tracked_tag.yml";
     private static final String TAG_PERSIST_DATE = "dataset/tagResourceController/TagPaginationByDate/tagByDate.yml";
     private static final String QUESTION_BY_POPULAR = "dataset/tagResourceController/questionByPopular/question.yml";
@@ -45,7 +43,7 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String PREFIX = "Bearer ";
 
     @Test
-    @DataSet(value = {QUESTION, TAG, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {QUESTION, TAG_ENTITY, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getRelatedTags() throws Exception {
         mvc.perform(get(GET_RELATED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -81,17 +79,17 @@ public class TestTagResourceController extends AbstractTestApi {
 
 
     @Test
-    @DataSet(value = {USER_ENTITY, TAG_ENTITY_TRACKED, TRACKED_TAG_ENTITY}, disableConstraints = true)
+    @DataSet(value = {USER_ENTITY, TAG_ENTITY, TRACKED_TAG_ENTITY}, disableConstraints = true)
     public void getAllTrackedTags() throws Exception {
         mvc.perform(get(GET_TRACKED_TAGS).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(3)))
-                .andExpect(jsonPath("$[*].id", containsInAnyOrder(100, 101, 102)))
+                .andExpect(jsonPath("$[*].id", containsInAnyOrder(105, 106, 107)))
                 .andExpect(jsonPath("$[0].description", nullValue()));
     }
 
     @Test
-    @DataSet(value = {TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {TAG_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getTagsByLetters_returnCorrectResult() throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
         TokenResponseDto token = objectMapper.readValue(mvc
@@ -130,7 +128,7 @@ public class TestTagResourceController extends AbstractTestApi {
      * Тест пагинации TagDto по имени
      * */
     @Test
-    @DataSet(value = {QUESTION, TAG, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {QUESTION, TAG_ENTITY, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getTagsPaginationByName() throws Exception {
 
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
@@ -253,7 +251,7 @@ public class TestTagResourceController extends AbstractTestApi {
     // Тест пагинации TagDto отсотрированной по популярности
 
     @Test
-    @DataSet(value = {QUESTION_BY_POPULAR, TAG, QUESTION_HAS_TAG_BY_POPULAR, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {QUESTION_BY_POPULAR, TAG_ENTITY, QUESTION_HAS_TAG_BY_POPULAR, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void getTagsPaginationOrderByPopular() throws Exception {
 
         AuthenticationRequestDto authDto = new AuthenticationRequestDto("user100@user.ru", "user");
