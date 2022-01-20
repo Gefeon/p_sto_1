@@ -29,10 +29,10 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
         return userDao.findByEmail(email);
     }
 
-    @Override
-    public void update(User user) {
-        super.update(user);
-        cacheManager.getCache("user-email").evict(user.getEmail());
+    @Transactional
+    public void update(String email){
+        userDao.update(email);
+        evictUserCache(email);
     }
 
     @Override
@@ -40,7 +40,10 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     public void changePasswordByEmail(String email, String password) {
         String passHash = BCrypt.hashpw(password, BCrypt.gensalt());
         userDao.changePassword(email, passHash);
-        cacheManager.getCache("user-email").evict(email);
+        evictUserCache(email);
     }
 
+    public void evictUserCache(String email){
+        cacheManager.getCache("user-email").evict(email);
+    }
 }

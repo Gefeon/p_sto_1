@@ -5,11 +5,13 @@ import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.TestPropertySource;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@TestPropertySource(properties = "spring.cache.type=none")
 public class TestAdminResourceController extends AbstractTestApi {
     private static final String USER_ENTITY = "dataset/adminResourceController/user_entity.yml";
     private static final String ROLE_ENTITY = "dataset/adminResourceController/role.yml";

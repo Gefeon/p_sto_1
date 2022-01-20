@@ -10,12 +10,15 @@ import com.javamentor.qa.platform.webapp.configs.JmApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.cache.CacheManager;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import java.util.Objects;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,13 +28,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(properties = {"spring.config.location = src/test/resources/application-test.properties"})
 @DBUnit(caseSensitiveTableNames = true, cacheConnection = false, allowEmptyFields = true)
 @AutoConfigureMockMvc
-public class AbstractTestApi {
+public abstract class AbstractTestApi {
 
     private static final String AUTH_URI = "/api/auth/token";
 
     @PersistenceContext
     protected EntityManager em;
-
+    @Autowired
+    CacheManager cacheManager;
     @Autowired
     protected MockMvc mvc;
     @Autowired
@@ -48,6 +52,10 @@ public class AbstractTestApi {
                 .andReturn().getResponse().getContentAsString(), TokenResponseDto.class);
 
         return token.getToken();
+    }
+
+    public void clearUserCache() {
+        Objects.requireNonNull(cacheManager.getCache("user-email")).clear();
     }
 
 }
