@@ -79,12 +79,6 @@ public class TestAnswerResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
 
-        // Id не задан
-//        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + token))
-//                .andDo(print())
-//                .andExpect(status().isNotFound())
-//                .andExpect(jsonPath("$").doesNotExist());
-
         // не верный формат Id
         mvc.perform(get("/api/user/question/ggg/answer").header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())

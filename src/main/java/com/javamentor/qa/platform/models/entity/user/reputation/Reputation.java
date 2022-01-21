@@ -8,8 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -59,7 +57,6 @@ public class Reputation implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = Answer.class, cascade = {CascadeType.REFRESH})
     @JoinColumn(name = "answer_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Answer answer;
 
     public Reputation(User author, User sender, Integer count, ReputationType type, Question question) {
