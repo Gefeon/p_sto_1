@@ -1,0 +1,11 @@
+comment:
+  - id: 100
+    user_id: 100
+    text: "aaa"
+    persist_date: "2021-11-30 00:29:29"
+    last_redaction_date: "2021-11-30 00:29:29"
+  - id: 101
+    user_id: 100
+    text: "bbb"
+    persist_date: "2021-11-30 00:30:30"
+    last_redaction_date: "2021-11-30 00:30:30"
