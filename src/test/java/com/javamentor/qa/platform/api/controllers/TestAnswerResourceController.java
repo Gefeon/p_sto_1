@@ -79,6 +79,11 @@ public class TestAnswerResourceController extends AbstractTestApi {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
 
+        // Id не задан
+//        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + token))
+//                .andDo(print())
+//                .andExpect(status().isNotFound())
+//                .andExpect(jsonPath("$").doesNotExist());
 
         // не верный формат Id
         mvc.perform(get("/api/user/question/ggg/answer").header(AUTH_HEADER, PREFIX + token))
@@ -107,7 +112,7 @@ public class TestAnswerResourceController extends AbstractTestApi {
         mvc.perform(get("/api/user/question/100/answer").header(AUTH_HEADER, PREFIX + token))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[*].comments[*].id", containsInRelativeOrder(101, 102, 103, 104)))
+                .andExpect(jsonPath("$[*].comments[*].id", containsInRelativeOrder(101,102,103,104)))
                 .andExpect(jsonPath("$[*].comments[*].comment", containsInRelativeOrder("Hello world",
                         "Hello brother", "Hello mother", "Hello wife")))
                 .andExpect(jsonPath("$[*].comments[*].userId", containsInRelativeOrder(100, 101, 102, 103)))
