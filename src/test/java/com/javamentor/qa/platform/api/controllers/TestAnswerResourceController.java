@@ -43,7 +43,9 @@ public class TestAnswerResourceController extends AbstractTestApi {
     }
 
     @Test
-    @DataSet(value = {ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
+    @DataSet(value = {ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY,
+            "dataset/answerResourceController/votes_on_answers.yml",
+            "dataset/answerResourceController/reputation.yml"}, disableConstraints = true)
     @ExpectedDataSet(value = {USER_ENTITY, ROLE_ENTITY})
     public void deleteAnswer_returnStatusOk_AnswerDeleted() throws Exception {
         ResultActions response = mvc.perform(delete(url).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
@@ -77,12 +79,6 @@ public class TestAnswerResourceController extends AbstractTestApi {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isEmpty());
-
-        // Id не задан
-//        mvc.perform(get("/api/user/question//answer").header(AUTH_HEADER, PREFIX + token))
-//                .andDo(print())
-//                .andExpect(status().isNotFound())
-//                .andExpect(jsonPath("$").doesNotExist());
 
         // не верный формат Id
         mvc.perform(get("/api/user/question/ggg/answer").header(AUTH_HEADER, PREFIX + token))

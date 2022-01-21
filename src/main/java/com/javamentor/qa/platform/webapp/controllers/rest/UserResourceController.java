@@ -119,13 +119,4 @@ public class UserResourceController {
         map.put("class", "UserPaginationByVote");
         return ResponseEntity.ok(userDtoService.getPage(currPage, items, map));
     }
-
-//ToDo используется как заглушка для тестов
-
-    @GetMapping("/api/user/stub")
-    @Operation(summary = "Returns Hello World!")
-    public ResponseEntity<?> stub() {
-        return ResponseEntity.ok("Hello World!");
-
-    }
 }
