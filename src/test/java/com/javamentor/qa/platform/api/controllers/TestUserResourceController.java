@@ -6,8 +6,9 @@ import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
+
+import javax.annotation.PreDestroy;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -15,7 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@TestPropertySource(properties = "spring.cache.type=none")
 public class TestUserResourceController extends AbstractTestApi {
 
     private static final String AUTH_URI = "/api/auth/token";
@@ -35,6 +35,11 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String USER_BY_VOTE_QUESTION = "dataset/userResourceController/vote_question.yml";
     private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/paginationByTag/question_has_tag.yml";
+
+    @PreDestroy
+    public void clearCache(){
+        clearUserCache();
+    }
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)

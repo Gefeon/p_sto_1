@@ -6,8 +6,9 @@ import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
+
+import javax.annotation.PreDestroy;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -15,7 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@TestPropertySource(properties = "spring.cache.type=none")
+
 public class TestTagResourceController extends AbstractTestApi {
 
     private static final String QUESTION = "dataset/tagResourceController/relatedTags/question.yml";
@@ -42,6 +43,11 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String AUTH_URI = "/api/auth/token";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
+
+    @PreDestroy
+    public void clearCache(){
+        clearUserCache();
+    }
 
     @Test
     @DataSet(value = {QUESTION, TAG_ENTITY, QUESTION_HAS_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)

@@ -37,7 +37,7 @@ public class UserDaoImpl extends ReadWriteDaoImpl<User, Long> implements UserDao
                 .executeUpdate();
     }
 
-    public void update(String email){
+    public void changeIsEnable(String email){
         String hql = "update User set isEnabled = :isEnabled where email = :email";
         entityManager.createQuery(hql)
                 .setParameter("isEnabled", false)

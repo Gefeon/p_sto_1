@@ -4,8 +4,9 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.ResultActions;
+
+import javax.annotation.PreDestroy;
 
 import static org.hamcrest.Matchers.containsInRelativeOrder;
 import static org.hamcrest.Matchers.is;
@@ -16,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@TestPropertySource(properties = "spring.cache.type=none")
+
 public class TestAnswerResourceController extends AbstractTestApi {
 
     private final String url = "/api/user/question/100/answer/100";
@@ -33,6 +34,11 @@ public class TestAnswerResourceController extends AbstractTestApi {
     private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/another_answer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
+
+    @PreDestroy
+    public void clearCache(){
+        clearUserCache();
+    }
 
     @Test
     @DataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)

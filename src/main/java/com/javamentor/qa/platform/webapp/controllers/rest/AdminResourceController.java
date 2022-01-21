@@ -37,7 +37,7 @@ public class AdminResourceController {
             @NotBlank(message = "Email cannot be empty") @PathVariable("email") final String email) {
         Optional<User> optionalUser = userService.findByEmail(email);
         if (optionalUser.isPresent()) {
-            userService.update(email);
+            userService.changeIsEnable(email);
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

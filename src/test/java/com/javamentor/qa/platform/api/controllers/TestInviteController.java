@@ -9,12 +9,13 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.test.context.TestPropertySource;
+
+import javax.annotation.PreDestroy;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@TestPropertySource(properties = "spring.cache.type=none")
+
 public class TestInviteController extends AbstractTestApi {
 
     private static final String USER_ENTITY = "dataset/inviteController/user_entity.yml";
@@ -26,6 +27,11 @@ public class TestInviteController extends AbstractTestApi {
 
     @SpyBean private InviteService inviteService;
     @MockBean private MailService mailService;
+
+    @PreDestroy
+    public void clearCache(){
+        clearUserCache();
+    }
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE}, disableConstraints = true)

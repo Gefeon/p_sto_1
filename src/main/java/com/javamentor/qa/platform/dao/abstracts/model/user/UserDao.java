@@ -10,5 +10,5 @@ public interface UserDao extends ReadWriteDao<User, Long> {
     Optional<User> findByEmail(String email);
     void changePassword(String email, String password);
 
-    void update(String email);
+    void changeIsEnable(String email);
 }

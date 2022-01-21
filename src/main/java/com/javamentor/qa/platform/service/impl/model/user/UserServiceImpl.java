@@ -30,8 +30,8 @@ public class UserServiceImpl extends ReadWriteServiceImpl<User, Long> implements
     }
 
     @Transactional
-    public void update(String email){
-        userDao.update(email);
+    public void changeIsEnable(String email){
+        userDao.changeIsEnable(email);
         evictUserCache(email);
     }
 

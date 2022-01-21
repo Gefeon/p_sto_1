@@ -6,17 +6,17 @@ import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.security.jwt.JwtService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.ReflectionUtils;
 
+import javax.annotation.PreDestroy;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-@TestPropertySource(properties = "spring.cache.type=none")
+
 public class TestAuthenticationResourceController extends AbstractTestApi {
     private static final String USER_ENTITY = "dataset/authenticationResourceController/user_entity.yml";
     private static final String ROLE_ENTITY = "dataset/authenticationResourceController/role.yml";
@@ -25,6 +25,11 @@ public class TestAuthenticationResourceController extends AbstractTestApi {
     private static final String WITH_NO_AUTH_URI = "/login";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
+
+    @PreDestroy
+    public void clearCache(){
+        clearUserCache();
+    }
 
     @Test
     public void shouldNotAllowAccessToPrivateResourceToUnauthenticatedRequest() throws Exception {

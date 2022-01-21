@@ -9,5 +9,5 @@ public interface UserService extends ReadWriteService<User, Long> {
     Optional<User> findByEmail(String email);
     void changePasswordByEmail(String email, String password);
 
-    void update(String email);
+    void changeIsEnable(String email);
 }
