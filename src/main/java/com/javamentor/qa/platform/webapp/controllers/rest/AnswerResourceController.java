@@ -28,7 +28,7 @@ import static com.javamentor.qa.platform.models.entity.question.answer.VoteType.
 
 
 
-@Api(tags = {SwaggerConfig.ANSWER_CONTROLLER})
+@Api(tags = {SwaggerConfig.ANSWER_RESOURCE_CONTROLLER})
 @RestController
 @RequestMapping("/api/user/question/{questionId}/answer")
 public class AnswerResourceController {
