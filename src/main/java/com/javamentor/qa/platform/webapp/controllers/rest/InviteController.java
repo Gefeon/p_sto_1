@@ -1,6 +1,8 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
 import com.javamentor.qa.platform.service.util.InviteService;
+import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+@Api(tags = {SwaggerConfig.INVITE_CONTROLLER})
 @RestController
 @RequestMapping("api/invite")
 @RequiredArgsConstructor
