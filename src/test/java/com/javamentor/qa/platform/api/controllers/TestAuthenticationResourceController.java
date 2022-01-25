@@ -4,12 +4,11 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
 import com.javamentor.qa.platform.security.jwt.JwtService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.util.ReflectionUtils;
-
-import javax.annotation.PreDestroy;
 import java.lang.reflect.Field;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,10 +24,14 @@ public class TestAuthenticationResourceController extends AbstractTestApi {
     private static final String WITH_NO_AUTH_URI = "/login";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
+    private static byte numberOfTests = 4;
 
-    @PreDestroy
-    public void clearCache(){
-        clearUserCache();
+    @AfterEach
+    public void tearDown() {
+        numberOfTests--;
+        if (numberOfTests <= 0){
+            clearUserCache();
+        }
     }
 
     @Test

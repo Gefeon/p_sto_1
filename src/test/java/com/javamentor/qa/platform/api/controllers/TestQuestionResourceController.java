@@ -8,11 +8,11 @@ import com.javamentor.qa.platform.models.dto.TagDto;
 import com.javamentor.qa.platform.models.entity.question.VoteQuestion;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.reputation.Reputation;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
-import javax.annotation.PreDestroy;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,10 +98,14 @@ public class TestQuestionResourceController extends AbstractTestApi {
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
+    private static byte numberOfTests = 26;
 
-    @PreDestroy
-    public void clearCache(){
-        clearUserCache();
+    @AfterEach
+    public void tearDown() {
+        numberOfTests--;
+        if (numberOfTests <= 0){
+            clearUserCache();
+        }
     }
 
     @Test

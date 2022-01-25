@@ -3,11 +3,9 @@ package com.javamentor.qa.platform.api.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-
-import javax.annotation.PreDestroy;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -22,10 +20,14 @@ public class TestAdminResourceController extends AbstractTestApi {
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
+    private static byte numberOfTests = 3;
 
-    @PreDestroy
-    public void clearCache(){
-        clearUserCache();
+    @AfterEach
+    public void tearDown() {
+          numberOfTests--;
+          if (numberOfTests <= 0){
+              clearUserCache();
+          }
     }
 
     @Test
@@ -61,6 +63,5 @@ public class TestAdminResourceController extends AbstractTestApi {
         //after delete
         mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + tokenUser)).andExpect(status().isForbidden());
     }
-
 
 }
