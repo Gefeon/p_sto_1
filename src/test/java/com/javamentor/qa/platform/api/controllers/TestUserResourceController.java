@@ -4,7 +4,6 @@ import com.github.database.rider.core.api.dataset.DataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import com.javamentor.qa.platform.models.dto.TokenResponseDto;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
@@ -34,15 +33,6 @@ public class TestUserResourceController extends AbstractTestApi {
     private static final String USER_BY_VOTE_QUESTION = "dataset/userResourceController/vote_question.yml";
     private static final String TAG_ENTITY = "dataset/questionResourceController/tag.yml";
     private static final String QUESTION_HAS_TAG_ENTITY = "dataset/questionResourceController/paginationByTag/question_has_tag.yml";
-    private static byte numberOfTests = 12;
-
-    @AfterEach
-    public void tearDown() {
-        numberOfTests--;
-        if (numberOfTests <= 0){
-            clearUserCache();
-        }
-    }
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE_REP_ENTITY, REPUTATION_ENTITY, QUESTION_ENTITY, ANSWER_ENTITY}, disableConstraints = true)

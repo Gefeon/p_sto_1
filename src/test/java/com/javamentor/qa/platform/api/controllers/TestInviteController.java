@@ -5,7 +5,6 @@ import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.service.util.InviteService;
 import com.javamentor.qa.platform.service.util.MailService;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,18 +22,9 @@ public class TestInviteController extends AbstractTestApi {
     private static final String TEST_URL = "/api/user/stub";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
-    private static byte numberOfTests = 2;
 
     @SpyBean private InviteService inviteService;
     @MockBean private MailService mailService;
-
-    @AfterEach
-    public void tearDown() {
-        numberOfTests--;
-        if (numberOfTests <= 0){
-            clearUserCache();
-        }
-    }
 
     @Test
     @DataSet(value = {USER_ENTITY, ROLE}, disableConstraints = true)

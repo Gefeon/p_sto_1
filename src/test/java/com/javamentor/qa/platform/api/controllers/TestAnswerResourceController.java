@@ -3,7 +3,6 @@ package com.javamentor.qa.platform.api.controllers;
 import com.github.database.rider.core.api.dataset.DataSet;
 import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -33,15 +32,6 @@ public class TestAnswerResourceController extends AbstractTestApi {
     private static final String ANOTHER_ANSWER_ENTITY = "dataset/answerResourceController/another_answer.yml";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
-    private static byte numberOfTests = 8;
-
-    @AfterEach
-    public void tearDown() {
-        numberOfTests--;
-        if (numberOfTests <= 0){
-            clearUserCache();
-        }
-    }
 
     @Test
     @DataSet(value = {ANOTHER_ANSWER_ENTITY, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
