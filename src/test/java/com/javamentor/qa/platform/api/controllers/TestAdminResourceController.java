@@ -5,7 +5,6 @@ import com.javamentor.qa.platform.api.abstracts.AbstractTestApi;
 import com.javamentor.qa.platform.models.dto.AuthenticationRequestDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,4 +53,5 @@ public class TestAdminResourceController extends AbstractTestApi {
         //after delete
         mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + tokenUser)).andExpect(status().isForbidden());
     }
+
 }

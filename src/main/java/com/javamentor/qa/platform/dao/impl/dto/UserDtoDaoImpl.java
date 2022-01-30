@@ -1,6 +1,6 @@
 package com.javamentor.qa.platform.dao.impl.dto;
 
-import com.javamentor.qa.platform.dao.abstracts.dto.UserSupplierDtoDao;
+import com.javamentor.qa.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.qa.platform.dao.util.SingleResultUtil;
 import com.javamentor.qa.platform.models.dto.UserSupplierDto;
 import org.springframework.stereotype.Repository;
@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Repository
-public class UserSupplierDtoDaoImpl implements UserSupplierDtoDao {
+public class UserDtoDaoImpl implements UserDtoDao {
 
     @PersistenceContext
     private EntityManager entityManager;

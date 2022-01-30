@@ -7,7 +7,6 @@ import com.javamentor.qa.platform.models.dto.QuestionDto;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.service.abstracts.dto.QuestionCommentDtoService;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.question.QuestionService;
 import com.javamentor.qa.platform.service.abstracts.model.question.VoteQuestionService;
@@ -48,17 +47,14 @@ public class QuestionResourceController {
 
     private final VoteQuestionService voteQuestionService;
 
-    private final QuestionCommentDtoService questionCommentDtoService;
-
     public QuestionResourceController(QuestionMapper questionMapper,
                                       QuestionService questionService,
                                       QuestionDtoService questionDtoService,
-                                      VoteQuestionService voteQuestionService, QuestionCommentDtoService questionCommentDtoService) {
+                                      VoteQuestionService voteQuestionService) {
         this.questionMapper = questionMapper;
         this.questionService = questionService;
         this.questionDtoService = questionDtoService;
         this.voteQuestionService = voteQuestionService;
-        this.questionCommentDtoService = questionCommentDtoService;
     }
 
     @Operation(summary = "add new question", responses = {
@@ -201,7 +197,7 @@ public class QuestionResourceController {
     })
     @GetMapping("/{id}/comment")
     public ResponseEntity<?> getQuestionCommentDtoById(@PathVariable("id") Long id) {
-        List<QuestionCommentDto> questionCommentDtoList = questionCommentDtoService.getQuestionCommentDtoById(id);
+        List<QuestionCommentDto> questionCommentDtoList = questionDtoService.getQuestionCommentDtoById(id);
         return new ResponseEntity<>(questionCommentDtoList, HttpStatus.OK);
     }
 
