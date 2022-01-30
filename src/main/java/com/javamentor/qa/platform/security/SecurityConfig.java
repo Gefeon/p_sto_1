@@ -3,7 +3,6 @@ package com.javamentor.qa.platform.security;
 import com.javamentor.qa.platform.security.jwt.CustomJwtAuthorizationFilter;
 import com.javamentor.qa.platform.security.jwt.JwtService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
-import com.javamentor.qa.platform.webapp.controllers.ExceptionHandlerFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,7 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter implements WebM
         http
                 .antMatcher("/api/**")
                 .addFilterBefore(new CustomJwtAuthorizationFilter(jwtService, userService), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new ExceptionHandlerFilter(), CustomJwtAuthorizationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/api/user/**").access("hasRole('USER')")
                 .antMatchers("/api/admin/**").access("hasRole('ADMIN')")
