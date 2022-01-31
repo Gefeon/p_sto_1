@@ -42,8 +42,6 @@ public abstract class AbstractTestApi {
     protected ObjectMapper objectMapper;
     @Autowired
     protected JwtService jwtService;
-    @Autowired
-    protected CacheManager cacheManager;
 
     public String getToken(String username, String password) throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto(username, password);
