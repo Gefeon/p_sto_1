@@ -1,22 +1,27 @@
 package com.javamentor.qa.platform.service.impl.dto;
 
 import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
+import com.javamentor.qa.platform.dao.abstracts.dto.UserDtoDao;
 import com.javamentor.qa.platform.models.dto.*;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class UserDtoServiceImpl extends PageDtoServiceImpl<UserDto> implements UserDtoService {
 
     private final TagDtoDao tagDtoDao;
+    private final UserDtoDao userDtoDao;
 
-    public UserDtoServiceImpl(TagDtoDao tagDtoDao) {
+    public UserDtoServiceImpl(TagDtoDao tagDtoDao, UserDtoDao userDtoDao) {
         this.tagDtoDao = tagDtoDao;
+        this.userDtoDao = userDtoDao;
     }
 
     @Override
@@ -37,5 +42,11 @@ public class UserDtoServiceImpl extends PageDtoServiceImpl<UserDto> implements U
 
         pageDto.setItems(userDtos);
         return pageDto;
+    }
+
+    @Override
+    @Transactional
+    public Optional<UserSupplierDto> getUserDtoById(Long id) {
+        return userDtoDao.getUserDtoById(id);
     }
 }

@@ -4,7 +4,6 @@ import com.javamentor.qa.platform.models.dto.PageDto;
 import com.javamentor.qa.platform.models.dto.UserDto;
 import com.javamentor.qa.platform.models.dto.UserSupplierDto;
 import com.javamentor.qa.platform.models.entity.user.User;
-import com.javamentor.qa.platform.service.abstracts.dto.UserSupplierDtoService;
 import com.javamentor.qa.platform.service.abstracts.dto.UserDtoService;
 import com.javamentor.qa.platform.service.abstracts.model.user.UserService;
 import com.javamentor.qa.platform.webapp.configs.SwaggerConfig;
@@ -31,12 +30,10 @@ import java.util.Optional;
 @Validated
 public class UserResourceController {
 
-    private final UserSupplierDtoService userSupplierDtoService;
     private final UserDtoService userDtoService;
     private final UserService userService;
 
-    public UserResourceController(UserSupplierDtoService userSupplierDtoService, UserDtoService userDtoService, UserService userService) {
-        this.userSupplierDtoService = userSupplierDtoService;
+    public UserResourceController(UserDtoService userDtoService, UserService userService) {
         this.userDtoService = userDtoService;
         this.userService = userService;
     }
@@ -48,7 +45,7 @@ public class UserResourceController {
             @ApiResponse(description = "User not found", responseCode = "404", content = @Content)
     })
     public ResponseEntity<Object> getUserDto(@PathVariable("userId") Long id) {
-        Optional<UserSupplierDto> dto = userSupplierDtoService.getUserDtoById(id);
+        Optional<UserSupplierDto> dto = userDtoService.getUserDtoById(id);
         return dto.isEmpty()
                 ? ResponseEntity.status(HttpStatus.NOT_FOUND).body("User is absent or wrong Id")
                 : ResponseEntity.ok(dto.get());
