@@ -46,12 +46,3 @@ public class TagDtoOrderByPopulationDaoImpl implements PageDtoDao<TagViewDto> {
     }
 
 }
-
-//    LocalDateTime localDateTime = LocalDateTime.now();
-//        return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.TagViewDto" +
-//                "(t.id, t.name, t.description, count(DISTINCT qa.id) , count(DISTINCT qd.id), count(DISTINCT qw.id)) FROM Tag t " +
-//                "LEFT JOIN t.questions qa  LEFT JOIN t.questions qd ON qd.persistDateTime <= :now and :oneDay < qd.persistDateTime " +
-//                "LEFT JOIN t.questions qw ON qw.persistDateTime <= :now and :oneWeek < qw.persistDateTime " +
-//                "GROUP BY t " +
-//                "ORDER BY t.persistDateTime DESC", TagViewDto.class)
-
