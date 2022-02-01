@@ -45,7 +45,6 @@ public abstract class AbstractTestApi {
 
     public String getToken(String username, String password) throws Exception {
         AuthenticationRequestDto authDto = new AuthenticationRequestDto(username, password);
-
         TokenResponseDto token = objectMapper.readValue(mvc
                 .perform(post(AUTH_URI).content(objectMapper.writeValueAsString(authDto)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

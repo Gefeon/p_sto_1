@@ -66,7 +66,8 @@ public class CommentDtoDaoImpl implements CommentDtoDao {
                                 "LEFT JOIN CommentQuestion cq ON c.id = cq.comment.id " +
                                 "LEFT JOIN Question q ON cq.question.id = q.id " +
                                 "LEFT JOIN Reputation r ON q.user.id = r.author.id " +
-                                "WHERE q.id IN :ids", Tuple.class)
+                                "WHERE q.id IN :ids " +
+                                "GROUP BY c.id, c.user.fullName, q.id", Tuple.class)
                 .setParameter("ids", questionIds)
                 .getResultList();
         Map<Long, List<CommentDto>> commentsMap = new HashMap<>();

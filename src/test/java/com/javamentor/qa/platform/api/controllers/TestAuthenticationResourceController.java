@@ -19,7 +19,7 @@ public class TestAuthenticationResourceController extends AbstractTestApi {
     private static final String USER_ENTITY = "dataset/authenticationResourceController/user_entity.yml";
     private static final String ROLE_ENTITY = "dataset/authenticationResourceController/role.yml";
 
-    private static final String WITH_AUTH_URI = "/api/user/stub";
+    private static final String WITH_AUTH_URI = "/api/user/";
     private static final String WITH_NO_AUTH_URI = "/login";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
@@ -38,7 +38,7 @@ public class TestAuthenticationResourceController extends AbstractTestApi {
     @DataSet(value = {USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     public void shouldAllowAccessToPrivateResourceToAuthorizedRequest() throws Exception {
         mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
-                .andExpect(status().isOk());
+                .andExpect(status().isNotFound());
     }
 
     @Test

@@ -15,7 +15,7 @@ public class TestAdminResourceController extends AbstractTestApi {
 
     private static final String AUTH_URI = "/api/auth/token";
     private static final String DELETE_URI = "/api/admin/delete/";
-    private static final String WITH_AUTH_URI = "/api/user/stub";
+    private static final String WITH_AUTH_URI = "/api/user/";
 
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
@@ -47,9 +47,9 @@ public class TestAdminResourceController extends AbstractTestApi {
         String tokenAdmin = getToken("admin100@admin.ru", "admin");
         String tokenUser = getToken("user101@user.ru", "user");
         //before delete
-        mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + tokenUser)).andExpect(status().isOk());
+        mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + tokenUser)).andExpect(status().isNotFound());
         //deleting
-        mvc.perform(post(DELETE_URI + "/user101@user.ru").header(AUTH_HEADER, PREFIX + tokenAdmin));
+        mvc.perform(post(DELETE_URI + "/user101@user.ru").header(AUTH_HEADER, PREFIX + tokenAdmin)).andExpect(status().isOk());
         //after delete
         mvc.perform(get(WITH_AUTH_URI).header(AUTH_HEADER, PREFIX + tokenUser)).andExpect(status().isForbidden());
     }
