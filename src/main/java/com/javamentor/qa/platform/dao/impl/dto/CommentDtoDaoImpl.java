@@ -42,11 +42,11 @@ public class CommentDtoDaoImpl implements CommentDtoDao {
 
         comments.forEach(tuple -> commentsDtoMap.computeIfAbsent(tuple.get("ans_id", Long.class), id -> new ArrayList<>())
                 .add(new CommentDto(tuple.get("c_id", Long.class),
-                                tuple.get("c_text", String.class),
-                                tuple.get("user_id", Long.class),
-                                tuple.get("user_fullName", String.class),
-                                tuple.get("a_reputation", Long.class),
-                                tuple.get("c_per_date", LocalDateTime.class)
+                        tuple.get("c_text", String.class),
+                        tuple.get("user_id", Long.class),
+                        tuple.get("user_fullName", String.class),
+                        tuple.get("a_reputation", Long.class),
+                        tuple.get("c_per_date", LocalDateTime.class)
                         )
                 )
         );
@@ -70,7 +70,6 @@ public class CommentDtoDaoImpl implements CommentDtoDao {
                         "GROUP BY comq.id, comq.user.fullName ",
                 CommentDto.class).setParameter("id", id).getResultList();
     }
-
     @Override
     public List<QuestionCommentDto> getQuestionCommentDtoById(Long id) {
         return entityManager.createQuery("SELECT new com.javamentor.qa.platform.models.dto.QuestionCommentDto" +

@@ -19,7 +19,7 @@ public class TestInviteController extends AbstractTestApi {
     private static final String USER_ENTITY = "dataset/inviteController/user_entity.yml";
     private static final String ROLE = "dataset/inviteController/role.yml";
     private static final String INVITE_URL = "/api/invite/";
-    private static final String TEST_URL = "/api/user/stub";
+    private static final String TEST_URL = "/api/user/";
     private static final String AUTH_HEADER = "Authorization";
     private static final String PREFIX = "Bearer ";
 
@@ -35,9 +35,10 @@ public class TestInviteController extends AbstractTestApi {
         //invite user
         mvc.perform(post(INVITE_URL + "user101@user.ru").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andExpect(status().isOk());
+        cacheManager.getCache("user-email").clear();
         //invited user
         mvc.perform(get(TEST_URL).header(AUTH_HEADER, PREFIX + getToken("user101@user.ru", "generated_password")))
-                .andExpect(status().isOk());
+                .andExpect(status().isNotFound());
     }
 
     @Test
