@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface QuestionDtoService extends PageDtoService<QuestionDto> {
 
-    Optional<QuestionDto> getQuestionDtoById(long id);
+    Optional<QuestionDto> getQuestionDtoByIdAndUserAuthId(long id, long userId);
 
     List<QuestionCommentDto> getQuestionCommentDtoById(Long id);
 }

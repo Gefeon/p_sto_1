@@ -1,6 +1,21 @@
 votes_on_questions:
   - id: 100
     persist_date: "2021-11-24 00:00:00"
-    vote: "UP_VOTE"
+    vote: "DOWN_VOTE"
+    user_id: 100
+    question_id: 100
+  - id: 101
+    persist_date: "2021-11-24 00:00:00"
+    vote: "DOWN_VOTE"
     user_id: 100
     question_id: 101
+  - id: 102
+    persist_date: "2021-11-24 00:00:00"
+    vote: "DOWN_VOTE"
+    user_id: 100
+    question_id: 109
+  - id: 103
+    persist_date: "2021-11-24 00:00:00"
+    vote: "DOWN_VOTE"
+    user_id: 100
+    question_id: 108

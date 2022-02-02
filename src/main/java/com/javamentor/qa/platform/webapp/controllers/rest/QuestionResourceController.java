@@ -79,7 +79,8 @@ public class QuestionResourceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getQuestionDtoById(@PathVariable("id") Long id) {
-        Optional<QuestionDto> questionDto = questionDtoService.getQuestionDtoById(id);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Optional<QuestionDto> questionDto = questionDtoService.getQuestionDtoByIdAndUserAuthId(id, user.getId());
         return questionDto.isEmpty()
                 ? new ResponseEntity<>("Missing question or invalid id", HttpStatus.BAD_REQUEST)
                 : new ResponseEntity<>(questionDto, HttpStatus.OK);
@@ -140,9 +141,11 @@ public class QuestionResourceController {
             @RequestParam @Positive(message = "current page must be positive number") int currPage,
             @ApiParam(value = "positive number representing number of items to show on page")
             @RequestParam(required = false, defaultValue = "10") @Positive(message = "items must be positive number") int items) {
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "QuestionDtoPaginationByTag");
         map.put("tagId", id);
+        map.put("userAuth", userAuth);
         PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
@@ -159,10 +162,12 @@ public class QuestionResourceController {
                                  @RequestParam(required = false, defaultValue = "10") int items,
                                  @RequestParam(required = false, defaultValue = "0") List<Long> ignoredTags,
                                  @RequestParam(required = false) List<Long> trackedTags) {
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "QuestionByDate");
         map.put("ignoredTags", ignoredTags);
         map.put("trackedTags", trackedTags);
+        map.put("userAuth", userAuth);
         return ResponseEntity.ok(questionDtoService.getPage(currPage, items, map));
     }
 
@@ -182,10 +187,12 @@ public class QuestionResourceController {
             @RequestParam(required = false)  List<@Positive(message = "ids of tracked tags must be positive numbers") Long> trackedId,
             @ApiParam(value = "list of ignored tags attached to question")
             @RequestParam(required = false) List<@Positive(message = "ids of ignored tags must be positive numbers") Long> ignoredId) {
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "AllQuestions");
         map.put("trackedIds", trackedId);
         map.put("ignoredIds", ignoredId);
+        map.put("userAuth", userAuth);
         PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
@@ -212,11 +219,12 @@ public class QuestionResourceController {
                                               @RequestParam(required = false, defaultValue = "10") int items,
                                               @RequestParam(required = false, defaultValue = "0") List<Long> ignoredTags,
                                               @RequestParam(required = false) List<Long> trackedTags) {
-
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "QuestionNoAnswer");
         map.put("ignoredTags", ignoredTags);
         map.put("trackedTags", trackedTags);
+        map.put("userAuth", userAuth);
         PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
