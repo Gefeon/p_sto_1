@@ -11,5 +11,7 @@ public class TagViewDto {
     private Long id;
     private String name;
     private String description;
-    private Long questionCount, questionCountOneDay, questionCountOneWeek;
+    private Long questionCount;
+    private Long questionCountOneDay;
+    private Long questionCountOneWeek;
 }
