@@ -5,6 +5,7 @@ import com.javamentor.qa.platform.models.entity.user.User;
 import com.javamentor.qa.platform.webapp.converters.transformers.QuestionDtoTagResultTransformer;
 import com.javamentor.qa.platform.models.dto.QuestionDto;
 import org.springframework.security.core.context.SecurityContextHolder;
+import com.javamentor.qa.platform.models.dto.QuestionViewDto;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,14 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 @Repository(value = "QuestionDtoPaginationByTag")
-public class QuestionDtoTagDaoImpl implements PageDtoDao<QuestionDto> {
+public class QuestionDtoTagDaoImpl implements PageDtoDao<QuestionViewDto> {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<QuestionDto> getItems(Map<Object, Object> param) {
+    public List<QuestionViewDto> getItems(Map<Object, Object> param) {
         int curPageNumber = (int) param.get("currentPageNumber");
         int itemsOnPage = (int) param.get("itemsOnPage");
         Long tagId = (Long) param.get("tagId");
@@ -45,6 +46,26 @@ public class QuestionDtoTagDaoImpl implements PageDtoDao<QuestionDto> {
                         "JOIN User u ON q.user.id = u.id " +
                         "JOIN q.tags AS t WHERE t.id = :tagId " +
                         "ORDER BY q.id")
+        return entityManager.createQuery(
+                        "SELECT new com.javamentor.qa.platform.models.dto.QuestionViewDto" +
+                                "(q.id, " +
+                                "q.title, " +
+                                "q.user.id, " +
+                                "q.user.fullName, " +
+                                "q.user.imageLink, " +
+                                "q.description, " +
+                                "SUM(0), " +
+                                "(SELECT COUNT(answer.id) FROM Answer answer WHERE answer.user.id = q.user.id), " +
+                                "(SELECT COUNT (up.vote) FROM VoteQuestion up WHERE up.vote = 'UP_VOTE' AND up.user.id = q.user.id) - " +
+                                "(SELECT COUNT(down.vote) FROM VoteQuestion down WHERE down.vote = 'DOWN_VOTE' AND down.user.id = q.user.id)," +
+                                "(SELECT SUM (r.count) FROM Reputation r WHERE q.user.id = r.author.id), " +
+                                "q.persistDateTime, " +
+                                "q.lastUpdateDateTime)" +
+                                "FROM Question q " +
+                                "JOIN q.tags tgs " +
+                                "WHERE q.id IN (SELECT q.id From Question q JOIN q.tags tgs WHERE :tagId IS NULL OR tgs.id IN :tagId)" +
+                                "GROUP BY q.id, q.user.fullName, q.user.imageLink ORDER BY q.persistDateTime DESC ",
+                        QuestionViewDto.class)
                 .setParameter("tagId", tagId)
                 .setParameter("userId", userAuth.getId())
                 .unwrap(org.hibernate.query.Query.class)

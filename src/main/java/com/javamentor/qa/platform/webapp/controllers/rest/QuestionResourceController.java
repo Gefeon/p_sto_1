@@ -1,9 +1,6 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
-import com.javamentor.qa.platform.models.dto.PageDto;
-import com.javamentor.qa.platform.models.dto.QuestionCommentDto;
-import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
-import com.javamentor.qa.platform.models.dto.QuestionDto;
+import com.javamentor.qa.platform.models.dto.*;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
@@ -146,7 +143,7 @@ public class QuestionResourceController {
         map.put("class", "QuestionDtoPaginationByTag");
         map.put("tagId", id);
         map.put("userAuth", userAuth);
-        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        PageDto<QuestionViewDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 
@@ -193,7 +190,7 @@ public class QuestionResourceController {
         map.put("trackedIds", trackedId);
         map.put("ignoredIds", ignoredId);
         map.put("userAuth", userAuth);
-        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        PageDto<QuestionViewDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 
@@ -225,7 +222,7 @@ public class QuestionResourceController {
         map.put("ignoredTags", ignoredTags);
         map.put("trackedTags", trackedTags);
         map.put("userAuth", userAuth);
-        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        PageDto<QuestionViewDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 

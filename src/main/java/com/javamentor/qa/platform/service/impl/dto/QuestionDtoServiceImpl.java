@@ -3,11 +3,7 @@ package com.javamentor.qa.platform.service.impl.dto;
 import com.javamentor.qa.platform.dao.abstracts.dto.CommentDtoDao;
 import com.javamentor.qa.platform.dao.abstracts.dto.QuestionDtoDao;
 import com.javamentor.qa.platform.dao.abstracts.dto.TagDtoDao;
-import com.javamentor.qa.platform.models.dto.QuestionDto;
-import com.javamentor.qa.platform.models.dto.PageDto;
-import com.javamentor.qa.platform.models.dto.TagDto;
-import com.javamentor.qa.platform.models.dto.CommentDto;
-import com.javamentor.qa.platform.models.dto.QuestionCommentDto;
+import com.javamentor.qa.platform.models.dto.*;
 import com.javamentor.qa.platform.service.abstracts.dto.QuestionDtoService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +14,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> implements QuestionDtoService {
+public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionViewDto> implements QuestionDtoService {
 
     private final QuestionDtoDao questionDao;
     private final TagDtoDao tagDtoDao;
@@ -32,22 +28,20 @@ public class QuestionDtoServiceImpl extends PageDtoServiceImpl<QuestionDto> impl
 
     @Override
     @Transactional
-    public PageDto<QuestionDto> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
+    public PageDto<QuestionViewDto> getPage(int currentPageNumber, int itemsOnPage, Map<Object, Object> map) {
 
-        PageDto<QuestionDto> pageDto = super.getPage(currentPageNumber, itemsOnPage, map);
-        List<QuestionDto> questionDtos = pageDto.getItems();
+        PageDto<QuestionViewDto> pageDto = super.getPage(currentPageNumber, itemsOnPage, map);
+        List<QuestionViewDto> questionViewDtos = pageDto.getItems();
 
-        List<Long> questionIds = questionDtos.stream()
-                .map(QuestionDto::getId)
+        List<Long> questionIds = questionViewDtos.stream()
+                .map(QuestionViewDto::getId)
                 .collect(Collectors.toList());
 
         Map<Long, List<TagDto>> tagsMap = tagDtoDao.getMapTagsByQuestionIds(questionIds);
-        Map<Long, List<CommentDto>> commentsMap = commentDtoDao.getMapCommentsByQuestionIds(questionIds);
-        for (QuestionDto questionDto : questionDtos) {
-            questionDto.setListTagDto(tagsMap.get(questionDto.getId()));
-            questionDto.setListCommentsDto(commentsMap.get(questionDto.getId()));
+        for (QuestionViewDto questionViewDto : questionViewDtos) {
+            questionViewDto.setListTagDto(tagsMap.get(questionViewDto.getId()));
         }
-        pageDto.setItems(questionDtos);
+        pageDto.setItems(questionViewDtos);
         return pageDto;
     }
 
