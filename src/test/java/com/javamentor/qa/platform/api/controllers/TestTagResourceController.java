@@ -272,7 +272,7 @@ public class TestTagResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.itemsOnPage", is(3)))
                 .andExpect(jsonPath("$.totalResultCount", is(12)))
                 .andExpect(jsonPath("$.items").isNotEmpty())
-                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(100, 111, 105)));
+                .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(100, 111, 101)));
 
         // нет необязательного параметра - кол-во элементов на странице, по умолчанию 10
         mvc.perform(get(GET_TAGS_BY_POPULAR + "?currPage=1").header(AUTH_HEADER, PREFIX + token.getToken()))
