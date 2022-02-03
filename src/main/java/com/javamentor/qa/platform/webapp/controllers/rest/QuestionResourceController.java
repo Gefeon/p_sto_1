@@ -1,9 +1,6 @@
 package com.javamentor.qa.platform.webapp.controllers.rest;
 
-import com.javamentor.qa.platform.models.dto.PageDto;
-import com.javamentor.qa.platform.models.dto.QuestionCommentDto;
-import com.javamentor.qa.platform.models.dto.QuestionCreateDto;
-import com.javamentor.qa.platform.models.dto.QuestionDto;
+import com.javamentor.qa.platform.models.dto.*;
 import com.javamentor.qa.platform.models.entity.question.Question;
 import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import com.javamentor.qa.platform.models.entity.user.User;
@@ -143,7 +140,7 @@ public class QuestionResourceController {
         Map<Object, Object> map = new HashMap<>();
         map.put("class", "QuestionDtoPaginationByTag");
         map.put("tagId", id);
-        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        PageDto<QuestionViewDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 
@@ -186,7 +183,7 @@ public class QuestionResourceController {
         map.put("class", "AllQuestions");
         map.put("trackedIds", trackedId);
         map.put("ignoredIds", ignoredId);
-        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        PageDto<QuestionViewDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 
@@ -217,7 +214,7 @@ public class QuestionResourceController {
         map.put("class", "QuestionNoAnswer");
         map.put("ignoredTags", ignoredTags);
         map.put("trackedTags", trackedTags);
-        PageDto<QuestionDto> page = questionDtoService.getPage(currPage, items, map);
+        PageDto<QuestionViewDto> page = questionDtoService.getPage(currPage, items, map);
         return ResponseEntity.ok(page);
     }
 
