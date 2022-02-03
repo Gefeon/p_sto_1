@@ -26,9 +26,10 @@ public class QuestionDtoPersistDateDaoImpl implements PageDtoDao<QuestionViewDto
         int itemsOnPage = (int) param.get("itemsOnPage");
         List<Long> ignoredTags = (List<Long>) param.get("ignoredTags");
         List<Long> trackedTags = (List<Long>) param.get("trackedTags");
+        User userAuth = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return entityManager.createQuery(
-                        "SELECT new com.javamentor.qa.platform.models.dto.QuestionDto" +
+                        "SELECT new com.javamentor.qa.platform.models.dto.QuestionViewDto" +
                                 "(q.id, " +
                                 "q.title, " +
                                 "q.user.id, " +

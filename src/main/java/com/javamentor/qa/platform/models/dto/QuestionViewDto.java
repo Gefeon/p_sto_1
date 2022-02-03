@@ -1,5 +1,6 @@
 package com.javamentor.qa.platform.models.dto;
 
+import com.javamentor.qa.platform.models.entity.question.answer.VoteType;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -26,11 +27,13 @@ public class QuestionViewDto {
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();
+    private VoteType isUserVote;
 
     public QuestionViewDto(Long id, String title, Long authorId, String authorName,
                            String authorImage, String description, Long viewCount,
                            Long countAnswer, Long countValuable, Long authorReputation,
-                           LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime) {
+                           LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime,
+                           VoteType isUserVote) {
         this.id = id;
         this.title = title;
         this.authorId = authorId;
@@ -43,5 +46,6 @@ public class QuestionViewDto {
         this.authorReputation = authorReputation;
         this.persistDateTime = persistDateTime;
         this.lastUpdateDateTime = lastUpdateDateTime;
+        this.isUserVote = isUserVote;
     }
 }
