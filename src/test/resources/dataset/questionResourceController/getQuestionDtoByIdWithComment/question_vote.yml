@@ -1,26 +1,51 @@
 votes_on_questions:
   - id: 100
-    user_id: 100
-    question_id: 100
-    persist_date: "2021-11-30 00:29:29.586848"
+    persist_date: "2021-10-11 13:07:00.000000"
     vote: "UP_VOTE"
+    question_id: 108
+    user_id: 101
   - id: 101
-    user_id: 100
-    question_id: 100
-    persist_date: "2021-11-30 00:29:29.586848"
+    persist_date: "2021-10-11 13:07:00.000000"
     vote: "UP_VOTE"
+    question_id: 108
+    user_id: 102
   - id: 102
-    user_id: 100
-    question_id: 100
-    persist_date: "2021-11-30 00:29:29.586848"
+    persist_date: "2021-10-11 13:07:00.000000"
     vote: "UP_VOTE"
+    question_id: 108
+    user_id: 103
   - id: 103
-    user_id: 100
-    question_id: 100
-    persist_date: "2021-11-30 00:29:29.586848"
+    persist_date: "2021-10-11 13:07:00.000000"
     vote: "DOWN_VOTE"
+    question_id: 100
+    user_id: 100
   - id: 104
+    persist_date: "2021-10-11 13:07:00.000000"
+    vote: "UP_VOTE"
+    question_id: 109
     user_id: 100
-    question_id: 100
-    persist_date: "2021-11-30 00:29:29.586848"
+  - id: 105
+    persist_date: "2021-10-11 13:07:00.000000"
     vote: "DOWN_VOTE"
+    question_id: 109
+    user_id: 102
+  - id: 106
+    persist_date: "2021-10-11 13:07:00.000000"
+    vote: "DOWN_VOTE"
+    question_id: 109
+    user_id: 103
+  - id: 107
+    persist_date: "2021-10-11 13:07:00.000000"
+    vote: "DOWN_VOTE"
+    question_id: 109
+    user_id: 104
+  - id: 108
+    persist_date: "2021-10-11 13:07:00.000000"
+    vote: "UP_VOTE"
+    question_id: 110
+    user_id: 101
+  - id: 109
+    persist_date: "2021-10-11 13:07:00.000000"
+    vote: "DOWN_VOTE"
+    question_id: 111
+    user_id: 101

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class QuestionDto {
+public class QuestionViewDto {
     private Long id;
     private String title;
     private Long authorId;
@@ -27,14 +27,13 @@ public class QuestionDto {
     private LocalDateTime persistDateTime;
     private LocalDateTime lastUpdateDateTime;
     private List<TagDto> listTagDto = new ArrayList<>();
-    private List<CommentDto> listCommentsDto = new ArrayList<>();
     private VoteType isUserVote;
 
-    public QuestionDto(Long id, String title, Long authorId, String authorName,
-                       String authorImage, String description, Long viewCount,
-                       Long countAnswer, Long countValuable, Long authorReputation,
-                       LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime,
-                       VoteType isUserVote) {
+    public QuestionViewDto(Long id, String title, Long authorId, String authorName,
+                           String authorImage, String description, Long viewCount,
+                           Long countAnswer, Long countValuable, Long authorReputation,
+                           LocalDateTime persistDateTime, LocalDateTime lastUpdateDateTime,
+                           VoteType isUserVote) {
         this.id = id;
         this.title = title;
         this.authorId = authorId;

@@ -285,7 +285,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items").value(hasSize(5)))
                 .andExpect(jsonPath("$.items[*].id").value(containsInRelativeOrder(100, 101, 103, 106, 112)))
                 .andExpect(jsonPath("$.items[*].listTagDto").value(containsInRelativeOrder(hasSize(5),hasSize(1),hasSize(5),hasSize(2),hasSize(3))))
-                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,101,102,103,104,100,100,101,102,103,104,106,100,100,105,109)));
+                .andExpect(jsonPath("$.items[*].listTagDto[*].id").value(containsInAnyOrder(100,101,102,103,104,100,100,101,102,103,104,106,100,100,105,109)))
+                .andExpect(jsonPath("$.items[0].isUserVote", is( "UP_VOTE")));
     }
 
     //проверка что находятся все вопросы, с которыми нет ни одного связанного тэга из IgnoredTags, без дубликатов.
@@ -350,7 +351,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
         mvc.perform(get(url + "?currPage=1&trackedId=100&trackedId=101&trackedId=102&trackedId=113").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.items").value(hasSize(7)));
+                .andExpect(jsonPath("$.items").value(hasSize(7)))
+                .andExpect(jsonPath("$.items[0].isUserVote", is( "UP_VOTE")));
     }
 
     //  передать в trackedTag отрицательное число
@@ -412,7 +414,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.totalResultCount").value(9))
                 .andExpect(jsonPath("$.items[*].countAnswer").value(containsInRelativeOrder( 2, 1, 0, 0)))
                 .andExpect(jsonPath("$.items[*].authorReputation").value(containsInRelativeOrder( 30, 30, 30, -5)))
-                .andExpect(jsonPath("$.items[*].countValuable").value(containsInRelativeOrder( 2, -2, 1, -1)));
+                .andExpect(jsonPath("$.items[*].countValuable").value(containsInRelativeOrder( 2, -2, 1, -1)))
+                .andExpect(jsonPath("$.items[1].isUserVote", is( "UP_VOTE")));
     }
 
     @Test
@@ -444,13 +447,13 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].id", is(100)))
                 .andExpect(jsonPath("$.items[0].title", is("lazyEx")))
                 .andExpect(jsonPath("$.items[0].authorId", is(100)))
-                .andExpect(jsonPath("$.items[0].authorName", is("user")))
+                .andExpect(jsonPath("$.items[0].authorName", is("ИВАНОВ ИВАН ИВАНОВИЧ")))
                 .andExpect(jsonPath("$.items[0].authorImage", is("test.ru")))
                 .andExpect(jsonPath("$.items[0].description", is("fix lazyInitialization Exception")))
                 .andExpect(jsonPath("$.items[0].viewCount", is(0)))
-                .andExpect(jsonPath("$.items[0].countAnswer", is(0)))
+                .andExpect(jsonPath("$.items[0].countAnswer", is(1)))
                 .andExpect(jsonPath("$.items[0].countValuable", is(1)))
-                .andExpect(jsonPath("$.items[0].authorReputation", is(1)))
+                .andExpect(jsonPath("$.items[0].authorReputation", is(10)))
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-30T00:29:29.62381")))
                 .andExpect(jsonPath("$.items[0].lastUpdateDateTime", is("2021-11-30T00:29:29.62381")))
                 .andExpect(jsonPath("$.items[0].listTagDto.[0].id", is(100)))
@@ -500,7 +503,8 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.items[0].persistDateTime", is("2021-11-28T00:00:00")))
                 .andExpect(jsonPath("$.items[1].persistDateTime", is("2021-11-26T00:00:00")))
                 .andExpect(jsonPath("$.items.length()", is(8)))
-                .andExpect(jsonPath("$.totalResultCount", is(8)));
+                .andExpect(jsonPath("$.totalResultCount", is(8)))
+                .andExpect(jsonPath("$.items[7].isUserVote", is( "UP_VOTE")));
 
         // нет обязательного параметра - текущей страницы
         mvc.perform(get("/api/user/question/new?items=16&ignoredTags=101,106,107,108,109&trackedTags=100,102,103,104,105")
@@ -605,10 +609,11 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.description", is("fix lazyInitialization Exception")))
                 .andExpect(jsonPath("$.viewCount", is(0)))
                 .andExpect(jsonPath("$.countAnswer", is(1)))
-                .andExpect(jsonPath("$.countValuable", is(1)))
+                .andExpect(jsonPath("$.countValuable", is(2)))
                 .andExpect(jsonPath("$.listTagDto.[*].id", containsInAnyOrder(100, 101)))
                 .andExpect(jsonPath("$.listTagDto.[*].name", containsInAnyOrder("db_architecture", "Room")))
-                .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture", "Room Android best practises")));
+                .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture", "Room Android best practises")))
+                .andExpect(jsonPath("$.isUserVote", is("UP_VOTE")));
 
         /*
          * Проверка на не существующий ID
@@ -752,11 +757,12 @@ public class TestQuestionResourceController extends AbstractTestApi {
                 .andExpect(jsonPath("$.description", is("fix lazyInitialization Exception")))
                 .andExpect(jsonPath("$.viewCount", is(0)))
                 .andExpect(jsonPath("$.countAnswer", is(1)))
-                .andExpect(jsonPath("$.countValuable", is(1)))
+                .andExpect(jsonPath("$.countValuable", is(0)))
                 .andExpect(jsonPath("$.listTagDto.[*].id", containsInAnyOrder(100, 101)))
                 .andExpect(jsonPath("$.listTagDto.[*].name", containsInAnyOrder("db_architecture", "Room")))
                 .andExpect(jsonPath("$.listTagDto.[*].description", containsInAnyOrder("my sql database architecture", "Room Android best practises")))
                 .andExpect(jsonPath("$.listCommentsDto.[*].id", containsInAnyOrder(100, 101)))
-                .andExpect(jsonPath("$.listCommentsDto.[*].comment", containsInAnyOrder("aaa", "bbb")));
+                .andExpect(jsonPath("$.listCommentsDto.[*].comment", containsInAnyOrder("aaa", "bbb")))
+                .andExpect(jsonPath("$.isUserVote", is("DOWN_VOTE")));
     }
 }

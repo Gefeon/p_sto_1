@@ -9,8 +9,6 @@ import java.util.Map;
 public interface CommentDtoDao {
     Map<Long, List<CommentDto>> getCommentsDtoByAnswersIds(List<Long> answerIds);
 
-    Map<Long, List<CommentDto>> getMapCommentsByQuestionIds(List<Long> questionIds);
-
     List<CommentDto> getCommentDtoListByQuestionId(Long id);
 
     List<QuestionCommentDto> getQuestionCommentDtoById(Long id);
