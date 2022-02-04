@@ -141,13 +141,13 @@ public class TagResourceController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = TagDto.class))))
     })
     @PostMapping(value = "/{id}/ignored")
-    public ResponseEntity<?> addToIgnoredTagsList(@Valid @RequestParam String name, @PathVariable("id") Long id) {
-        Optional<Tag> addedTag = tagService.getByName(name);
+    public ResponseEntity<?> addToIgnoredTagsList(@Valid @PathVariable("id") Long id) {
+        Optional<Tag> addedTag = tagService.getById(id);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (addedTag.isEmpty()) {
-            return ResponseEntity.badRequest().body("The tag \"" + name + "\" does not exist on this site");
+            return ResponseEntity.badRequest().body("The tag does not exist on this site");
         }
-        if (ignoredTagService.getIgnoredTagByName(user.getId(), name).isPresent()) {
+        if (ignoredTagService.getIgnoredTagByUsername(user.getId(), id).isPresent()) {
             return ResponseEntity.badRequest().body("The ignored tag has already been added");
         }
         IgnoredTag createIgnoredTag = new IgnoredTag();
@@ -163,13 +163,13 @@ public class TagResourceController {
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = TagDto.class))))
     })
     @PostMapping(value = "/{id}/tracked")
-    public ResponseEntity<?> addToTrackedTagsList(@Valid @RequestParam String name, @PathVariable("id") Long id) {
-        Optional<Tag> addedTag = tagService.getByName(name);
+    public ResponseEntity<?> addToTrackedTagsList(@Valid @PathVariable("id") Long id) {
+        Optional<Tag> addedTag = tagService.getById(id);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (addedTag.isEmpty()) {
-            return ResponseEntity.badRequest().body("The tag \"" + name + "\" does not exist on this site");
+            return ResponseEntity.badRequest().body("The tag does not exist on this site");
         }
-        if (trackedTagService.getTrackedTagByName(user.getId(), name).isPresent()) {
+        if (trackedTagService.getTrackedTagByUser(user.getId(), id).isPresent()) {
             return ResponseEntity.badRequest().body("The tracked tag has already been added");
         }
         TrackedTag createTrackedTag = new TrackedTag();

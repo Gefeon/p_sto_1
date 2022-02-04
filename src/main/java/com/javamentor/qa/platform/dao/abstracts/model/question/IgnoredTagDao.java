@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface IgnoredTagDao extends ReadWriteDao<IgnoredTag, Long> {
 
-    Optional<IgnoredTag> getIgnoredTagByName(Long id, String name);
+    Optional<IgnoredTag> getIgnoredTagByUser(Long userId, Long tagId);
 }

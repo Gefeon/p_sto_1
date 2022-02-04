@@ -9,7 +9,10 @@ import java.util.Optional;
 
 public interface TagService extends ReadWriteService<Tag, Long> {
     boolean existsByName(String name);
+
     Optional<Tag> getByName(String name);
+
+    Optional<Tag> getById(Long id);
 
     List<Tag> getByAllNames(Collection<String> names);
 }

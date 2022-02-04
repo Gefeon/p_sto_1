@@ -31,8 +31,10 @@ public class TestTagResourceController extends AbstractTestApi {
     private static final String QUESTION_HAS_TAG_BY_POPULAR = "dataset/tagResourceController/questionByPopular/question_has_tag.yml";
     private static final String TAG_ENTITY_ADD_TRACKED_OR_IGNORED_TAG = "dataset/tagResourceController/addTrackedOrIgnoredTag/tags.yml";
 
-    private static final String ADD_TRACKED_TAG = "/api/user/tag/100/tracked";
-    private static final String ADD_IGNORED_TAG = "/api/user/tag/100/ignored";
+    private static final String ADD_TRACKED_TAG = "/api/user/tag/5/tracked";
+    private static final String ADD_IGNORED_TAG = "/api/user/tag/4/ignored";
+    private static final String ADD_IGNORED_TAG_NOT_EXIST = "/api/user/tag/10/ignored";
+    private static final String ADD_TRACKED_TAG_NOT_EXIST = "/api/user/tag/10/tracked";
     private static final String GET_TRACKED_TAGS = "/api/user/tag/tracked";
     private static final String GET_RELATED_TAGS = "/api/user/tag/related";
     private static final String GET_IGNORED_TAGS = "/api/user/tag/ignored";
@@ -308,7 +310,7 @@ public class TestTagResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {TAG_ENTITY_ADD_TRACKED_OR_IGNORED_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     void addTagTrackedStatusOk() throws Exception {
-        ResultActions response = mvc.perform(post(ADD_TRACKED_TAG).param("name", "java").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        ResultActions response = mvc.perform(post(ADD_TRACKED_TAG).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(5)))
                 .andExpect(jsonPath("$.name", is("java")))
@@ -318,7 +320,7 @@ public class TestTagResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {TAG_ENTITY_ADD_TRACKED_OR_IGNORED_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     void addTagIgnoredStatusOk() throws Exception {
-        ResultActions response = mvc.perform(post(ADD_IGNORED_TAG).param("name", "python").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        ResultActions response = mvc.perform(post(ADD_IGNORED_TAG).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(4)))
                 .andExpect(jsonPath("$.name", is("python")))
@@ -328,16 +330,16 @@ public class TestTagResourceController extends AbstractTestApi {
     @Test
     @DataSet(value = {TAG_ENTITY_ADD_TRACKED_OR_IGNORED_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     void addTagTrackedStatusNotExistOnThisSite() throws Exception {
-        ResultActions response = mvc.perform(post(ADD_TRACKED_TAG).param("name", "car").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        ResultActions response = mvc.perform(post(ADD_TRACKED_TAG_NOT_EXIST).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isBadRequest())
-                .andExpect(content().string("The tag \"car\" does not exist on this site"));
+                .andExpect(content().string("The tag does not exist on this site"));
     }
 
     @Test
     @DataSet(value = {TAG_ENTITY_ADD_TRACKED_OR_IGNORED_TAG, USER_ENTITY, ROLE_ENTITY}, disableConstraints = true)
     void addTagIgnoredStatusNotExistOnThisSite() throws Exception {
-        ResultActions response = mvc.perform(post(ADD_IGNORED_TAG).param("name", "car").header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
+        ResultActions response = mvc.perform(post(ADD_IGNORED_TAG_NOT_EXIST).header(AUTH_HEADER, PREFIX + getToken("user100@user.ru", "user")));
         response.andExpect(status().isBadRequest())
-                .andExpect(content().string("The tag \"car\" does not exist on this site"));
+                .andExpect(content().string("The tag does not exist on this site"));
     }
 }

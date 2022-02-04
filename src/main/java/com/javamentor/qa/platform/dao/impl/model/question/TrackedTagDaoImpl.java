@@ -17,15 +17,15 @@ public class TrackedTagDaoImpl extends ReadWriteDaoImpl<TrackedTag, Long> implem
     private EntityManager em;
 
     @Override
-    public Optional<TrackedTag> getTrackedTagByName(Long id, String name) {
+    public Optional<TrackedTag> getTrackedTagByUser(Long userId, Long tagId) {
         return (Optional<TrackedTag>) em.unwrap(Session.class)
                 .createQuery("SELECT tag " +
                         "FROM TrackedTag tr " +
-                        "INNER JOIN Tag tag on tag.name=tr.trackedTag.name " +
+                        "INNER JOIN Tag tag on tag.id=tr.trackedTag.id " +
                         "INNER JOIN User u on u.id=tr.user.id " +
-                        "WHERE u.id=:id and  tag.name=:name")
-                .setParameter("id", id)
-                .setParameter("name", name)
+                        "WHERE u.id=:id and  tag.id=:id")
+                .setParameter("id", userId)
+                .setParameter("id", tagId)
                 .uniqueResultOptional();
     }
 }

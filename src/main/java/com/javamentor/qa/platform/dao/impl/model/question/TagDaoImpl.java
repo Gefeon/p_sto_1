@@ -34,6 +34,13 @@ public class TagDaoImpl extends ReadWriteDaoImpl<Tag, Long> implements TagDao {
         return SingleResultUtil.getSingleResultOrNull(query);
     }
 
+    public Optional<Tag> getById(Long id) {
+        TypedQuery<Tag> query = entityManager
+                .createQuery("FROM Tag t WHERE  t.id= :id", Tag.class)
+                .setParameter("id", id);
+        return SingleResultUtil.getSingleResultOrNull(query);
+    }
+
     @Override
     public List<Tag> getByAllNames(Collection<String> names) {
         if (names != null && names.size() > 0) {

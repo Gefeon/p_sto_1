@@ -17,15 +17,15 @@ public class IgnoredTagDaoImpl extends ReadWriteDaoImpl<IgnoredTag, Long> implem
     private EntityManager em;
 
     @Override
-    public Optional<IgnoredTag> getIgnoredTagByName(Long id, String name) {
+    public Optional<IgnoredTag> getIgnoredTagByUser(Long userId, Long tagId) {
         return (Optional<IgnoredTag>) em.unwrap(Session.class)
                 .createQuery("SELECT tr " +
                         "FROM IgnoredTag tr " +
-                        "INNER JOIN Tag tag on tag.name=tr.ignoredTag.name " +
+                        "INNER JOIN Tag tag on tag.id=tr.ignoredTag.id " +
                         "INNER JOIN User u on u.id=tr.user.id " +
-                        "WHERE u.id=:id and  tag.name=:name")
-                .setParameter("id", id)
-                .setParameter("name", name)
+                        "WHERE u.id=:id and  tag.id=:id")
+                .setParameter("id", userId)
+                .setParameter("id", tagId)
                 .uniqueResultOptional();
     }
 }

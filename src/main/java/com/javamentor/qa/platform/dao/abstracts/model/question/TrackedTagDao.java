@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface TrackedTagDao extends ReadWriteDao<TrackedTag, Long> {
 
-    Optional<TrackedTag> getTrackedTagByName(Long id, String name);
+    Optional<TrackedTag> getTrackedTagByUser(Long userId, Long tagId);
 }
