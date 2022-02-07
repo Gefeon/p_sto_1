@@ -2,12 +2,15 @@ package com.javamentor.qa.platform.dao.impl.model.question;
 
 import com.javamentor.qa.platform.dao.abstracts.model.question.IgnoredTagDao;
 import com.javamentor.qa.platform.dao.impl.model.ReadWriteDaoImpl;
+import com.javamentor.qa.platform.dao.util.SingleResultUtil;
 import com.javamentor.qa.platform.models.entity.question.IgnoredTag;
+import com.javamentor.qa.platform.models.entity.question.TrackedTag;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.Optional;
 
 @Repository
@@ -18,14 +21,14 @@ public class IgnoredTagDaoImpl extends ReadWriteDaoImpl<IgnoredTag, Long> implem
 
     @Override
     public Optional<IgnoredTag> getIgnoredTagByUser(Long userId, Long tagId) {
-        return (Optional<IgnoredTag>) em.unwrap(Session.class)
+        TypedQuery<IgnoredTag> query = (TypedQuery<IgnoredTag>) em
                 .createQuery("SELECT tr " +
                         "FROM IgnoredTag tr " +
                         "INNER JOIN Tag tag on tag.id=tr.ignoredTag.id " +
                         "INNER JOIN User u on u.id=tr.user.id " +
                         "WHERE u.id=:id and  tag.id=:id")
                 .setParameter("id", userId)
-                .setParameter("id", tagId)
-                .uniqueResultOptional();
+                .setParameter("id", tagId);
+        return SingleResultUtil.getSingleResultOrNull(query);
     }
 }

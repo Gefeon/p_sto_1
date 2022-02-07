@@ -19,7 +19,6 @@ public class TrackedTagServiceImpl extends ReadWriteServiceImpl<TrackedTag, Long
         this.trackedTagDao = trackedTagDao;
     }
 
-    @Transactional
     @Override
     public Optional<TrackedTag> getTrackedTagByUser(Long userId, Long tagId) {
         return trackedTagDao.getTrackedTagByUser(userId, tagId);

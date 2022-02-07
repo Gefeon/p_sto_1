@@ -19,7 +19,6 @@ public class IgnoredTagServiceImpl extends ReadWriteServiceImpl<IgnoredTag, Long
         this.ignoredTagDao = ignoredTagDao;
     }
 
-    @Transactional
     @Override
     public Optional<IgnoredTag> getIgnoredTagByUsername(Long userId, Long tagId) {
         return ignoredTagDao.getIgnoredTagByUser(userId, tagId);
